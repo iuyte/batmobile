@@ -5,6 +5,6 @@
 using namespace okapi::literals;
 
 extern okapi::Controller controller;
-extern okapi::MotorGroup left, right;
+extern okapi::MotorGroup left, right, launcher;
 
 #endif

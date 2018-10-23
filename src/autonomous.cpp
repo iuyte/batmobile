@@ -15,21 +15,24 @@
  */
 
 void autonomous() {
-  left.setBrakeMode(okapi::AbstractMotor::brakeMode::hold);
-  right.setBrakeMode(okapi::AbstractMotor::brakeMode::hold);
+  left.setBrakeMode(okapi::AbstractMotor::brakeMode::brake);
+  right.setBrakeMode(okapi::AbstractMotor::brakeMode::brake);
 
   okapi::ChassisControllerIntegrated drive =
       okapi::ChassisControllerFactory::create(
           left, right, okapi::AbstractMotor::gearset::green,
-          okapi::ChassisScales({3.98_in, 14.85_in}));
+          okapi::ChassisScales({12.15_in, 14.85_in}));
   auto driveController =
       okapi::AsyncControllerFactory::motionProfile(1, 2, 10, drive);
-  driveController.generatePath(
-      {okapi::Point{0_ft, 0_ft, 0_deg}, okapi::Point{2_ft, 2_ft, 90_deg}}, "A");
+  driveController.generatePath({okapi::Point{0_ft, 0_ft, 0_deg},
+                                okapi::Point{2_ft, 2_ft, 0_deg}},
+                                //okapi::Point{2_ft, 2_ft, 90_deg}},
+                               "A");
 
-  for (auto &&i : {1, 2, 3, 4}) {
+  for (;; /*auto &&i : {1, 2, 3, 4}*/) {
     driveController.setTarget("A");
     driveController.waitUntilSettled();
-    // drive.turnAngle(90);
+    pros::delay(150);
+    drive.turnAngle(90);
   }
 }

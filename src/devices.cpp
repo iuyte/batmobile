@@ -7,7 +7,8 @@
 okapi::Controller controller;
 okapi::MotorGroup
     left({okapi::Motor(1, false, okapi::AbstractMotor::gearset::green),
-          okapi::Motor(3, false, okapi::AbstractMotor::gearset::green)});
-okapi::MotorGroup
+          okapi::Motor(3, false, okapi::AbstractMotor::gearset::green)}),
     right({okapi::Motor(2, true, okapi::AbstractMotor::gearset::green),
-           okapi::Motor(4, true, okapi::AbstractMotor::gearset::green)});
+           okapi::Motor(4, true, okapi::AbstractMotor::gearset::green)}),
+    launcher({okapi::Motor(5, false, okapi::AbstractMotor::gearset::green),
+              okapi::Motor(6, false, okapi::AbstractMotor::gearset::green)});

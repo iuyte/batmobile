@@ -27,8 +27,9 @@ void opcontrol() {
     left.moveVelocity(l);
     right.moveVelocity(r);
 
-    // if (controller.getDigital(okapi::ControllerDigital::L1))
-    //  autonomous();
+    launcher.moveVelocity(
+        200 * controller.getDigital(okapi::ControllerDigital::up) +
+        -10 * controller.getDigital(okapi::ControllerDigital::down));
 
     pros::delay(20);
   }
