@@ -13,14 +13,10 @@ void initialize() {
 
   pros::Task(
       [](void *param) {
-        pros::ADIGyro gyro[] = {pros::ADIGyro('d'), pros::ADIGyro('e')};
         while (true) {
-          pros::lcd::print(1, "Position: %f, %f", left.getPosition(),
-                           right.getPosition());
-          pros::lcd::print(2, "Velocity: %f, %f", left.getActualVelocity(),
-                           right.getActualVelocity());
-          pros::lcd::print(3, "Gyro: %f, %f", gyro[0].get_value(),
-                           gyro[1].get_value());
+          pros::lcd::print(1, "Position: %f, %f", left.getPosition(), right.getPosition());
+          pros::lcd::print(
+              2, "Velocity: %f, %f", left.getActualVelocity(), right.getActualVelocity());
           pros::delay(20);
         }
       },

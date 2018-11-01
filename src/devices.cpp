@@ -3,12 +3,13 @@
 #include "util.h"
 
 #include <iostream>
+using namespace okapi;
 
-okapi::Controller controller;
-okapi::MotorGroup
-    left({okapi::Motor(1, false, okapi::AbstractMotor::gearset::green),
-          okapi::Motor(3, false, okapi::AbstractMotor::gearset::green)}),
-    right({okapi::Motor(2, true, okapi::AbstractMotor::gearset::green),
-           okapi::Motor(4, true, okapi::AbstractMotor::gearset::green)}),
-    launcher({okapi::Motor(5, false, okapi::AbstractMotor::gearset::green),
-              okapi::Motor(6, false, okapi::AbstractMotor::gearset::green)});
+Controller controller;
+Motor      left(13, false, okapi::AbstractMotor::gearset::green);
+Motor      right(12, true, okapi::AbstractMotor::gearset::green);
+Motor      launcher(11, true, okapi::AbstractMotor::gearset::green);
+Motor      intake(20, false, okapi::AbstractMotor::gearset::green);
+
+ChassisControllerIntegrated drive = okapi::ChassisControllerFactory::create(
+    left, right, okapi::AbstractMotor::gearset::green, okapi::ChassisScales({4.1875, 10.5}));

@@ -1,5 +1,6 @@
 #include "devices.h"
 #include "main.h"
+#include "util.h"
 
 void autonomous();
 
@@ -17,19 +18,25 @@ void autonomous();
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-  float l, r;
-  left.setBrakeMode(okapi::AbstractMotor::brakeMode::coast);
-  right.setBrakeMode(okapi::AbstractMotor::brakeMode::coast);
+  // The maximum speed in RPM for the drive motors
+  const float dmax = 185;
+  // Set the left and right to be more natural for drivers
+  okapi::AbstractMotor::brakeMode bmode = okapi::AbstractMotor::brakeMode::coast;
+  left.setBrakeMode(bmode);
+  right.setBrakeMode(bmode);
 
   while (true) {
-    l = controller.getAnalog(okapi::ControllerAnalog::leftY) * 200.f;
-    r = controller.getAnalog(okapi::ControllerAnalog::rightY) * 200.f;
-    left.moveVelocity(l);
-    right.moveVelocity(r);
+    left.moveVelocity(controller.getAnalog(okapi::ControllerAnalog::leftY) * dmax +
+                      controller.getDigital(okapi::ControllerDigital::up) * dmax -
+                      controller.getDigital(okapi::ControllerDigital::down) * dmax);
+    right.moveVelocity(controller.getAnalog(okapi::ControllerAnalog::rightY) * dmax +
+                       controller.getDigital(okapi::ControllerDigital::up) * dmax -
+                       controller.getDigital(okapi::ControllerDigital::down) * dmax);
 
-    launcher.moveVelocity(
-        200 * controller.getDigital(okapi::ControllerDigital::up) +
-        -10 * controller.getDigital(okapi::ControllerDigital::down));
+    intake.move(127 * controller.getDigital(okapi::ControllerDigital::R1) +
+                -127 * controller.getDigital(okapi::ControllerDigital::R2));
+    launcher.move(127 * controller.getDigital(okapi::ControllerDigital::R1) +
+                  -127 * controller.getDigital(okapi::ControllerDigital::R2));
 
     pros::delay(20);
   }
