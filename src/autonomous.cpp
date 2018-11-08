@@ -18,13 +18,10 @@ void autonomous() {
   left.setBrakeMode(okapi::AbstractMotor::brakeMode::brake);
   right.setBrakeMode(okapi::AbstractMotor::brakeMode::brake);
 
-  auto dc = okapi::AsyncControllerFactory::motionProfile(1, 2, 10, drive);
-  dc.generatePath({okapi::Point{0_ft, 0_ft, 0_deg}, okapi::Point{2_ft, 2_ft, 0_deg}}, "A");
+  // = okapi::AsyncControllerFactory::motionProfile(1, 2, 10, drive);
 
-  for (auto &&i : {1, 2, 3, 4}) {
-    dc.setTarget("A");
-    dc.waitUntilSettled();
-    pros::delay(150);
-    drive.turnAngle(90);
-  }
+  dc.setTarget("A");
+  dc.waitUntilSettled();
+  pros::delay(150);
+  //drive.turnAngle(-135);
 }

@@ -2,6 +2,8 @@
 #include "main.h"
 #include "util.h"
 
+void launcherMove(float voltage);
+
 void autonomous();
 
 /**
@@ -20,8 +22,10 @@ void autonomous();
 void opcontrol() {
   // The maximum speed in RPM for the drive motors
   const float dmax = 185;
+
   // Set the left and right to be more natural for drivers
   okapi::AbstractMotor::brakeMode bmode = okapi::AbstractMotor::brakeMode::coast;
+  launcher.setBrakeMode(okapi::AbstractMotor::brakeMode::hold);
   left.setBrakeMode(bmode);
   right.setBrakeMode(bmode);
 
@@ -35,9 +39,28 @@ void opcontrol() {
 
     intake.move(127 * controller.getDigital(okapi::ControllerDigital::R1) +
                 -127 * controller.getDigital(okapi::ControllerDigital::R2));
-    launcher.move(127 * controller.getDigital(okapi::ControllerDigital::R1) +
-                  -127 * controller.getDigital(okapi::ControllerDigital::R2));
+    launcherMove(127 * controller.getDigital(okapi::ControllerDigital::L1) +
+                 -127 * controller.getDigital(okapi::ControllerDigital::L2));
 
-    pros::delay(20);
+    pros::delay(25);
+  }
+}
+
+void launcherMove(float voltage) {
+  // distance that the gear turns in clicks
+  const float gDis = 625;
+  // launcher home position
+  static float lph = 0;
+
+  if (launcher.getTorque() > 0.2) {
+    lph = (abs(launcher.getPosition() - lph) < 400) ? lph : launcher.getPosition();
+  }
+  if (voltage) {
+    launcher.move(voltage);
+  } else {
+    if (launcher.getPosition() - lph < gDis)
+      launcher.moveVelocity(0);
+    else
+      launcher.move(0);
   }
 }
