@@ -12,14 +12,16 @@ void initialize() {
   pros::lcd::initialize();
   pros::lcd::set_text(0, "RoboEagles: 709S");
 
+  // a task that prints a lot of useful data to the LCD emulator
   pros::Task(
           [](void *param) {
             while (true) {
-              pros::lcd::print(1, "drive position: %f, %f", left.getPosition(), right.getPosition());
+              pros::lcd::print(
+                      1, "drive position: %f, %f", left.getPosition(), right.getPosition());
               pros::lcd::print(2,
-                         "drive velocity: %f, %f",
-                         left.getActualVelocity(),
-                         right.getActualVelocity());
+                               "drive velocity: %f, %f",
+                               left.getActualVelocity(),
+                               right.getActualVelocity());
               pros::lcd::print(3, "launcher position: %f", launcher.getPosition());
               pros::lcd::print(4, "launcher torque: %f", launcher.getTorque());
               pros::lcd::print(5, "launcher temp: %f", launcher.getTemperature());
@@ -40,7 +42,8 @@ void initialize() {
  * the robot is enabled, this task will exit.
  */
 void disabled() {
-  // drive controller init
+  // drive controller init: generate the motion path now (takes time) such that less precious time
+  // during autonomous is lost
   dc.generatePath({okapi::Point{0_ft, 0_ft, 0_deg},
                    okapi::Point{0_ft, sqrt(2) * okapi::foot, 0_deg},
                    okapi::Point{0_ft, sqrt(2) * okapi::foot, -180_deg}},

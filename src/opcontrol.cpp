@@ -23,12 +23,13 @@ void opcontrol() {
   // The maximum speed in RPM for the drive motors
   const float dmax = 185;
 
-  // Set the left and right to be more natural for drivers
+  // Set the left and right to "coast" mode, as it is more natural for drivers
   okapi::AbstractMotor::brakeMode bmode = okapi::AbstractMotor::brakeMode::coast;
   launcher.setBrakeMode(okapi::AbstractMotor::brakeMode::hold);
   left.setBrakeMode(bmode);
   right.setBrakeMode(bmode);
 
+  // infinite driver-control loop, runs: drive, intake, and launcher
   while (true) {
     left.moveVelocity(controller.getAnalog(okapi::ControllerAnalog::leftY) * dmax +
                       controller.getDigital(okapi::ControllerDigital::up) * dmax -
@@ -42,7 +43,7 @@ void opcontrol() {
     launcherMove(127 * controller.getDigital(okapi::ControllerDigital::L1) +
                  -127 * controller.getDigital(okapi::ControllerDigital::L2));
 
-    pros::delay(25);
+    delay(25);
   }
 }
 
@@ -52,12 +53,16 @@ void launcherMove(float voltage) {
   // launcher home position
   static float lph = 0;
 
+  // if the launcher has a high torque, it means that the slip-gear is now driving the gear the
+  // catapult is on, and if this is new, then the home position should be reset
   if (launcher.getTorque() > 0.2) {
     lph = (abs(launcher.getPosition() - lph) < 400) ? lph : launcher.getPosition();
   }
-  if (voltage) {
+  if (voltage) { // if there is controller input for the launcher
     launcher.move(voltage);
-  } else {
+  } else { // if there is no controller input
+    // if the catapult arm is in the process of being cocked, hold its position, and if not, don't
+    // bother holding the position
     if (launcher.getPosition() - lph < gDis)
       launcher.moveVelocity(0);
     else

@@ -15,13 +15,12 @@
  */
 
 void autonomous() {
+  // make it so the drive motors hold commanded positions, rather than coast like in driver-control
   left.setBrakeMode(okapi::AbstractMotor::brakeMode::brake);
   right.setBrakeMode(okapi::AbstractMotor::brakeMode::brake);
 
-  // = okapi::AsyncControllerFactory::motionProfile(1, 2, 10, drive);
-
-  dc.setTarget("A");
-  dc.waitUntilSettled();
-  pros::delay(150);
-  //drive.turnAngle(-135);
+  dc.setTarget("A");     // set the target as the first motion path
+  dc.waitUntilSettled(); // let the drive complete the motion path
+  delay(150);
+  // drive.turnAngle(-135); // turn mostly around counterclockwise
 }
