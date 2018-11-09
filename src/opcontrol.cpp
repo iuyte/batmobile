@@ -34,25 +34,32 @@ void opcontrol() {
   // infinite launcher control task
   auto launcherTask = pros::Task(
           [](void *none) {
-            // state switching vars
-            bool tn, to;
-            bool tz = true;
+            // state switching var
+            int t;
+            // power
+            float lp;
 
             while (!pros::competition::is_disabled() && !pros::competition::is_autonomous()) {
-              tn = controller.getDigital(okapi::ControllerDigital::X);
-              if (tn && !to) {
-                tz = !tz;
-                if (tz) {
+              if (lp) {
+                launcher.moveVoltage(lp);
+              } else {
+                t = controller.getDigital(okapi::ControllerDigital::Y) * 2 +
+                    controller.getDigital(okapi::ControllerDigital::X) * 3;
+                switch (t) {
+                case 2:
                   // pull the launcher arm back
                   launcherReady();
                   indicator = 100;
-                } else {
+                  break;
+                case 3:
                   // fire the catapult
                   launcherFire();
                   indicator = -494;
+                  break;
+                default:
+                  break;
                 }
               }
-              to = tn;
               delay(25);
             }
           },

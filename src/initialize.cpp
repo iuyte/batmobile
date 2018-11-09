@@ -12,6 +12,14 @@ void initialize() {
   pros::lcd::initialize();
   pros::lcd::set_text(0, "RoboEagles: 709S");
 
+  // launcher controller disable
+  launchC.flipDisable(true);
+
+  // pot init
+  pot.reset();
+  pot.setScale(-2);
+  pot.z = 1700;
+
   // a task that prints a lot of useful data to the LCD emulator
   pros::Task(
           [](void *none) {
@@ -22,12 +30,12 @@ void initialize() {
                                "drive velocity: %f, %f",
                                left.getActualVelocity(),
                                right.getActualVelocity());
-              pros::lcd::print(3, "launcher position: %f", launcher.getPosition());
+              pros::lcd::print(3, "launcher position: %f, %f", launcher.getPosition(), pot.get());
               pros::lcd::print(4, "launcher torque: %f", launcher.getTorque());
               pros::lcd::print(5, "launcher temp: %f", launcher.getTemperature());
               pros::lcd::print(6, "indicator: %d", indicator);
               // controller.setText(1, 1, std::to_string(launcher.getPosition()));
-              delay(75);
+              delay(50);
             }
           },
           nullptr);
