@@ -10,6 +10,10 @@ Motor      left(13, false, okapi::AbstractMotor::gearset::green);
 Motor      right(12, true, okapi::AbstractMotor::gearset::green);
 Motor      launcher(11, false, okapi::AbstractMotor::gearset::green);
 Motor      intake(20, false, okapi::AbstractMotor::gearset::green);
+MotorGroup lift({Motor(9, true, AbstractMotor::gearset::green),
+                 Motor(10, false, AbstractMotor::gearset::green)});
+AsyncPosIntegratedController launchC = okapi::AsyncControllerFactory::posIntegrated(launcher, 200);
+
 
 ChassisControllerIntegrated drive =
         okapi::ChassisControllerFactory::create(left,

@@ -2,16 +2,22 @@
 #define _IUYTE_DEVICES_H_
 
 #include "main.h"
+#include "util.h"
+
 using namespace okapi::literals;
 using namespace okapi;
 using pros::delay;
 
-/** The main V5 controller */
+/** main V5 controller */
 extern okapi::Controller controller;
 extern okapi::Motor      left, right, launcher, intake;
-/** The combination of the left and right side motors */
+/** combination of both lift motors */
+extern okapi::MotorGroup lift;
+/** launcher async controller */
+extern AsyncPosIntegratedController launchC;
+/** combination of the left and right side motors */
 extern okapi::ChassisControllerIntegrated drive;
-/** The motion profile controller  for the drive */
+/** motion profile controller for the drive */
 extern okapi::AsyncMotionProfileController dc;
 
 #endif

@@ -1,8 +1,7 @@
 #include "devices.h"
 #include "main.h"
+#include "presets.h"
 #include "util.h"
-
-void launcherMove(float voltage);
 
 void autonomous();
 
@@ -23,11 +22,41 @@ void opcontrol() {
   // The maximum speed in RPM for the drive motors
   const float dmax = 185;
 
-  // Set the left and right to "coast" mode, as it is more natural for drivers
+  // set the drive and intake to "coast" mode, as it is more natural for drivers
   okapi::AbstractMotor::brakeMode bmode = okapi::AbstractMotor::brakeMode::coast;
-  launcher.setBrakeMode(okapi::AbstractMotor::brakeMode::hold);
   left.setBrakeMode(bmode);
   right.setBrakeMode(bmode);
+  intake.setBrakeMode(okapi::AbstractMotor::brakeMode::coast);
+  // set the launcher and lift to "hold" mode
+  launcher.setBrakeMode(okapi::AbstractMotor::brakeMode::hold);
+  lift.setBrakeMode(okapi::AbstractMotor::brakeMode::hold);
+
+  // infinite launcher control task
+  auto launcherTask = pros::Task(
+          [](void *none) {
+            // state switching vars
+            bool tn, to;
+            bool tz = true;
+
+            while (!pros::competition::is_disabled() && !pros::competition::is_autonomous()) {
+              tn = controller.getDigital(okapi::ControllerDigital::X);
+              if (tn && !to) {
+                tz = !tz;
+                if (tz) {
+                  // pull the launcher arm back
+                  launcherReady();
+                  indicator = 100;
+                } else {
+                  // fire the catapult
+                  launcherFire();
+                  indicator = -494;
+                }
+              }
+              to = tn;
+              delay(25);
+            }
+          },
+          nullptr);
 
   // infinite driver-control loop, runs: drive, intake, and launcher
   while (true) {
@@ -38,10 +67,10 @@ void opcontrol() {
                        controller.getDigital(okapi::ControllerDigital::up) * dmax -
                        controller.getDigital(okapi::ControllerDigital::down) * dmax);
 
-    intake.move(127 * controller.getDigital(okapi::ControllerDigital::R1) +
-                -127 * controller.getDigital(okapi::ControllerDigital::R2));
-    launcherMove(127 * controller.getDigital(okapi::ControllerDigital::L1) +
-                 -127 * controller.getDigital(okapi::ControllerDigital::L2));
+    intake.move(127 * controller.getDigital(okapi::ControllerDigital::R1) -
+                127 * controller.getDigital(okapi::ControllerDigital::R2));
+    lift.moveVelocity(200 * controller.getDigital(okapi::ControllerDigital::A) -
+                      200 * controller.getDigital(okapi::ControllerDigital::B));
 
     delay(25);
   }
@@ -49,20 +78,21 @@ void opcontrol() {
 
 void launcherMove(float voltage) {
   // distance that the gear turns in clicks
-  const float gDis = 625;
+  static const float gDis = 625;
   // launcher home position
-  static float lph = 0;
+  float lph = 0;
 
-  // if the launcher has a high torque, it means that the slip-gear is now driving the gear the
-  // catapult is on, and if this is new, then the home position should be reset
-  if (launcher.getTorque() > 0.2) {
-    lph = (abs(launcher.getPosition() - lph) < 400) ? lph : launcher.getPosition();
-  }
+  if (abs(launcher.getPosition() - lph) < 400)
+    // if the launcher has a high torque, it means that the slip-gear is now driving the gear
+    // the catapult is on, and if this is new, then the home position should be reset
+    if (launcher.getTorque() > 0.2) {
+      lph = (abs(launcher.getPosition() - lph) < 400) ? lph : launcher.getPosition();
+    }
   if (voltage) { // if there is controller input for the launcher
     launcher.move(voltage);
   } else { // if there is no controller input
-    // if the catapult arm is in the process of being cocked, hold its position, and if not, don't
-    // bother holding the position
+    // if the catapult arm is in the process of being pulled back, hold its position, and if not,
+    // don't bother holding the position
     if (launcher.getPosition() - lph < gDis)
       launcher.moveVelocity(0);
     else

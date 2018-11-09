@@ -18,3 +18,5 @@ std::vector<std::string> split(const std::string &s, char delim) {
   split(s, delim, std::back_inserter(elems));
   return elems;
 }
+
+int indicator = 0;
