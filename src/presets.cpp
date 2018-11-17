@@ -1,7 +1,7 @@
 #include "presets.h"
 
 // distance that the gear turns in clicks
-static const float gDis = 675;
+static const int32_t gDis = 620;
 // launcher home position
 float lph = 0;
 // new and old state variables

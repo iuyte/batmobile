@@ -22,6 +22,9 @@ void opcontrol() {
   // The maximum speed in RPM for the drive motors
   const float dmax = 185;
 
+  // the commanded drive power values
+  float leftCmd, rightCmd;
+
   // set the drive and intake to "coast" mode, as it is more natural for drivers
   okapi::AbstractMotor::brakeMode bmode = okapi::AbstractMotor::brakeMode::coast;
   left.setBrakeMode(bmode);
@@ -67,17 +70,40 @@ void opcontrol() {
 
   // infinite driver-control loop, runs: drive, intake, and launcher
   while (true) {
-    left.moveVelocity(controller.getAnalog(okapi::ControllerAnalog::leftY) * dmax +
-                      controller.getDigital(okapi::ControllerDigital::up) * dmax -
-                      controller.getDigital(okapi::ControllerDigital::down) * dmax);
-    right.moveVelocity(controller.getAnalog(okapi::ControllerAnalog::rightY) * dmax +
-                       controller.getDigital(okapi::ControllerDigital::up) * dmax -
-                       controller.getDigital(okapi::ControllerDigital::down) * dmax);
+    // get the input control for the drive
+    leftCmd = controller.getAnalog(okapi::ControllerAnalog::leftY) * dmax +
+              controller.getDigital(okapi::ControllerDigital::up) * dmax -
+              controller.getDigital(okapi::ControllerDigital::down) * dmax;
+    rightCmd = controller.getAnalog(okapi::ControllerAnalog::rightY) * dmax +
+               controller.getDigital(okapi::ControllerDigital::up) * dmax -
+               controller.getDigital(okapi::ControllerDigital::down) * dmax;
+
+    left.moveVelocity(leftCmd);
+    right.moveVelocity(rightCmd);
+
+    // if the commanded power value isn't 0, coast. Otherwise, if the robot is still, keep it
+    // still by setting a commanded velocity of zero
+    if (leftCmd || rightCmd) {
+      if (bmode != AbstractMotor::brakeMode::coast) {
+        bmode = AbstractMotor::brakeMode::coast;
+        left.setBrakeMode(bmode);
+        right.setBrakeMode(bmode);
+      }
+    } else if (!(left.getActualVelocity() + right.getActualVelocity())) {
+      left.moveVelocity(0);
+      right.moveVelocity(0);
+
+      if (bmode != AbstractMotor::brakeMode::hold) {
+        bmode = AbstractMotor::brakeMode::hold;
+        left.setBrakeMode(bmode);
+        right.setBrakeMode(bmode);
+      }
+    }
 
     intake.move(127 * controller.getDigital(okapi::ControllerDigital::R1) -
                 127 * controller.getDigital(okapi::ControllerDigital::R2));
-    lift.moveVelocity(200 * controller.getDigital(okapi::ControllerDigital::A) -
-                      200 * controller.getDigital(okapi::ControllerDigital::B));
+    lift.moveVelocity(200 * controller.getDigital(okapi::ControllerDigital::L1) -
+                      200 * controller.getDigital(okapi::ControllerDigital::L2));
 
     delay(25);
   }

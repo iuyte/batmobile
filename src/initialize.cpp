@@ -16,9 +16,7 @@ void initialize() {
   launchC.flipDisable(true);
 
   // pot init
-  pot.reset();
-  pot.setScale(-2);
-  pot.z = 1700;
+  pot.zero = 1710;
 
   // a task that prints a lot of useful data to the LCD emulator
   pros::Task(
@@ -30,7 +28,7 @@ void initialize() {
                                "drive velocity: %f, %f",
                                left.getActualVelocity(),
                                right.getActualVelocity());
-              pros::lcd::print(3, "launcher position: %f, %f", launcher.getPosition(), pot.get());
+              pros::lcd::print(3, "launcher position: %f, %d", launcher.getPosition(), pot.get());
               pros::lcd::print(4, "launcher torque: %f", launcher.getTorque());
               pros::lcd::print(5, "launcher temp: %f", launcher.getTemperature());
               pros::lcd::print(6, "indicator: %d", indicator);
