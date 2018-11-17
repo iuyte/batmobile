@@ -57,6 +57,7 @@
 //#include "pros/api_legacy.h"
 #include <iostream>
 using std::cout;
+using std::int32_t;
 
 #ifdef __cplusplus
 /**

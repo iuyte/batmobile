@@ -21,21 +21,14 @@ extern okapi::ChassisControllerIntegrated drive;
 extern okapi::AsyncMotionProfileController dc;
 
 /** my own potentiometer class */
-class Pot : pros::ADIPotentiometer {
-public:
+struct Pot : public pros::ADIPotentiometer {
   using pros::ADIPotentiometer::ADIPotentiometer;
 
-  /** reset the sensor's home position */
-  void reset();
-
-  /** set the scale (starts as 1.0). Ex: if scale = -.5, the values are halved and inverted. */
-  void setScale(double scalv);
-
   /** get the sensor value with zero and scale applied */
-  double get();
+  int32_t get();
 
-  double z;
-  double scale = 1.0;
+  int32_t zero;
+  int32_t scale = 1.0;
 };
 
 /** Potentiometer in legacy ADI port H */
