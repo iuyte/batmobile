@@ -10,7 +10,7 @@ using pros::delay;
 
 /** main V5 controller */
 extern okapi::Controller controller;
-extern okapi::Motor      left, right, launcher, intake;
+extern okapi::Motor      left, right, launcher, intake, flipper;
 /** combination of both lift motors */
 extern okapi::MotorGroup lift;
 /** launcher async controller */

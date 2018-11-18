@@ -25,14 +25,10 @@ void opcontrol() {
   // the commanded drive power values
   float leftCmd, rightCmd;
 
-  // set the drive and intake to "coast" mode, as it is more natural for drivers
+  // set the drive to "coast" mode, as it is more natural for drivers
   okapi::AbstractMotor::brakeMode bmode = okapi::AbstractMotor::brakeMode::coast;
   left.setBrakeMode(bmode);
   right.setBrakeMode(bmode);
-  intake.setBrakeMode(okapi::AbstractMotor::brakeMode::coast);
-  // set the launcher and lift to "hold" mode
-  launcher.setBrakeMode(okapi::AbstractMotor::brakeMode::hold);
-  lift.setBrakeMode(okapi::AbstractMotor::brakeMode::hold);
 
   // infinite launcher control task
   auto launcherTask = pros::Task(
@@ -71,12 +67,8 @@ void opcontrol() {
   // infinite driver-control loop, runs: drive, intake, and launcher
   while (true) {
     // get the input control for the drive
-    leftCmd = controller.getAnalog(okapi::ControllerAnalog::leftY) * dmax +
-              controller.getDigital(okapi::ControllerDigital::up) * dmax -
-              controller.getDigital(okapi::ControllerDigital::down) * dmax;
-    rightCmd = controller.getAnalog(okapi::ControllerAnalog::rightY) * dmax +
-               controller.getDigital(okapi::ControllerDigital::up) * dmax -
-               controller.getDigital(okapi::ControllerDigital::down) * dmax;
+    leftCmd  = controller.getAnalog(okapi::ControllerAnalog::leftY) * dmax;
+    rightCmd = controller.getAnalog(okapi::ControllerAnalog::rightY) * dmax;
 
     left.moveVelocity(leftCmd);
     right.moveVelocity(rightCmd);
@@ -102,6 +94,8 @@ void opcontrol() {
 
     intake.move(127 * controller.getDigital(okapi::ControllerDigital::R1) -
                 127 * controller.getDigital(okapi::ControllerDigital::R2));
+    flipper.move(127 * controller.getDigital(okapi::ControllerDigital::up) -
+                 127 * controller.getDigital(okapi::ControllerDigital::down));
     lift.moveVelocity(200 * controller.getDigital(okapi::ControllerDigital::L1) -
                       200 * controller.getDigital(okapi::ControllerDigital::L2));
 

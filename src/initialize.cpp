@@ -12,6 +12,13 @@ void initialize() {
   pros::lcd::initialize();
   pros::lcd::set_text(0, "RoboEagles: 709S");
 
+  // set intake to "coast" mode
+  intake.setBrakeMode(okapi::AbstractMotor::brakeMode::coast);
+  // set the launcher, lift, and flipper to "hold" mode
+  launcher.setBrakeMode(okapi::AbstractMotor::brakeMode::hold);
+  lift.setBrakeMode(okapi::AbstractMotor::brakeMode::hold);
+  flipper.setBrakeMode(okapi::AbstractMotor::brakeMode::hold);
+
   // launcher controller disable
   launchC.flipDisable(true);
 
