@@ -11,4 +11,13 @@ void launcherReady();
  * catapult arm quite forcfully */
 void launcherFire();
 
+/** lift heights */
+typedef enum {
+  lift_bottom = 0,
+  lift_top    = 360 * 30,
+} liftH;
+
+/** raise the lift by one level */
+liftH upHeight(liftH current);
+
 #endif

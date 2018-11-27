@@ -23,7 +23,7 @@ void autonomous() {
   dc.setTarget("A");     // set the target as the first motion path
   dc.waitUntilSettled(); // let the drive complete the motion path
   delay(150);
-  // drive.turnAngle(-135); // turn mostly around counterclockwise
+  drive.turnAngle(-135); // turn mostly around counterclockwise
 
   // wait for something to happen
   while (pros::competition::is_autonomous())
