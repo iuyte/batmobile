@@ -3,24 +3,20 @@
 #include "util.h"
 
 #include <iostream>
-using namespace okapi;
 
 Controller controller;
-Motor      left(12, false, okapi::AbstractMotor::gearset::green);
-Motor      right(13, true, okapi::AbstractMotor::gearset::green);
-Motor      launcher(11, false, okapi::AbstractMotor::gearset::green);
-Motor      intake(20, false, okapi::AbstractMotor::gearset::green);
-Motor      flipper(8, true, okapi::AbstractMotor::gearset::green);
+Motor      left(12, false, AbstractMotor::gearset::green);
+Motor      right(13, true, AbstractMotor::gearset::green);
+Motor      launcher(11, false, AbstractMotor::gearset::green);
+Motor      intake(20, false, AbstractMotor::gearset::green);
+Motor      flipper(8, true, AbstractMotor::gearset::green);
 MotorGroup lift({Motor(9, true, AbstractMotor::gearset::green),
                  Motor(10, false, AbstractMotor::gearset::green)});
 
-AsyncPosIntegratedController launchC = okapi::AsyncControllerFactory::posIntegrated(launcher, 200);
-ChassisControllerIntegrated  drive =
-        okapi::ChassisControllerFactory::create(left,
-                                                right,
-                                                okapi::AbstractMotor::gearset::green,
-                                                okapi::ChassisScales({4.1875_in, 10.5_in}));
-AsyncMotionProfileController dc = okapi::AsyncControllerFactory::motionProfile(.5, 1.25, 8, drive);
+AsyncPosIntegratedController launchC = AsyncControllerFactory::posIntegrated(launcher, 200);
+ChassisControllerIntegrated  drive   = ChassisControllerFactory::create(
+        left, right, AbstractMotor::gearset::green, ChassisScales({4.1875_in, 10.5_in}));
+AsyncMotionProfileController dc = AsyncControllerFactory::motionProfile(.5, 1.25, 8, drive);
 
 ::Pot pot('h');
 

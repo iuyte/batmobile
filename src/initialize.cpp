@@ -13,17 +13,17 @@ void initialize() {
   pros::lcd::set_text(0, "RoboEagles: 709S");
 
   // set intake to "coast" mode
-  intake.setBrakeMode(okapi::AbstractMotor::brakeMode::coast);
+  intake.setBrakeMode(AbstractMotor::brakeMode::coast);
   // set the launcher, lift, and flipper to "hold" mode
-  launcher.setBrakeMode(okapi::AbstractMotor::brakeMode::hold);
-  lift.setBrakeMode(okapi::AbstractMotor::brakeMode::hold);
-  flipper.setBrakeMode(okapi::AbstractMotor::brakeMode::hold);
+  launcher.setBrakeMode(AbstractMotor::brakeMode::hold);
+  lift.setBrakeMode(AbstractMotor::brakeMode::hold);
+  flipper.setBrakeMode(AbstractMotor::brakeMode::hold);
 
   // launcher controller disable
   launchC.flipDisable(true);
 
   // pot init
-  pot.zero = 1710;
+  pot.zero = 1550;
 
   // a task that prints a lot of useful data to the LCD emulator
   pros::Task(
@@ -38,7 +38,8 @@ void initialize() {
               pros::lcd::print(3, "launcher position: %f, %d", launcher.getPosition(), pot.get());
               pros::lcd::print(4, "launcher torque: %f", launcher.getTorque());
               pros::lcd::print(5, "launcher temp: %f", launcher.getTemperature());
-              pros::lcd::print(6, "indicator: %d", indicator);
+              pros::lcd::print(6, "flipper position: %f", flipper.getPosition());
+              pros::lcd::print(7, "indicator: %d", indicator);
               // controller.setText(1, 1, std::to_string(launcher.getPosition()));
               delay(50);
             }
@@ -58,9 +59,9 @@ void initialize() {
 void disabled() {
   // drive controller init: generate the motion path now (takes time) such that less precious time
   // during autonomous is lost
-  dc.generatePath({okapi::Point{0_ft, 0_ft, 0_deg},
-                   okapi::Point{0_ft, sqrt(2) * okapi::foot, 0_deg},
-                   okapi::Point{0_ft, sqrt(2) * okapi::foot, -180_deg}},
+  dc.generatePath({Point{0_ft, 0_ft, 0_deg},
+                   Point{0_ft, sqrt(2) * foot, 0_deg},
+                   Point{0_ft, sqrt(2) * foot, -180_deg}},
                   "A");
 
   // wait for something to happen

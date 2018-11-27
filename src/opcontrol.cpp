@@ -26,7 +26,7 @@ void opcontrol() {
   float leftCmd, rightCmd;
 
   // set the drive to "coast" mode, as it is more natural for drivers
-  okapi::AbstractMotor::brakeMode bmode = okapi::AbstractMotor::brakeMode::coast;
+  AbstractMotor::brakeMode bmode = AbstractMotor::brakeMode::coast;
   left.setBrakeMode(bmode);
   right.setBrakeMode(bmode);
 
@@ -42,8 +42,8 @@ void opcontrol() {
               if (lp) {
                 launcher.moveVoltage(lp);
               } else {
-                t = controller.getDigital(okapi::ControllerDigital::Y) * 2 +
-                    controller.getDigital(okapi::ControllerDigital::X) * 3;
+                t = controller.getDigital(ControllerDigital::Y) * 2 +
+                    controller.getDigital(ControllerDigital::X) * 3;
                 switch (t) {
                 case 2:
                   // pull the launcher arm back
@@ -67,8 +67,8 @@ void opcontrol() {
   // infinite driver-control loop, runs: drive, intake, and launcher
   while (true) {
     // get the input control for the drive
-    leftCmd  = controller.getAnalog(okapi::ControllerAnalog::leftY) * dmax;
-    rightCmd = controller.getAnalog(okapi::ControllerAnalog::rightY) * dmax;
+    leftCmd  = controller.getAnalog(ControllerAnalog::leftY) * dmax;
+    rightCmd = controller.getAnalog(ControllerAnalog::rightY) * dmax;
 
     left.moveVelocity(leftCmd);
     right.moveVelocity(rightCmd);
@@ -92,12 +92,15 @@ void opcontrol() {
       }
     }
 
-    intake.move(127 * controller.getDigital(okapi::ControllerDigital::R1) -
-                127 * controller.getDigital(okapi::ControllerDigital::R2));
-    flipper.move(127 * controller.getDigital(okapi::ControllerDigital::up) -
-                 127 * controller.getDigital(okapi::ControllerDigital::down));
-    lift.moveVelocity(200 * controller.getDigital(okapi::ControllerDigital::L1) -
-                      200 * controller.getDigital(okapi::ControllerDigital::L2));
+    intake.move(127 * controller.getDigital(ControllerDigital::R1) -
+                127 * controller.getDigital(ControllerDigital::R2));
+    flipper.moveAbsolute(
+            controller.getDigital(ControllerDigital::down)
+                    ? 0
+                    : (controller.getDigital(ControllerDigital::up) ? 500 : flipper.getPosition()),
+            135);
+    lift.moveVelocity(200 * controller.getDigital(ControllerDigital::L1) -
+                      200 * controller.getDigital(ControllerDigital::L2));
 
     delay(25);
   }
