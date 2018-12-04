@@ -23,46 +23,12 @@ void opcontrol() {
   const float dmax = 185;
 
   // the commanded drive power values
-  float leftCmd, rightCmd;
+  float leftCmd, rightCmd, launcherCmd;
 
   // set the drive to "coast" mode, as it is more natural for drivers
   AbstractMotor::brakeMode bmode = AbstractMotor::brakeMode::coast;
   left.setBrakeMode(bmode);
   right.setBrakeMode(bmode);
-
-  // infinite launcher control task
-  auto launcherTask = pros::Task(
-          [](void *none) {
-            // state switching var
-            int t;
-            // power
-            float lp;
-
-            while (!pros::competition::is_disabled() && !pros::competition::is_autonomous()) {
-              if (lp) {
-                launcher.moveVoltage(lp);
-              } else {
-                t = controller.getDigital(ControllerDigital::Y) * 2 +
-                    controller.getDigital(ControllerDigital::X) * 3;
-                switch (t) {
-                case 2:
-                  // pull the launcher arm back
-                  launcherReady();
-                  indicator = 100;
-                  break;
-                case 3:
-                  // fire the catapult
-                  launcherFire();
-                  indicator = -494;
-                  break;
-                default:
-                  break;
-                }
-              }
-              delay(25);
-            }
-          },
-          nullptr);
 
   // infinite driver-control loop, runs: drive, intake, and launcher
   while (true) {
@@ -102,30 +68,13 @@ void opcontrol() {
     lift.moveVelocity(200 * controller.getDigital(ControllerDigital::L1) -
                       200 * controller.getDigital(ControllerDigital::L2));
 
+    launcher.moveVelocity(-100 * controller.getDigital(ControllerDigital::A) +
+                          100 * controller.getDigital(ControllerDigital::B));
+    // launcherCmd = 200 * controller.getDigital(ControllerDigital::A) -
+    //              200 * controller.getDigital(ControllerDigital::B);
+    // lfly.moveVelocity(launcherCmd);
+    // rfly.moveVelocity(launcherCmd);
+
     delay(25);
-  }
-}
-
-void launcherMove(float voltage) {
-  // distance that the gear turns in clicks
-  static const float gDis = 625;
-  // launcher home position
-  float lph = 0;
-
-  if (abs(launcher.getPosition() - lph) < 400)
-    // if the launcher has a high torque, it means that the slip-gear is now driving the gear
-    // the catapult is on, and if this is new, then the home position should be reset
-    if (launcher.getTorque() > 0.2) {
-      lph = (abs(launcher.getPosition() - lph) < 400) ? lph : launcher.getPosition();
-    }
-  if (voltage) { // if there is controller input for the launcher
-    launcher.move(voltage);
-  } else { // if there is no controller input
-    // if the catapult arm is in the process of being pulled back, hold its position, and if not,
-    // don't bother holding the position
-    if (launcher.getPosition() - lph < gDis)
-      launcher.moveVelocity(0);
-    else
-      launcher.move(0);
   }
 }

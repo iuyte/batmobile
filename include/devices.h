@@ -10,11 +10,9 @@ using pros::delay;
 
 /** main V5 controller */
 extern Controller controller;
-extern Motor      left, right, launcher, intake, flipper;
-/** combination of both lift motors */
-extern MotorGroup lift;
-/** launcher async controller */
-extern AsyncPosIntegratedController launchC;
+extern Motor      left, right, intake, flipper;
+/** combination of both lift/flywheel motors */
+extern MotorGroup lift, launcher;
 /** combination of the left and right side motors */
 extern ChassisControllerIntegrated drive;
 /** motion profile controller for the drive */
