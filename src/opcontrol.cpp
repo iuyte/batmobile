@@ -20,10 +20,12 @@ void autonomous();
  */
 void opcontrol() {
   // The maximum speed in RPM for the drive motors
-  const float dmax = 185;
+  static const float dmax = 185;
+  // The maximum speed in RPM for the flywheel motors
+  static const float fmax = 100;
 
   // the commanded drive power values
-  float leftCmd, rightCmd, launcherCmd;
+  float leftCmd, rightCmd;
 
   // set the drive to "coast" mode, as it is more natural for drivers
   AbstractMotor::brakeMode bmode = AbstractMotor::brakeMode::coast;
@@ -68,12 +70,8 @@ void opcontrol() {
     lift.moveVelocity(200 * controller.getDigital(ControllerDigital::L1) -
                       200 * controller.getDigital(ControllerDigital::L2));
 
-    launcher.moveVelocity(-100 * controller.getDigital(ControllerDigital::A) +
-                          100 * controller.getDigital(ControllerDigital::B));
-    // launcherCmd = 200 * controller.getDigital(ControllerDigital::A) -
-    //              200 * controller.getDigital(ControllerDigital::B);
-    // lfly.moveVelocity(launcherCmd);
-    // rfly.moveVelocity(launcherCmd);
+    launcher.moveVelocity(controller.getDigital(ControllerDigital::A) * fmax +
+                          controller.getDigital(ControllerDigital::B) * fmax);
 
     delay(25);
   }
