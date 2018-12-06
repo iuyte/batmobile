@@ -28,6 +28,7 @@ void initialize() {
   // a task that prints a lot of useful data to the LCD emulator
   pros::Task(
           [](void *none) {
+            long int count = 0;
             while (true) {
               pros::lcd::print(
                       1, "drive position: %f, %f", left.getPosition(), right.getPosition());
@@ -43,7 +44,11 @@ void initialize() {
               pros::lcd::print(5, "launcher temp: %f", launcher.getTemperature());
               pros::lcd::print(6, "flipper position: %f", flipper.getPosition());
               pros::lcd::print(7, "indicator: %d", indicator);
-              controller.setText(0, 0, std::string("v: ").append(std::to_string(launcher.getActualVelocity())));
+              if (!(count++ % 4))
+                controller.setText(
+                        2,
+                        0,
+                        std::string("v: ").append(std::to_string(launcher.getActualVelocity())));
               delay(50);
             }
           },
