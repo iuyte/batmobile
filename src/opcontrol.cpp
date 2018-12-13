@@ -22,7 +22,7 @@ void opcontrol() {
   // The maximum speed in RPM for the drive motors
   static const float dmax = 185;
   // The maximum speed in RPM for the flywheel motors
-  static const float fmax = 100;
+  static const float fmax = 75;
 
   // the commanded drive power values
   float leftCmd, rightCmd;
@@ -31,6 +31,9 @@ void opcontrol() {
   AbstractMotor::brakeMode bmode = AbstractMotor::brakeMode::coast;
   left.setBrakeMode(bmode);
   right.setBrakeMode(bmode);
+
+  fc.setTarget(-fmax);
+  fc.waitUntilSettled();
 
   // infinite driver-control loop, runs: drive, intake, and launcher
   while (true) {
@@ -70,8 +73,8 @@ void opcontrol() {
     lift.moveVelocity(200 * controller.getDigital(ControllerDigital::L1) -
                       200 * controller.getDigital(ControllerDigital::L2));
 
-    launcher.moveVelocity(controller.getDigital(ControllerDigital::A) * fmax +
-                          controller.getDigital(ControllerDigital::B) * fmax);
+    //launcher.moveVelocity(controller.getDigital(ControllerDigital::B) * fmax -
+    //                      controller.getDigital(ControllerDigital::A) * fmax);
 
     delay(25);
   }

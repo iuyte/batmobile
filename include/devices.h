@@ -17,19 +17,7 @@ extern MotorGroup lift, launcher;
 extern ChassisControllerIntegrated drive;
 /** motion profile controller for the drive */
 extern AsyncMotionProfileController dc;
-
-/** my own potentiometer class */
-struct Pot : public pros::ADIPotentiometer {
-  using pros::ADIPotentiometer::ADIPotentiometer;
-
-  /** get the sensor value with zero and scale applied */
-  int32_t get();
-
-  int32_t zero;
-  int32_t scale = 1.0;
-};
-
-/** Potentiometer in legacy ADI port H */
-extern ::Pot pot;
+/** velocity controller for the flywheel */
+extern AsyncVelPIDController fc;
 
 #endif

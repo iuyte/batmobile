@@ -22,33 +22,33 @@ void initialize() {
   lift.setBrakeMode(AbstractMotor::brakeMode::hold);
   flipper.setBrakeMode(AbstractMotor::brakeMode::hold);
 
-  // pot init
-  pot.zero = 1550;
+  // enable the flywheel controller
+  //fc.flipDisable(false);
 
   // a task that prints a lot of useful data to the LCD emulator
   pros::Task(
           [](void *none) {
-            long int count = 0;
             while (true) {
-              pros::lcd::print(
-                      1, "drive position: %f, %f", left.getPosition(), right.getPosition());
-              pros::lcd::print(2,
-                               "drive velocity: %f, %f",
-                               left.getActualVelocity(),
-                               right.getActualVelocity());
+              //pros::lcd::print(
+              //        1, "drive position: %f, %f", left.getPosition(), right.getPosition());
+              //pros::lcd::print(2,
+              //                 "drive velocity: %f, %f",
+              //                 left.getActualVelocity(),
+              //                 right.getActualVelocity());
               pros::lcd::print(3,
                                "launcher position: %f, %f",
                                launcher.getPosition(),
                                launcher.getActualVelocity());
               pros::lcd::print(4, "launcher torque: %f", launcher.getTorque());
               pros::lcd::print(5, "launcher temp: %f", launcher.getTemperature());
-              pros::lcd::print(6, "flipper position: %f", flipper.getPosition());
+              //pros::lcd::print(6, "flipper position: %f", flipper.getPosition());
               pros::lcd::print(7, "indicator: %d", indicator);
-              if (!(count++ % 4))
-                controller.setText(
-                        2,
-                        0,
-                        std::string("v: ").append(std::to_string(launcher.getActualVelocity())));
+              controller.setText(
+                      2,
+                      0,
+                      std::string("v: ")
+                              .append(std::to_string((int)(launcher.getActualVelocity() + .5)))
+                              .append("   "));
               delay(50);
             }
           },
