@@ -8,10 +8,6 @@
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-  // LCD emulator init
-  pros::lcd::initialize();
-  pros::lcd::set_text(0, "RoboEagles: 709S");
-
   // Clear controller
   controller.clear();
 
@@ -22,27 +18,27 @@ void initialize() {
   lift.setBrakeMode(AbstractMotor::brakeMode::hold);
   flipper.setBrakeMode(AbstractMotor::brakeMode::hold);
 
-  // enable the flywheel controller
-  //fc.flipDisable(false);
+  // set the flywheel pid
+  //launcher.setVelPID(.4, .1, 0, .75);
+  launcher.setVelPID(0, 2, 0, 7);
 
   // a task that prints a lot of useful data to the LCD emulator
   pros::Task(
           [](void *none) {
+            // create a Label on the V5 screen
+            lv_obj_t * label1 =  lv_label_create(lv_scr_act(), NULL);
+
+            // change the Label's text
+            lv_label_set_text(label1, "Hello world!");
+
+            // Align the Label to the center
+            lv_obj_align(label1, NULL, LV_ALIGN_CENTER, -50, 0);
+
+            // start of text
+            auto text = std::string("speed: ");
+
             while (true) {
-              //pros::lcd::print(
-              //        1, "drive position: %f, %f", left.getPosition(), right.getPosition());
-              //pros::lcd::print(2,
-              //                 "drive velocity: %f, %f",
-              //                 left.getActualVelocity(),
-              //                 right.getActualVelocity());
-              pros::lcd::print(3,
-                               "launcher position: %f, %f",
-                               launcher.getPosition(),
-                               launcher.getActualVelocity());
-              pros::lcd::print(4, "launcher torque: %f", launcher.getTorque());
-              pros::lcd::print(5, "launcher temp: %f", launcher.getTemperature());
-              //pros::lcd::print(6, "flipper position: %f", flipper.getPosition());
-              pros::lcd::print(7, "indicator: %d", indicator);
+              lv_label_set_text(label1, (text + std::to_string(launcher.getActualVelocity())).c_str());
               controller.setText(
                       2,
                       0,
@@ -53,10 +49,6 @@ void initialize() {
             }
           },
           nullptr);
-
-  // wait for something to happen
-  while (pros::competition::is_disabled())
-    delay(50);
 }
 
 /**

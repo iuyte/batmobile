@@ -20,8 +20,6 @@ void autonomous() {
   left.setBrakeMode(okapi::AbstractMotor::brakeMode::brake);
   right.setBrakeMode(okapi::AbstractMotor::brakeMode::brake);
 
-  fc.setTarget(-75);
-  fc.waitUntilSettled();
   goto END;
 
   dc.setTarget("A");     // set the target as the first motion path

@@ -17,7 +17,5 @@ extern MotorGroup lift, launcher;
 extern ChassisControllerIntegrated drive;
 /** motion profile controller for the drive */
 extern AsyncMotionProfileController dc;
-/** velocity controller for the flywheel */
-extern AsyncVelPIDController fc;
 
 #endif

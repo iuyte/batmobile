@@ -54,7 +54,8 @@
  * You should add more #includes here
  */
 #include "okapi/api.hpp"
-//#include "pros/api_legacy.h"
+#include "display/lvgl.h"
+
 #include <iostream>
 using std::cout;
 using std::int32_t;

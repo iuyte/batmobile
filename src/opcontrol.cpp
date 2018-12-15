@@ -19,10 +19,12 @@ void autonomous();
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-  // The maximum speed in RPM for the drive motors
+  // maximum speed in RPM for the drive motors
   static const float dmax = 185;
-  // The maximum speed in RPM for the flywheel motors
+  // maximum speed in RPM for the flywheel motors
   static const float fmax = 75;
+  // flywheel speed
+  float fspeed = 0;
 
   // the commanded drive power values
   float leftCmd, rightCmd;
@@ -31,9 +33,6 @@ void opcontrol() {
   AbstractMotor::brakeMode bmode = AbstractMotor::brakeMode::coast;
   left.setBrakeMode(bmode);
   right.setBrakeMode(bmode);
-
-  fc.setTarget(-fmax);
-  fc.waitUntilSettled();
 
   // infinite driver-control loop, runs: drive, intake, and launcher
   while (true) {
@@ -73,8 +72,14 @@ void opcontrol() {
     lift.moveVelocity(200 * controller.getDigital(ControllerDigital::L1) -
                       200 * controller.getDigital(ControllerDigital::L2));
 
-    //launcher.moveVelocity(controller.getDigital(ControllerDigital::B) * fmax -
-    //                      controller.getDigital(ControllerDigital::A) * fmax);
+    // set the flywheel speed such that if A is pressed, it toggles forward, and if B is pressed, it
+    // toggles backward motion. if the either mode is powered on and a button is pressed, the
+    // flywheel no longer recieves power
+    fspeed =
+            controller.getDigital(ControllerDigital::A)
+                    ? ((fspeed) ? 0 : fmax)
+                    : (controller.getDigital(ControllerDigital::B) ? ((fspeed) ? 0 : -15) : fspeed);
+    launcher.moveVelocity(fspeed); // move the flywheel
 
     delay(25);
   }
