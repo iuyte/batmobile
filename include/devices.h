@@ -7,6 +7,7 @@
 using namespace okapi::literals;
 using namespace okapi;
 using pros::delay;
+using pros::millis;
 
 /** main V5 controller */
 extern Controller controller;

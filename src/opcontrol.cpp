@@ -23,11 +23,13 @@ void opcontrol() {
   static const float dmax = 185;
   // maximum speed in RPM for the flywheel motors
   static const float fmax = 75;
+
   // flywheel speed
   float fspeed = 0;
-
   // the commanded drive power values
   float leftCmd, rightCmd;
+  // counter for flywheel toggle
+  unsigned long fcount = millis();
 
   // set the drive to "coast" mode, as it is more natural for drivers
   AbstractMotor::brakeMode bmode = AbstractMotor::brakeMode::coast;
@@ -75,10 +77,13 @@ void opcontrol() {
     // set the flywheel speed such that if A is pressed, it toggles forward, and if B is pressed, it
     // toggles backward motion. if the either mode is powered on and a button is pressed, the
     // flywheel no longer recieves power
-    fspeed =
-            controller.getDigital(ControllerDigital::A)
-                    ? ((fspeed) ? 0 : fmax)
-                    : (controller.getDigital(ControllerDigital::B) ? ((fspeed) ? 0 : -15) : fspeed);
+    if (millis() - fcount > 250) {
+      fspeed = controller.getDigital(ControllerDigital::A)
+                       ? ((fspeed) ? 0 : fmax)
+                       : (controller.getDigital(ControllerDigital::B) ? ((fspeed) ? 0 : -15)
+                                                                      : fspeed);
+      fcount = millis();
+    }
     launcher.moveVelocity(fspeed); // move the flywheel
 
     delay(25);
