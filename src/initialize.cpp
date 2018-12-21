@@ -25,26 +25,78 @@ void initialize() {
   // a task that prints a lot of useful data to the LCD emulator
   pros::Task(
           [](void *none) {
-            // create a Label on the V5 screen
-            lv_obj_t *label1 = lv_label_create(lv_scr_act(), NULL);
+            class Line {
+            private:
+              std::string    atext;
+              AbstractMotor *motor;
+              unsigned int   number;
 
-            // change the Label's text
-            lv_label_set_text(label1, "Hello world!");
+            public:
+              typedef enum { Velocity, Temperature, Position } ValueType;
+              lv_obj_t *line;
 
-            // Align the Label to the center
-            lv_obj_align(label1, NULL, LV_ALIGN_CENTER, -50, 0);
+              Line(std::string    name,
+                   AbstractMotor *motor,
+                   ValueType      valueType,
+                   unsigned int   number) :
+                  motor(motor),
+                  valueType(valueType), number(number) {
+                switch (valueType) {
+                case Velocity:
+                  atext = name + " velocity (rpm): ";
+                  break;
+                case Temperature:
+                  atext = name + " temperature (°): ";
+                  break;
+                case Position:
+                  atext = name + " position: ";
+                  break;
+                default:
+                  break;
+                }
 
-            // start of text
-            auto text = std::string("speed: ");
+                line = lv_label_create(lv_scr_act(), NULL);
+                delay(2);
+              }
+
+              std::string get() {
+                switch (valueType) {
+                case Velocity:
+                  return atext + std::to_string(motor->getActualVelocity());
+                case Temperature:
+                  return atext + std::to_string(motor->getTemperature());
+                case Position:
+                  return atext + std::to_string(motor->getPosition());
+                default:
+                  return std::string("error");
+                }
+              }
+
+            private:
+              ValueType valueType;
+            };
+
+            unsigned int nlines = 0;
+
+            Line lines[] = {
+                    Line("flywheel", &launcher, Line::Velocity, nlines++),
+                    Line("flywheel", &launcher, Line::Temperature, nlines++),
+                    Line("intake", &intake, Line::Velocity, nlines++),
+                    Line("lift", &lift, Line::Position, nlines++),
+                    Line("flipper", &flipper, Line::Position, nlines++),
+            };
+
+            for (std::size_t i = 0; i < nlines; i++) {
+              lv_obj_align(lines[i].line, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 20 * i);
+            }
 
             while (true) {
-              lv_label_set_text(label1,
-                                (text + std::to_string(launcher.getActualVelocity())).c_str());
+              for (std::size_t i = 0; i < nlines; i++) {
+                lv_label_set_text(lines[i].line, lines[i].get().c_str());
+              }
+
               controller.setText(
-                      2, 0,
-                      std::string("v: ")
-                              .append(std::to_string((int)(launcher.getActualVelocity() + .5)))
-                              .append("   "));
+                      2, 0, std::to_string((int)(launcher.getActualVelocity() + .5)).append("   "));
               delay(50);
             }
           },
