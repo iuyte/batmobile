@@ -79,11 +79,13 @@ void initialize() {
             unsigned int nlines = 0;
 
             Line lines[] = {
-                    Line("flywheel", &launcher, Line::Velocity, nlines++),
-                    Line("flywheel", &launcher, Line::Temperature, nlines++),
-                    Line("intake", &intake, Line::Velocity, nlines++),
-                    Line("lift", &lift, Line::Position, nlines++),
-                    Line("flipper", &flipper, Line::Position, nlines++),
+                    Line("flywheel", &launcher, Line::Velocity, ++nlines),
+                    Line("flywheel", &launcher, Line::Temperature, ++nlines),
+                    Line("intake", &intake, Line::Velocity, ++nlines),
+                    Line("lift", &lift, Line::Position, ++nlines),
+                    Line("flipper", &flipper, Line::Position, ++nlines),
+                    Line("left drive", &left, Line::Position, ++nlines),
+                    Line("right drive", &right, Line::Position, ++nlines),
             };
 
             for (std::size_t i = 0; i < nlines; i++) {
