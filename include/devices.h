@@ -19,4 +19,7 @@ extern ChassisControllerIntegrated drive;
 /** motion profile controller for the drive */
 extern AsyncMotionProfileController dc;
 
+/** status lights */
+extern pros::ADIDigitalOut lights[2];
+
 #endif

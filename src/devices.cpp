@@ -17,3 +17,5 @@ MotorGroup launcher({Motor(19, true, AbstractMotor::gearset::green),
 ChassisControllerIntegrated drive = ChassisControllerFactory::create(
         left, right, AbstractMotor::gearset::green, ChassisScales({4.1875_in, 10.5_in}));
 AsyncMotionProfileController dc = AsyncControllerFactory::motionProfile(.5, 1.25, 8, drive);
+
+pros::ADIDigitalOut lights[2] = {pros::ADIDigitalOut('a', false), pros::ADIDigitalOut('b', false)};

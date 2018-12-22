@@ -99,6 +99,14 @@ void initialize() {
 
               controller.setText(
                       2, 0, std::to_string((int)(launcher.getActualVelocity() + .5)).append("   "));
+
+              if (abs(launcher.getActualVelocity() - launcher.getTargetVelocity()) >= 5) {
+                lights[0].set_value(true);
+                lights[1].set_value(true);
+              } else {
+                lights[0].set_value(false);
+                lights[1].set_value(false);
+              }
               delay(50);
             }
           },
