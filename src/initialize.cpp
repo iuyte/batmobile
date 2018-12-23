@@ -1,12 +1,14 @@
 #include "devices.h"
 #include "main.h"
+#include "switcher.h"
 
-/**
- * Runs initialization code. This occurs as soon as the program is started.
- *
- * All other competition modes are blocked by initialize; it is recommended
- * to keep execution time for this mode under a few seconds.
- */
+/*Called when a button is released ot long pressed*/
+static lv_res_t btnm_action(lv_obj_t *btnm, const char *txt) {
+  printf("Button: %s released\n", txt);
+
+  return LV_RES_OK; /*Return OK because the button matrix is not deleted*/
+}
+
 void initialize() {
   // Clear controller
   controller.clear();
@@ -22,12 +24,15 @@ void initialize() {
   // launcher.setVelPID(.4, .1, 0, .75);
   launcher.setVelPID(0, 2, 0, 7);
 
+  // select the autonomous routine using the touchscreen
+  chooseAuton();
+
   // a task that prints a lot of useful data to the LCD emulator
   pros::Task(
           [](void *none) {
             class Line {
             private:
-              std::string    atext;
+              string         atext;
               AbstractMotor *motor;
               unsigned int   number;
 
@@ -35,12 +40,8 @@ void initialize() {
               typedef enum { Velocity, Temperature, Position } ValueType;
               lv_obj_t *line;
 
-              Line(std::string    name,
-                   AbstractMotor *motor,
-                   ValueType      valueType,
-                   unsigned int   number) :
-                  motor(motor),
-                  valueType(valueType), number(number) {
+              Line(string name, AbstractMotor *motor, ValueType valueType, unsigned int number) :
+                  motor(motor), valueType(valueType), number(number) {
                 switch (valueType) {
                 case Velocity:
                   atext = name + " velocity (rpm): ";
@@ -59,7 +60,7 @@ void initialize() {
                 delay(2);
               }
 
-              std::string get() {
+              string get() {
                 switch (valueType) {
                 case Velocity:
                   return atext + std::to_string(motor->getActualVelocity());
@@ -68,7 +69,7 @@ void initialize() {
                 case Position:
                   return atext + std::to_string(motor->getPosition());
                 default:
-                  return std::string("error");
+                  return string("error");
                 }
               }
 
@@ -100,43 +101,14 @@ void initialize() {
               controller.setText(
                       2, 0, std::to_string((int)(launcher.getActualVelocity() + .5)).append("   "));
 
-              if (abs(launcher.getActualVelocity() - launcher.getTargetVelocity()) >= 5) {
-                lights[0].set_value(true);
-                lights[1].set_value(true);
-              } else {
-                lights[0].set_value(false);
-                lights[1].set_value(false);
-              }
+              light.set_value(abs(launcher.getActualVelocity() - launcher.getTargetVelocity()) >=
+                              5);
               delay(50);
             }
           },
           nullptr);
 }
 
-/**
- * Runs while the robot is in the disabled state of Field Management System or
- * the VEX Competition Switch, following either autonomous or opcontrol. When
- * the robot is enabled, this task will exit.
- */
-void disabled() {
-  // drive controller init: generate the motion path now (takes time) such that less precious time
-  // during autonomous is lost
-  dc.generatePath({Point{0_ft, 0_ft, 0_deg}, Point{0_ft, sqrt(2) * foot, 0_deg},
-                   Point{0_ft, sqrt(2) * foot, -180_deg}},
-                  "A");
+void disabled() {}
 
-  // wait for something to happen
-  while (pros::competition::is_disabled())
-    delay(50);
-}
-
-/**
- * Runs after initialize(), and before autonomous when connected to the Field
- * Management System or the VEX Competition Switch. This is intended for
- * competition-specific initialization routines, such as an autonomous selector
- * on the LCD.
- *
- * This task will exit when the robot is enabled and autonomous or opcontrol
- * starts.
- */
 void competition_initialize() {}

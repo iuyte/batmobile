@@ -4,6 +4,14 @@
 #include "devices.h"
 #include "main.h"
 #include "util.h"
+#include "switcher.h"
+
+// flipper speed in rpm
+static const int flpSpeed = 135;
+// top flipper height
+static const int flpMax   = 500;
+// bottom flipper height
+static const int flpMin   = 50;
 
 /** lift heights */
 typedef enum {

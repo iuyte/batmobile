@@ -5,16 +5,16 @@
 #include <string>
 #include <vector>
 
-template <typename Out> void split(const std::string &s, char delim, Out result) {
+template <typename Out> void split(const string &s, char delim, Out result) {
   std::stringstream ss(s);
-  std::string       item;
+  string            item;
   while (std::getline(ss, item, delim)) {
     *(result++) = item;
   }
 }
 
-std::vector<std::string> split(const std::string &s, char delim) {
-  std::vector<std::string> elems;
+std::vector<string> split(const string &s, char delim) {
+  std::vector<string> elems;
   split(s, delim, std::back_inserter(elems));
   return elems;
 }

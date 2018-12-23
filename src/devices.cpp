@@ -5,17 +5,17 @@
 #include <iostream>
 
 Controller controller;
-Motor      left(12, true, AbstractMotor::gearset::green);
-Motor      right(13, false, AbstractMotor::gearset::green);
-Motor      intake(10, false, AbstractMotor::gearset::green);
-Motor      flipper(8, true, AbstractMotor::gearset::green);
-MotorGroup lift({Motor(1, true, AbstractMotor::gearset::green),
-                 Motor(2, false, AbstractMotor::gearset::green)});
-MotorGroup launcher({Motor(19, true, AbstractMotor::gearset::green),
-                     Motor(20, false, AbstractMotor::gearset::green)});
+Motor      left(11, true, AbstractMotor::gearset::green);
+Motor      right(12, false, AbstractMotor::gearset::green);
+Motor      intake(13, false, AbstractMotor::gearset::green);
+Motor      flipper(16, true, AbstractMotor::gearset::green);
+MotorGroup lift({Motor(15, false, AbstractMotor::gearset::green),
+                 Motor(14, true, AbstractMotor::gearset::green)});
+MotorGroup launcher({Motor(19, false, AbstractMotor::gearset::green),
+                     Motor(20, true, AbstractMotor::gearset::green)});
 
 ChassisControllerIntegrated drive = ChassisControllerFactory::create(
-        left, right, AbstractMotor::gearset::green, ChassisScales({4.1875_in, 10.5_in}));
+        left, right, AbstractMotor::gearset::green, ChassisScales({4.0625_in, 15.125_in}));
 AsyncMotionProfileController dc = AsyncControllerFactory::motionProfile(.5, 1.25, 8, drive);
 
-pros::ADIDigitalOut lights[2] = {pros::ADIDigitalOut('a', false), pros::ADIDigitalOut('b', false)};
+pros::ADIDigitalOut light = pros::ADIDigitalOut('a', false);

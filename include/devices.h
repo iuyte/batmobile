@@ -20,6 +20,6 @@ extern ChassisControllerIntegrated drive;
 extern AsyncMotionProfileController dc;
 
 /** status lights */
-extern pros::ADIDigitalOut lights[2];
+extern pros::ADIDigitalOut light;
 
 #endif
