@@ -15,6 +15,8 @@ void blueFront() {}
 void blueBack() {}
 void doNothing() {}
 
+void printData();
+
 vfptr auton = &doNothing;
 
 struct SwitcherMenu {
@@ -87,8 +89,13 @@ vfptr selectMenu(SwitcherMenu *menu) {
   lv_btnm_set_style(btnMtx, LV_BTNM_STYLE_BTN_PR, &style_btn_pr);
 
   // wait for something to be selected
-  while (!pressed)
+  while (!pressed) {
+    if (controller::master.getDigital(ControllerDigital::R1)) {
+      selected = "none";
+      break;
+    }
     delay(20);
+  }
 
   // delete the button
   lv_obj_del(btnMtx);
@@ -116,7 +123,10 @@ void chooseAuton() {
         SwitcherMenu("blue", {
                 SwitcherMenu("front", {}, &blueFront),
                 SwitcherMenu("back", {}, &blueBack),
-        })});
+        }),
+        SwitcherMenu("none", {}, &doNothing),
+        SwitcherMenu("data", {}, &printData),
+  });
   // clang-format on */
 
   auton = selectMenu(&rootMenu);

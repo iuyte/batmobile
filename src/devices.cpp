@@ -4,7 +4,52 @@
 
 #include <iostream>
 
-Controller controller;
+namespace controller {
+  using okapi::ControllerAnalog;
+  using okapi::ControllerDigital;
+
+  /** main V5 controller */
+  Controller master(ControllerId::master);
+  /** partner joystick V5 controller */
+  Controller partner(ControllerId::partner);
+
+  const float leftDrive() {
+    return master.getAnalog(ControllerAnalog::leftY) - partner.getAnalog(ControllerAnalog::rightY);
+  }
+
+  const float rightDrive() {
+    return master.getAnalog(ControllerAnalog::rightY) - partner.getAnalog(ControllerAnalog::leftY);
+  }
+
+  const bool driveHoldToggle() { return master.getDigital(ControllerDigital::X); }
+
+  const bool lift() {
+    return master.getDigital(ControllerDigital::L1) - master.getDigital(ControllerDigital::L2);
+  }
+
+  const bool flipper() {
+    return master.getDigital(ControllerDigital::R1) - master.getDigital(ControllerDigital::R2);
+  }
+
+  const bool intake() {
+    return partner.getDigital(ControllerDigital::L1) - partner.getDigital(ControllerDigital::L2);
+  }
+
+  namespace launcher {
+    const bool toggle() { return partner.getDigital(ControllerDigital::A); }
+
+    const bool backwards() { return partner.getDigital(ControllerDigital::B); }
+
+    const bool less() { return partner.getDigital(ControllerDigital::down); }
+
+    const bool more() { return partner.getDigital(ControllerDigital::up); }
+
+    const bool middleFlag() { return partner.getDigital(ControllerDigital::R2); }
+
+    const bool highFlag() { return partner.getDigital(ControllerDigital::R1); }
+  } // namespace launcher
+} // namespace controller
+
 Motor      left(11, true, AbstractMotor::gearset::green);
 Motor      right(12, false, AbstractMotor::gearset::green);
 Motor      intake(13, false, AbstractMotor::gearset::green);

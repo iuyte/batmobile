@@ -11,7 +11,8 @@ static lv_res_t btnm_action(lv_obj_t *btnm, const char *txt) {
 
 void initialize() {
   // Clear controller
-  controller.clear();
+  controller::master.clear();
+  controller::partner.clear();
 
   // set flywheel and intake to "coast" mode
   intake.setBrakeMode(AbstractMotor::brakeMode::coast);
@@ -37,20 +38,23 @@ void initialize() {
               unsigned int   number;
 
             public:
-              typedef enum { Velocity, Temperature, Position } ValueType;
+              typedef enum { Position, Temperature, Velocity, Power } ValueType;
               lv_obj_t *line;
 
               Line(string name, AbstractMotor *motor, ValueType valueType, unsigned int number) :
                   motor(motor), valueType(valueType), number(number) {
                 switch (valueType) {
-                case Velocity:
-                  atext = name + " velocity (rpm): ";
+                case Position:
+                  atext = name + " position: ";
                   break;
                 case Temperature:
                   atext = name + " temperature (°): ";
                   break;
-                case Position:
-                  atext = name + " position: ";
+                case Velocity:
+                  atext = name + " velocity (rpm): ";
+                  break;
+                case Power:
+                  atext = name + " power: ";
                   break;
                 default:
                   break;
@@ -62,12 +66,14 @@ void initialize() {
 
               string get() {
                 switch (valueType) {
-                case Velocity:
-                  return atext + std::to_string(motor->getActualVelocity());
-                case Temperature:
-                  return atext + std::to_string(motor->getTemperature());
                 case Position:
                   return atext + std::to_string(motor->getPosition());
+                case Temperature:
+                  return atext + std::to_string(motor->getTemperature());
+                case Velocity:
+                  return atext + std::to_string(motor->getActualVelocity());
+                case Power:
+                  return atext + std::to_string(motor->getPower() * (127 / 11));
                 default:
                   return string("error");
                 }
@@ -82,6 +88,7 @@ void initialize() {
             Line lines[] = {
                     Line("flywheel", &launcher, Line::Velocity, ++nlines),
                     Line("flywheel", &launcher, Line::Temperature, ++nlines),
+                    Line("flywheel", &launcher, Line::Power, ++nlines),
                     Line("intake", &intake, Line::Velocity, ++nlines),
                     Line("lift", &lift, Line::Position, ++nlines),
                     Line("flipper", &flipper, Line::Position, ++nlines),
@@ -93,16 +100,23 @@ void initialize() {
               lv_obj_align(lines[i].line, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 20 * i);
             }
 
+            char tline[2][20];
+
             while (true) {
               for (std::size_t i = 0; i < nlines; i++) {
                 lv_label_set_text(lines[i].line, lines[i].get().c_str());
               }
 
-              controller.setText(
-                      2, 0, std::to_string((int)(launcher.getActualVelocity() + .5)).append("   "));
+              sprintf(tline[0], "v: %.3d | t: %.2f", (int)(launcher.getActualVelocity() + .5),
+                      launcher.getTemperature());
+              controller::master.setText(2, 0, tline[0]);
+              sprintf(tline[1], "v: %.3d | t: %.2f", (int)(launcher.getActualVelocity() + .5),
+                      launcher.getTemperature());
+              controller::partner.setText(2, 0, tline[1]);
 
-              light.set_value(abs(launcher.getActualVelocity() - launcher.getTargetVelocity()) >=
-                              5);
+              light.set_value(abs(launcher.getActualVelocity() - launcher.getTargetVelocity()) >
+                                      5 ||
+                              launcher.getTargetVelocity() == 0);
               delay(50);
             }
           },
