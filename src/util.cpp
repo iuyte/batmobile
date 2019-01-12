@@ -1,10 +1,9 @@
 #include "util.h"
+#include "main.h"
 #include "devices.h"
 
 #include <iterator>
 #include <sstream>
-#include <string>
-#include <vector>
 
 int indicator = 0;
 
@@ -16,8 +15,8 @@ template <typename Out> void split(const string &s, char delim, Out result) {
   }
 }
 
-std::vector<string> split(const string &s, char delim) {
-  std::vector<string> elems;
+vector<string> split(const string &s, char delim) {
+  vector<string> elems;
   split(s, delim, std::back_inserter(elems));
   return elems;
 }

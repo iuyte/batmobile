@@ -2,7 +2,6 @@
 #define _IUYTE_DEVICES_H_
 
 #include "main.h"
-#include "util.h"
 
 using namespace okapi::literals;
 using namespace okapi;
@@ -19,12 +18,12 @@ namespace controller {
   const float leftDrive();
   const float rightDrive();
   const bool  driveHoldToggle();
-  const bool  lift();
-  const bool  flipper();
-  const bool  intake();
+  const float lift();
+  const float flipper();
+  const float intake();
 
   namespace launcher {
-    const bool toggle();
+    const bool off();
     const bool backwards();
     const bool less();
     const bool more();

@@ -1,13 +1,6 @@
-#include "devices.h"
 #include "main.h"
-#include "switcher.h"
 
-/*Called when a button is released ot long pressed*/
-static lv_res_t btnm_action(lv_obj_t *btnm, const char *txt) {
-  printf("Button: %s released\n", txt);
-
-  return LV_RES_OK; /*Return OK because the button matrix is not deleted*/
-}
+bool isSelected = false;
 
 void initialize() {
   // Clear controller
@@ -22,15 +15,18 @@ void initialize() {
   flipper.setBrakeMode(AbstractMotor::brakeMode::hold);
 
   // set the flywheel pid
-  // launcher.setVelPID(.4, .1, 0, .75);
   launcher.setVelPID(0, 2, 0, 7);
 
   // select the autonomous routine using the touchscreen
   chooseAuton();
+  isSelected = true;
 
   // a task that prints a lot of useful data to the LCD emulator
   pros::Task(
           [](void *none) {
+            // wait until the autonmous is selected or the robot is enabled
+            // waitUntil(isSelected || !pros::competition::is_disabled(), 20);
+
             class Line {
             private:
               string         atext;
@@ -100,19 +96,17 @@ void initialize() {
               lv_obj_align(lines[i].line, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 20 * i);
             }
 
-            char tline[2][20];
+            char tline[20];
 
             while (true) {
               for (std::size_t i = 0; i < nlines; i++) {
                 lv_label_set_text(lines[i].line, lines[i].get().c_str());
               }
 
-              sprintf(tline[0], "v: %.3d | t: %.2f", (int)(launcher.getActualVelocity() + .5),
+              sprintf(tline, "v: %.3d | t: %.2f", (int)(launcher.getActualVelocity() + .5),
                       launcher.getTemperature());
-              controller::master.setText(2, 0, tline[0]);
-              sprintf(tline[1], "v: %.3d | t: %.2f", (int)(launcher.getActualVelocity() + .5),
-                      launcher.getTemperature());
-              controller::partner.setText(2, 0, tline[1]);
+              controller::master.setText(2, 0, tline);
+              controller::partner.setText(2, 0, tline);
 
               light.set_value(abs(launcher.getActualVelocity() - launcher.getTargetVelocity()) >
                                       5 ||

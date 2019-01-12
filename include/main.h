@@ -57,11 +57,19 @@
 #include "display/lvgl.h"
 
 #include <iostream>
+#include <vector>
 #include <string>
+
+#include "autonomous.h"
+#include "devices.h"
+#include "presets.h"
+#include "util.h"
+
 using std::cout;
 using std::endl;
-using std::string;
 using std::int32_t;
+using std::string;
+using std::vector;
 
 #ifdef __cplusplus
 /**

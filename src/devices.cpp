@@ -1,8 +1,4 @@
 #include "devices.h"
-#include "main.h"
-#include "util.h"
-
-#include <iostream>
 
 namespace controller {
   using okapi::ControllerAnalog;
@@ -23,20 +19,22 @@ namespace controller {
 
   const bool driveHoldToggle() { return master.getDigital(ControllerDigital::X); }
 
-  const bool lift() {
+  const float lift() {
     return master.getDigital(ControllerDigital::L1) - master.getDigital(ControllerDigital::L2);
   }
 
-  const bool flipper() {
+  const float flipper() {
     return master.getDigital(ControllerDigital::R1) - master.getDigital(ControllerDigital::R2);
   }
 
-  const bool intake() {
-    return partner.getDigital(ControllerDigital::L1) - partner.getDigital(ControllerDigital::L2);
+  const float intake() {
+    float m = partner.getDigital(ControllerDigital::right) ? .7 : 1;
+    return (partner.getDigital(ControllerDigital::R1) - partner.getDigital(ControllerDigital::R2)) *
+           m;
   }
 
   namespace launcher {
-    const bool toggle() { return partner.getDigital(ControllerDigital::A); }
+    const bool off() { return partner.getDigital(ControllerDigital::A); }
 
     const bool backwards() { return partner.getDigital(ControllerDigital::B); }
 
@@ -44,14 +42,14 @@ namespace controller {
 
     const bool more() { return partner.getDigital(ControllerDigital::up); }
 
-    const bool middleFlag() { return partner.getDigital(ControllerDigital::R2); }
+    const bool middleFlag() { return partner.getDigital(ControllerDigital::L2); }
 
-    const bool highFlag() { return partner.getDigital(ControllerDigital::R1); }
+    const bool highFlag() { return partner.getDigital(ControllerDigital::L1); }
   } // namespace launcher
 } // namespace controller
 
-Motor      left(11, true, AbstractMotor::gearset::green);
-Motor      right(12, false, AbstractMotor::gearset::green);
+Motor      left(11, false, AbstractMotor::gearset::green);
+Motor      right(12, true, AbstractMotor::gearset::green);
 Motor      intake(13, false, AbstractMotor::gearset::green);
 Motor      flipper(16, true, AbstractMotor::gearset::green);
 MotorGroup lift({Motor(15, false, AbstractMotor::gearset::green),

@@ -1,27 +1,11 @@
-#include "switcher.h"
-#include <vector>
+#include "autonomous.h"
 
-using std::unique_ptr;
-typedef void (*vfptr)();
-
-#define A_RED_FRONT 0
-#define A_RED_BACK 1
-#define A_BLUE_FRONT 2
-#define A_BLUE_BACK 3
-
-void redFront() {}
-void redBack() {}
-void blueFront() {}
-void blueBack() {}
-void doNothing() {}
-
-void printData();
-
-vfptr auton = &doNothing;
+void  doNothing() {}
+vfptr auton = &autonBlueFlags;
 
 struct SwitcherMenu {
   const char *              name;
-  std::vector<SwitcherMenu> submenus;
+  vector<SwitcherMenu> submenus;
   vfptr                     fnc;
   SwitcherMenu(const char *name, std::initializer_list<SwitcherMenu> menus, vfptr fnc = nullptr) :
       name(name), fnc(fnc) {
@@ -117,15 +101,18 @@ void chooseAuton() {
   // clang-format off
   SwitcherMenu rootMenu("select autonomous", {
         SwitcherMenu("red", {
-                SwitcherMenu("front", {}, &redFront),
-                SwitcherMenu("back", {}, &redBack),
+          SwitcherMenu("flags", {}, &autonRedFlags),
+          SwitcherMenu("caps", {}, &autonDriveStraight),
         }),
         SwitcherMenu("blue", {
-                SwitcherMenu("front", {}, &blueFront),
-                SwitcherMenu("back", {}, &blueBack),
+          SwitcherMenu("flags", {}, &autonBlueFlags),
+          SwitcherMenu("caps", {}, &autonDriveStraight),
+        }),
+        SwitcherMenu("other", {
+          SwitcherMenu("data", {}, &printData),
+          SwitcherMenu("skills", {}, &autonSkills),
         }),
         SwitcherMenu("none", {}, &doNothing),
-        SwitcherMenu("data", {}, &printData),
   });
   // clang-format on */
 

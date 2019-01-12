@@ -1,15 +1,9 @@
-#include "devices.h"
 #include "main.h"
-#include "presets.h"
-#include "switcher.h"
-#include "util.h"
 
 void opcontrol() {
   // maximum speed in RPM for the drive motors
   static const float dmax = 185;
 
-  // low/high flag flywheel speeds, respectively
-  const float fpreset[2] = {94, 122};
   // target speed in RPM for the flywheel motors
   float ftarget = 75;
   // flywheel speed
@@ -29,8 +23,6 @@ void opcontrol() {
   AbstractMotor::brakeMode bmode = AbstractMotor::brakeMode::coast;
   left.setBrakeMode(bmode);
   right.setBrakeMode(bmode);
-
-  if (controller::master.getDigital(ControllerDigital::X)) auton();
 
   // infinite driver-control loop, runs: drive, intake, and launcher
   while (true) {
@@ -64,8 +56,14 @@ void opcontrol() {
       }
     }
 
-    // move the lift based on whether or not the left bumpers are pressed
-    lift.moveVelocity(185 * controller::lift());
+    // move the lift based on whether or not it is at maximum/minimum height
+    if (lift.getPosition() < lift_bottom) {
+      lift.moveVelocity(trim(liftSpeed * controller::lift(), 0, liftSpeed));
+    } else if (lift.getPosition() > lift_top) {
+      lift.moveVelocity(trim(liftSpeed * controller::lift(), -liftSpeed, 0));
+    } else {
+      lift.moveVelocity(liftSpeed * controller::lift());
+    }
 
     // move the intake based on whether or not the right bumpers are pressed
     intake.move(127 * controller::intake());
@@ -95,9 +93,8 @@ void opcontrol() {
       flipper.moveAbsolute(flp, flpSpeed);
     }
 
-    if (controller::launcher::toggle() && millis() - fcount > 250) {
-      fspeed = (flywheeltoggle = !flywheeltoggle) ? ftarget : 0;
-      fcount = millis();
+    if (controller::launcher::off()) {
+      fspeed = 0;
     } else if (controller::launcher::backwards()) {
       fspeed = -15;
     } else if (controller::launcher::less()) {
@@ -113,6 +110,8 @@ void opcontrol() {
     }
 
     launcher.moveVelocity(fspeed); // move the flywheel
+
+    if (controller::master.getDigital(ControllerDigital::X)) auton();
 
     delay(25);
   }
