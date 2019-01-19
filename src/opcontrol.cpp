@@ -4,8 +4,11 @@ void opcontrol() {
   // maximum speed in RPM for the drive motors
   static const float dmax = 185;
 
-  // target speed in RPM for the flywheel motors
-  float ftarget = 75;
+  // acceptable time between presses to make a change
+  static const unsigned long lpresst = 200;
+  // time of last press of flywheel controls
+  unsigned long lpress[5];
+
   // flywheel speed
   float fspeed = 0;
   // the commanded drive power values
@@ -21,8 +24,8 @@ void opcontrol() {
 
   // set the drive to "coast" mode, as it is more natural for drivers
   AbstractMotor::brakeMode bmode = AbstractMotor::brakeMode::coast;
-  left.setBrakeMode(bmode);
-  right.setBrakeMode(bmode);
+  drive::left.setBrakeMode(bmode);
+  drive::right.setBrakeMode(bmode);
 
   // infinite driver-control loop, runs: drive, intake, and launcher
   while (true) {
@@ -30,29 +33,29 @@ void opcontrol() {
     leftCmd  = controller::leftDrive() * dmax;
     rightCmd = controller::rightDrive() * dmax;
 
-    left.moveVelocity(leftCmd);
-    right.moveVelocity(rightCmd);
+    drive::left.moveVelocity(leftCmd);
+    drive::right.moveVelocity(rightCmd);
 
     // if x is pressed, set the drive to hold, and if the commanded power value isn't 0, coast.
     // Otherwise, if the robot is still (or almost still), keep it still by setting a commanded
     // velocity of zero
     if (controller::driveHoldToggle()) {
-      left.setBrakeMode(AbstractMotor::brakeMode::hold);
-      right.setBrakeMode(AbstractMotor::brakeMode::hold);
+      drive::left.setBrakeMode(AbstractMotor::brakeMode::hold);
+      drive::right.setBrakeMode(AbstractMotor::brakeMode::hold);
     } else if (leftCmd || rightCmd) {
       if (bmode != AbstractMotor::brakeMode::coast) {
         bmode = AbstractMotor::brakeMode::coast;
-        left.setBrakeMode(bmode);
-        right.setBrakeMode(bmode);
+        drive::left.setBrakeMode(bmode);
+        drive::right.setBrakeMode(bmode);
       }
-    } else if (abs(left.getActualVelocity()) + abs(right.getActualVelocity()) < 16) {
-      left.moveVelocity(0);
-      right.moveVelocity(0);
+    } else if (abs(drive::left.getActualVelocity()) + abs(drive::right.getActualVelocity()) < 16) {
+      drive::left.moveVelocity(0);
+      drive::right.moveVelocity(0);
 
       if (bmode != AbstractMotor::brakeMode::hold) {
         bmode = AbstractMotor::brakeMode::hold;
-        left.setBrakeMode(bmode);
-        right.setBrakeMode(bmode);
+        drive::left.setBrakeMode(bmode);
+        drive::right.setBrakeMode(bmode);
       }
     }
 
@@ -95,18 +98,21 @@ void opcontrol() {
 
     if (controller::launcher::off()) {
       fspeed = 0;
-    } else if (controller::launcher::backwards()) {
-      fspeed = -15;
-    } else if (controller::launcher::less()) {
-      fspeed = ftarget -= 2.5;
-    } else if (controller::launcher::more()) {
-      fspeed = ftarget += 2.5;
-    } else if (controller::launcher::middleFlag()) {
-      ftarget = fpreset[LOW];
-      fspeed  = fpreset[LOW];
-    } else if (controller::launcher::highFlag()) {
-      ftarget = fpreset[HIGH];
-      fspeed  = fpreset[HIGH];
+    } else if (controller::launcher::backwards() && millis() - lpress[0] > lpresst) {
+      fspeed = fspeed ? 0 : -15;
+      lpress[0] = millis();
+    } else if (controller::launcher::less() && millis() - lpress[1] > lpresst) {
+      fspeed -= 2.5;
+      lpress[1] = millis();
+    } else if (controller::launcher::more() && millis() - lpress[2] > lpresst) {
+      fspeed += 2.5;
+      lpress[2] = millis();
+    } else if (controller::launcher::middleFlag() && millis() - lpress[3] > lpresst) {
+      fspeed  = (fspeed == fpreset[LOW]) ? 0 : fpreset[LOW];
+      lpress[3] = millis();
+    } else if (controller::launcher::highFlag() && millis() - lpress[4] > lpresst) {
+      fspeed  = (fspeed == fpreset[HIGH]) ? 0 : fpreset[HIGH];
+      lpress[4] = millis();
     }
 
     launcher.moveVelocity(fspeed); // move the flywheel

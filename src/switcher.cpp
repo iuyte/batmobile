@@ -1,12 +1,11 @@
 #include "autonomous.h"
 
-void  doNothing() {}
-vfptr auton = &autonBlueFlags;
+void doNothing() {}
 
 struct SwitcherMenu {
-  const char *              name;
+  const char *         name;
   vector<SwitcherMenu> submenus;
-  vfptr                     fnc;
+  vfptr                fnc;
   SwitcherMenu(const char *name, std::initializer_list<SwitcherMenu> menus, vfptr fnc = nullptr) :
       name(name), fnc(fnc) {
     for (auto &&m : menus) {
@@ -25,7 +24,7 @@ lv_res_t buttonPress(lv_obj_t *btn, const char *text) {
   return LV_RES_OK;
 }
 
-vfptr selectMenu(SwitcherMenu *menu) {
+std::pair<vfptr, string> selectMenu(SwitcherMenu *menu) {
   // reset the selected text and pressed notifier
   selected = "";
   pressed  = false;
@@ -74,14 +73,18 @@ vfptr selectMenu(SwitcherMenu *menu) {
 
   // wait for something to be selected
   while (!pressed) {
-    if (controller::master.getDigital(ControllerDigital::R1)) {
-      selected = "none";
-      break;
+    if (controller::master.getDigital(ControllerDigital::R1) ||
+        (pros::competition::is_autonomous() && !pros::competition::is_disabled())) {
+      // delete the buttons
+      lv_obj_del(btnMtx);
+
+      return std::pair(auton, autonName);
     }
-    delay(20);
+
+    delay(5);
   }
 
-  // delete the button
+  // delete the buttons
   lv_obj_del(btnMtx);
 
   SwitcherMenu *newMenu;
@@ -91,7 +94,7 @@ vfptr selectMenu(SwitcherMenu *menu) {
         if (m.submenus.size()) return selectMenu(&m);
         return selectMenu(menu);
       } else {
-        return m.fnc;
+        return std::pair(m.fnc, string(m.name));
       }
     }
   }
@@ -102,11 +105,11 @@ void chooseAuton() {
   SwitcherMenu rootMenu("select autonomous", {
         SwitcherMenu("red", {
           SwitcherMenu("flags", {}, &autonRedFlags),
-          SwitcherMenu("caps", {}, &autonDriveStraight),
+          SwitcherMenu("caps", {}, &autonRedCaps),
         }),
         SwitcherMenu("blue", {
           SwitcherMenu("flags", {}, &autonBlueFlags),
-          SwitcherMenu("caps", {}, &autonDriveStraight),
+          SwitcherMenu("caps", {}, &autonBlueCaps),
         }),
         SwitcherMenu("other", {
           SwitcherMenu("data", {}, &printData),
@@ -114,7 +117,9 @@ void chooseAuton() {
         }),
         SwitcherMenu("none", {}, &doNothing),
   });
-  // clang-format on */
+  // clang-format on
 
-  auton = selectMenu(&rootMenu);
+  auto s    = selectMenu(&rootMenu);
+  auton     = s.first;
+  autonName = s.second;
 }

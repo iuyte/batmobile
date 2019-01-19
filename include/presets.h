@@ -11,7 +11,7 @@ static const int flpSpeed = 140;
 // bottom flipper height
 static const int flpMin   = 0;
 // top flipper height
-static const int flpMax   = flpMin + 500;
+static const int flpMax   = flpMin + 550;
 // flipper height for holding a cap in normal position
 static const int flpHold  = flpMin + 70;
 

@@ -6,6 +6,7 @@
 typedef void (*vfptr)();
 
 extern vfptr auton;
+extern std::string autonName;
 
 void chooseAuton();
 
@@ -13,6 +14,8 @@ void printData();
 void autonSkills();
 void autonRedFlags();
 void autonBlueFlags();
-void autonDriveStraight();
+void autonRedCaps();
+void autonBlueCaps();
+void autonScoreCap();
 
 #endif

@@ -32,15 +32,22 @@ namespace controller {
   } // namespace launcher
 } // namespace controller
 
-extern Motor left, right, intake, flipper;
+/** things having to do with the drive */
+namespace drive {
+  extern Motor left;
+  extern Motor right;
+
+  /** drive chassis profile controller, a combination of the left and right side motors */
+  extern ChassisControllerIntegrated dc;
+  /** motion profile controller for the drive */
+  extern AsyncMotionProfileController dpc;
+} // namespace drive
+
+extern Motor intake, flipper;
 /** combination of both lift motors */
 extern MotorGroup lift;
 /** combination of both flywheel motors */
 extern MotorGroup launcher;
-/** combination of the left and right side motors */
-extern ChassisControllerIntegrated drive;
-/** motion profile controller for the drive */
-extern AsyncMotionProfileController dc;
 
 /** status lights */
 extern pros::ADIDigitalOut light;
