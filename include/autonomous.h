@@ -3,9 +3,14 @@
 
 #include "main.h"
 
+#define motorPosTargetReached(motor, range)                                                        \
+  (abs(motor.getTargetPosition() - motor.getPosition()) < range)
+#define motorVelTargetReached(motor, range)                                                        \
+  (abs(motor.getTargetVelocity() - motor.getActualVelocity()) < range)
+
 typedef void (*vfptr)();
 
-extern vfptr auton;
+extern vfptr       auton;
 extern std::string autonName;
 
 void chooseAuton();

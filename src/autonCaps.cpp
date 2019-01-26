@@ -25,9 +25,7 @@ void autonScoreCap() {
   drive::dc.moveDistance(24_in);
 }
 
-void autonCaps(int side) {
-  autonScoreCap();
-}
+void autonCaps(int side) { autonScoreCap(); }
 
 void autonRedCaps() { autonCaps(side_red); }
 

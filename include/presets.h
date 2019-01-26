@@ -4,7 +4,7 @@
 #include "main.h"
 
 // low/high flag flywheel speeds, respectively
-static const float fpreset[2] = {99, 126};
+static const float fpreset[2] = {120, 130};
 
 // flipper speed in rpm
 static const int flpSpeed = 140;

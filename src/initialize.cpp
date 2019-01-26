@@ -9,7 +9,7 @@ void initialize() {
 
   // set flywheel and intake to "coast" mode
   intake.setBrakeMode(AbstractMotor::brakeMode::coast);
-  launcher.setBrakeMode(AbstractMotor::brakeMode::hold);
+  launcher.setBrakeMode(AbstractMotor::brakeMode::coast);
   // set the lift, and flipper to "hold" mode
   lift.setBrakeMode(AbstractMotor::brakeMode::hold);
   flipper.setBrakeMode(AbstractMotor::brakeMode::hold);
@@ -75,36 +75,37 @@ void initialize() {
                 }
               }
 
+              void draw() { lv_label_set_text(line, get().c_str()); }
+              void align() { lv_obj_align(line, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 20 * number); }
+
             private:
               ValueType valueType;
             };
 
             unsigned int nlines = 0;
-            char tline[20];
-            string autonT = "autonomous: ";
+            char         tline[20];
+            string       autonT = "autonomous: ";
 
             Line lines[] = {
-                    Line("flywheel", &launcher, Line::Velocity, ++nlines),
-                    Line("flywheel", &launcher, Line::Temperature, ++nlines),
-                    Line("flywheel", &launcher, Line::Power, ++nlines),
-                    Line("intake", &intake, Line::Velocity, ++nlines),
-                    Line("lift", &lift, Line::Position, ++nlines),
-                    Line("flipper", &flipper, Line::Position, ++nlines),
-                    Line("left drive", &drive::left, Line::Position, ++nlines),
-                    Line("right drive", &drive::right, Line::Position, ++nlines),
+                    Line("flywheel", &launcher, Line::Velocity, nlines++),
+                    Line("flywheel", &launcher, Line::Temperature, nlines++),
+                    Line("flywheel", &launcher, Line::Power, nlines++),
+                    Line("intake", &intake, Line::Velocity, nlines++),
+                    Line("lift", &lift, Line::Position, nlines++),
+                    Line("flipper", &flipper, Line::Position, nlines++),
+                    Line("left drive", &drive::left, Line::Position, nlines++),
+                    Line("right drive", &drive::right, Line::Position, nlines++),
             };
 
-            for (std::size_t i = 0; i < nlines; i++) {
-              lv_obj_align(lines[i].line, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 20 * i);
-            }
+            for (auto &&line : lines)
+              line.align();
 
             auto autonLine = lv_label_create(lv_scr_act(), NULL);
             lv_obj_align(autonLine, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 20 * nlines);
 
             while (true) {
-              for (std::size_t i = 0; i < nlines; i++) {
-                lv_label_set_text(lines[i].line, lines[i].get().c_str());
-              }
+              for (auto &&line : lines)
+                line.draw();
 
               lv_label_set_text(autonLine, (autonT + autonName).c_str());
 

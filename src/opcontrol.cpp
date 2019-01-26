@@ -2,10 +2,10 @@
 
 void opcontrol() {
   // maximum speed in RPM for the drive motors
-  static const float dmax = 185;
+  static const float dmax = 190;
 
   // acceptable time between presses to make a change
-  static const unsigned long lpresst = 200;
+  static const unsigned long lpresst = 325;
   // time of last press of flywheel controls
   unsigned long lpress[5];
 
@@ -26,15 +26,15 @@ void opcontrol() {
   AbstractMotor::brakeMode bmode = AbstractMotor::brakeMode::coast;
   drive::left.setBrakeMode(bmode);
   drive::right.setBrakeMode(bmode);
+  drive::dc.setMaxVelocity(200);
 
   // infinite driver-control loop, runs: drive, intake, and launcher
   while (true) {
     // get the input control for the drive
-    leftCmd  = controller::leftDrive() * dmax;
-    rightCmd = controller::rightDrive() * dmax;
+    leftCmd  = controller::leftDrive();
+    rightCmd = controller::rightDrive();
 
-    drive::left.moveVelocity(leftCmd);
-    drive::right.moveVelocity(rightCmd);
+    drive::dc.tank(leftCmd, rightCmd, .05);
 
     // if x is pressed, set the drive to hold, and if the commanded power value isn't 0, coast.
     // Otherwise, if the robot is still (or almost still), keep it still by setting a commanded

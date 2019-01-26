@@ -52,7 +52,8 @@ Motor      intake(13, false, AbstractMotor::gearset::green);
 Motor      flipper(16, true, AbstractMotor::gearset::green);
 MotorGroup lift({Motor(15, false, AbstractMotor::gearset::green),
                  Motor(14, true, AbstractMotor::gearset::green)});
-MotorGroup launcher({Motor(19, false, AbstractMotor::gearset::green),
+MotorGroup launcher({Motor(10, false, AbstractMotor::gearset::green),
+                     Motor(19, false, AbstractMotor::gearset::green),
                      Motor(20, true, AbstractMotor::gearset::green)});
 
 pros::ADIDigitalOut light = pros::ADIDigitalOut('a', false);

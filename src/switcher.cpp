@@ -19,6 +19,10 @@ bool   pressed;
 
 lv_res_t buttonPress(lv_obj_t *btn, const char *text) {
   selected = string(text);
+  if (selected == " ") {
+    selected = "";
+    return LV_RES_OK;
+  }
   cout << selected << std::endl;
   pressed = true;
   return LV_RES_OK;
