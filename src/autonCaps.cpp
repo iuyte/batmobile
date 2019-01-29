@@ -10,11 +10,6 @@ void autonScoreCap() {
   drive::dc.setMaxVelocity(115);
   drive::dc.moveDistance(-39_in);
 
-  // move flipper up and down to get it open
-  flipper.moveVoltage(127);
-  delay(300);
-  flipper.moveAbsolute(flpMin, 200);
-
   intake.moveRelative(1260, 200);
   intake.moveRelative(-300, 100);
 

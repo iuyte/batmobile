@@ -5,35 +5,73 @@
 #define side_blue 1
 
 void autonFlags(int side) {
+  // set the intake to on
   intake.move(127);
 
+  // drive forward and grab the ball from under the cap
   drive::dc.setMaxVelocity(115);
-  drive::dc.moveDistance(-39_in);
+  drive::dc.moveDistance(-38_in);
 
-  intake.moveRelative(1260, 200);
-  intake.moveRelative(-300, 100);
+  // move the balls in the intake away from the flywheel
+  intake.moveRelative(-180, 100);
 
-  auto a = (drive::left.getPosition() + drive::right.getPosition()) / 2;
-  drive::left.moveAbsolute(a, 75);
-  drive::right.moveAbsolute(a, 75);
+  // back up
+  drive::dc.moveDistance(32_in);
 
-  drive::dc.moveDistance(42_in);
-  drive::dc.turnAngle(93_deg * side);
-  drive::dc.moveDistance(-19.5_in);
-  launcher.moveVelocity(fpreset[HIGH]);
-  delay(2100);
-  intake.moveRelative(540, 200);
-  delay(2100);
-  intake.move(127);
+  // turn to the flags
+  drive::dc.turnAngleAsync(-90_deg);
+
+  // once the intake stops moving, power up the flywheel
+  waitUntil(motorPosTargetReached(intake, 20), 20);
+  launcher.moveVelocity(fpreset[MAGIC]);
+
+  // move towards the flags
+  drive::dc.waitUntilSettled();
+  drive::dc.moveDistanceAsync(-10_in);
+
+  // wait for the drive and launcher to reach their position and velocity targets, respectively
+  drive::dc.waitUntilSettled();
+  waitUntil(motorVelTargetReached(launcher, 10), 20);
+
+  // launch a ball
+  intake.moveRelative(230, 200);
+  waitUntil(motorPosTargetReached(intake, 20), 20);
+
+  // drive forward and launch the second ball
   drive::dc.moveDistance(-16_in);
+  delay(250);
+  waitUntil(motorVelTargetReached(launcher, 10), 20);
+  intake.moveRelative(520, 200);
+  waitUntil(motorPosTargetReached(intake, 20), 20);
+  intake.moveRelative(180, 200);
 
-  // stop launcher and intake
-  launcher.moveVelocity(0);
-  intake.move(0);
-
+  // turn
   drive::dc.setMaxVelocity(200);
   drive::dc.turnAngle(20_deg * side);
-  drive::dc.moveDistance(-20_in);
+
+  // make sure the second ball is launched
+  waitUntil(motorPosTargetReached(intake, 20), 20);
+
+  // stop launcher & intake
+  launcher.moveVelocity(0);
+  intake.moveVelocity(0);
+
+  // back into the flag
+  drive::dc.moveDistance(-16_in);
+
+  // turn, back away from the wall and turn towards the cap
+  drive::dc.turnAngle(20_deg);
+  drive::dc.moveDistance(26_in);
+  drive::dc.turnAngle(90_deg);
+
+  // flip the cap
+  drive::dc.setMaxVelocity(150);
+  intake.move(-127);
+  drive::dc.moveDistance(-15_in);
+
+  // back up from the cap and stop the intake
+  drive::dc.moveDistance(18_in);
+  intake.move(0);
 }
 
 void autonRedFlags() { autonFlags(side_red); }

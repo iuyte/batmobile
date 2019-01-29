@@ -26,17 +26,22 @@ void autonomous() {
     delay(50);
 }
 
-void generatePaths() {
-  //// clang-format off
-  // dc.generatePath({
-  //                 Point{0_in, 0_in, 0_deg},
-  //                 Point{-1_in, 0_in, 0_deg},
-  //                 Point{38_in, 0_in, 0_deg},
-  //  }, "A");
-  // dc.generatePath({
-  //                 Point{0_in, 0_in, 0_deg},
-  //                 Point{24_in, 0_in, 0_deg},
-  //                 Point{34_in, 12_in, -90_deg},
-  //  }, "B");
-  //// clang-format on
+void generatePaths() {}
+
+void moveToRelativePos(Motor         motor,
+                       double        position,
+                       double        velocity,
+                       double        errorTolerance,
+                       unsigned long loopTime) {
+  motor.moveRelative(position, velocity);
+  waitUntil(motorPosTargetReached(intake, errorTolerance), loopTime);
+}
+
+void moveToAbsolutePos(Motor         motor,
+                       double        position,
+                       double        velocity,
+                       double        errorTolerance,
+                       unsigned long loopTime) {
+  motor.moveAbsolute(position, velocity);
+  waitUntil(motorPosTargetReached(intake, errorTolerance), loopTime);
 }

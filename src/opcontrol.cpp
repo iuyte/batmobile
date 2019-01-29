@@ -17,10 +17,6 @@ void opcontrol() {
   unsigned long fcount = millis();
   // toggle for flywheel pressing buttons
   bool flywheeltoggle = true;
-  // flipper position
-  int flp = flpMin;
-  // toggle flipper hold
-  bool flptoggle = false;
 
   // set the drive to "coast" mode, as it is more natural for drivers
   AbstractMotor::brakeMode bmode = AbstractMotor::brakeMode::coast;
@@ -70,31 +66,6 @@ void opcontrol() {
 
     // move the intake based on whether or not the right bumpers are pressed
     intake.move(127 * controller::intake());
-
-    // move the flipper based on whether or not the up/down buttons are pressed
-    if (controller::flipper() < 0) {
-      flipper.moveAbsolute(flpMin, flpSpeed);
-      flptoggle = false;
-    } else if (controller::flipper() > 0) {
-      flipper.moveAbsolute(flpMax, flpSpeed);
-      flptoggle = false;
-    } else {
-      // if neither button is pressed, hold the position
-      if (!flptoggle) {
-        flp       = flipper.getPosition();
-        flptoggle = true;
-      }
-
-      // if the lift is above a low height and the flipper is low, angle it up a bit to prevent a
-      // cap from falling off
-      if (lift.getPosition() < lift_ing) {
-        if (flp == flpHold) flp = flpMin;
-      } else if (flp < flpHold) {
-        flp = flpHold;
-      }
-
-      flipper.moveAbsolute(flp, flpSpeed);
-    }
 
     if (controller::launcher::off()) {
       fspeed = 0;

@@ -58,7 +58,7 @@ OUTBIN:=$(BINDIR)/$(OUTNAME).bin
 OUTELF:=$(BINDIR)/$(OUTNAME).elf
 LDTIMEOBJ:=$(BINDIR)/_pros_ld_timestamp.o
 
-.PHONY: all clean quick
+.PHONY: all clean quick upload
 
 quick: $(OUTBIN)
 
@@ -67,6 +67,9 @@ all: clean $(OUTBIN)
 clean:
 	@echo Cleaning project
 	-$Drm -rf $(BINDIR)
+
+upload: quick
+	$(HOME)/.local/bin/prosv5 upload --no-run-after
 
 $(OUTBIN): $(OUTELF) $(BINDIR)
 	@echo -n "Creating $@ for $(DEVICE) "

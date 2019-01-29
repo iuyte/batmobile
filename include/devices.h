@@ -19,7 +19,6 @@ namespace controller {
   const float rightDrive();
   const bool  driveHoldToggle();
   const float lift();
-  const float flipper();
   const float intake();
 
   namespace launcher {
@@ -43,7 +42,7 @@ namespace drive {
   extern AsyncMotionProfileController dpc;
 } // namespace drive
 
-extern Motor intake, flipper;
+extern Motor intake;
 /** combination of both lift motors */
 extern MotorGroup lift;
 /** combination of both flywheel motors */

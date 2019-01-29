@@ -3,17 +3,10 @@
 
 #include "main.h"
 
-// low/high flag flywheel speeds, respectively
-static const float fpreset[2] = {120, 130};
+#define MAGIC 2
 
-// flipper speed in rpm
-static const int flpSpeed = 140;
-// bottom flipper height
-static const int flpMin   = 0;
-// top flipper height
-static const int flpMax   = flpMin + 550;
-// flipper height for holding a cap in normal position
-static const int flpHold  = flpMin + 70;
+// low/high flag flywheel speeds, respectively
+static const float fpreset[] = {110, 125, 130};
 
 // lift speed in rpm
 static const int liftSpeed = 185;
@@ -27,5 +20,8 @@ typedef enum {
 
 /** raise the lift by one level */
 liftH upHeight(liftH current);
+
+void infoLoop(void *none);
+void chooseAuton();
 
 #endif

@@ -34,3 +34,5 @@
 # My stuff
 bin
 extra
+compile_commands.json
+.clang_complete
