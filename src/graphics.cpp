@@ -198,38 +198,7 @@ private:
 pros::Mutex     mutex;
 bool            bpressed = false;
 static lv_res_t selectionPress(lv_obj_t *btn, const char *txt) {
-  // clang-format off
-  static SwitcherMenu rootMenu("select autonomous", {
-        SwitcherMenu("red", {
-          SwitcherMenu("flags", {}, &autonRedFlags),
-          SwitcherMenu("caps", {}, &autonRedCaps),
-        }),
-        SwitcherMenu("blue", {
-          SwitcherMenu("flags", {}, &autonBlueFlags),
-          SwitcherMenu("caps", {}, &autonBlueCaps),
-        }),
-        SwitcherMenu("other", {
-          SwitcherMenu("data", {}, &printData),
-          SwitcherMenu("skills", {}, &autonSkills),
-        }),
-        SwitcherMenu("none", {}, &doNothing),
-  });
-  // clang-format on
-
-  cout << "I exist too!" << endl;
   bpressed = true;
-  delay(250);
-  mutex.take(-1);
-  cout << "And me!" << endl;
-
-  auto s    = selectMenu(&rootMenu);
-  auton     = s.first;
-  autonName = s.second;
-
-  delay(100);
-  mutex.give();
-  bpressed = false;
-  cout << "I don't" << endl;
 
   return LV_RES_OK;
 }
@@ -254,6 +223,22 @@ void infoLoop(void *none) {
           Line("left drive",  &drive::left,  Line::Velocity,    nlines++),
           Line("right drive", &drive::right, Line::Velocity,    nlines++),
   };
+
+  static SwitcherMenu rootMenu("select autonomous", {
+          SwitcherMenu("red", {
+            SwitcherMenu("flags", {}, &autonRedFlags),
+            SwitcherMenu("caps", {}, &autonRedCaps),
+          }),
+            SwitcherMenu("blue", {
+              SwitcherMenu("flags", {}, &autonBlueFlags),
+              SwitcherMenu("caps", {}, &autonBlueCaps),
+          }),
+            SwitcherMenu("other", {
+              SwitcherMenu("data", {}, &printData),
+              SwitcherMenu("skills", {}, &autonSkills),
+          }),
+            SwitcherMenu("none", {}, &doNothing),
+  });
   // clang-format on
 
   for (auto &&line : lines)
@@ -300,26 +285,26 @@ void infoLoop(void *none) {
   mutex.give();
   bool blpressed = false;
   while (true) {
-    if (bpressed && !blpressed) {
-      cout << "I exist" << endl;
+    if (bpressed) {
       lv_obj_set_hidden(cont, true);
       for (auto &&line : lines)
         line.clear();
       lv_label_set_text(autonLine, "");
-      delay(50);
-      mutex.give();
-      blpressed = true;
-    } else if (!bpressed) {
-      mutex.take(1);
-      for (auto &&line : lines)
-        line.draw();
 
-      lv_label_set_text(autonLine, (autonT + autonName).c_str());
+      auto s    = selectMenu(&rootMenu);
+      auton     = s.first;
+      autonName = s.second;
 
-      if (blpressed) {
-        blpressed = false;
-        lv_obj_set_hidden(cont, false);
-      }
+      bpressed = false;
+      lv_obj_set_hidden(cont, false);
+    }
+    for (auto &&line : lines)
+      line.draw();
+
+    lv_label_set_text(autonLine, (autonT + autonName).c_str());
+
+    if (blpressed) {
+      blpressed = false;
     }
 
     sprintf(tline, "v: %.3d | t: %.2f", (int)(launcher.getActualVelocity() + .5),

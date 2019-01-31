@@ -56,6 +56,6 @@ namespace drive {
   Motor right(12, true, AbstractMotor::gearset::green);
 
   ChassisControllerIntegrated dc = ChassisControllerFactory::create(
-          left, right, AbstractMotor::gearset::green, ChassisScales({4.0625_in, 15.125_in}));
+          left, right, AbstractMotor::gearset::green, ChassisScales({4.1_in, 15.125_in}));
   AsyncMotionProfileController dpc = AsyncControllerFactory::motionProfile(.5, 1.25, 8, dc);
 } // namespace drive

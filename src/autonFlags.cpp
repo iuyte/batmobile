@@ -27,7 +27,7 @@ void autonFlags(int side) {
 
   // move towards the flags
   drive::dc.waitUntilSettled();
-  drive::dc.moveDistanceAsync(-10_in);
+  drive::dc.moveDistanceAsync(-10.5_in);
 
   // wait for the drive and launcher to reach their position and velocity targets, respectively
   drive::dc.waitUntilSettled();
@@ -61,7 +61,7 @@ void autonFlags(int side) {
 
   // turn, back away from the wall and turn towards the cap
   drive::dc.turnAngle(20_deg);
-  drive::dc.moveDistance(26_in);
+  drive::dc.moveDistance(22_in);
   drive::dc.turnAngle(90_deg);
 
   // flip the cap

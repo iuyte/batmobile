@@ -6,10 +6,10 @@ void autonSkills() {
 
   // turn, drive forward, turn again, then get on the platform
   drive::dc.turnAngle(95_deg);
-  drive::dc.moveDistance(-43.5_in);
-  drive::dc.turnAngle(-95_deg);
+  drive::dc.moveDistance(-41_in);
+  drive::dc.turnAngle(-90_deg);
   drive::left.moveVelocity(-175);
   drive::right.moveVelocity(-175);
-  delay(6000);
+  delay(4250);
   drive::dc.stop();
 }
