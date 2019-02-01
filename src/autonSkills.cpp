@@ -7,7 +7,7 @@ void autonSkills() {
   drive::dc.setMaxVelocity(125);
   // turn, reverse intake and move towards tha cap a bit
   drive::dc.turnAngle(45_deg);
-  intake.move(-127);
+  intake.move(-85);
   drive::dc.moveDistance(-30_in);
 
   // turn towards tha cap and flip it
