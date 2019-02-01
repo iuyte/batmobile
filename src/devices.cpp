@@ -8,39 +8,44 @@ namespace controller {
   Controller master(ControllerId::master);
   /** partner joystick V5 controller */
   Controller partner(ControllerId::partner);
+} // namespace controller
 
-  const float leftDrive() {
-    return partner.getAnalog(ControllerAnalog::leftY) - master.getAnalog(ControllerAnalog::rightY);
-  }
+namespace operatorCmd {
+  namespace drive {
+    const float left() {
+      return controller::partner.getAnalog(ControllerAnalog::leftY) -
+             controller::master.getAnalog(ControllerAnalog::rightY);
+    }
 
-  const float rightDrive() {
-    return partner.getAnalog(ControllerAnalog::rightY) - master.getAnalog(ControllerAnalog::leftY);
-  }
-
-  const bool driveHoldToggle() { return partner.getDigital(ControllerDigital::X); }
+    const float right() {
+      return controller::partner.getAnalog(ControllerAnalog::rightY) -
+             controller::master.getAnalog(ControllerAnalog::leftY);
+    }
+    const bool holdToggle() { return controller::partner.getDigital(ControllerDigital::X); }
+  } // namespace drive
 
   const float lift() {
-    return partner.getDigital(ControllerDigital::L1) - partner.getDigital(ControllerDigital::L2);
+    return controller::partner.getDigital(ControllerDigital::L1) - controller::partner.getDigital(ControllerDigital::L2);
   }
 
   const float intake() {
-    return master.getDigital(ControllerDigital::R1) - master.getDigital(ControllerDigital::R2);
+    return controller::master.getDigital(ControllerDigital::R1) - controller::master.getDigital(ControllerDigital::R2);
   }
 
   namespace launcher {
-    const bool off() { return master.getDigital(ControllerDigital::A); }
+    const bool off() { return controller::master.getDigital(ControllerDigital::A); }
 
-    const bool backwards() { return master.getDigital(ControllerDigital::B); }
+    const bool backwards() { return controller::master.getDigital(ControllerDigital::B); }
 
-    const bool less() { return master.getDigital(ControllerDigital::down); }
+    const bool less() { return controller::master.getDigital(ControllerDigital::down); }
 
-    const bool more() { return master.getDigital(ControllerDigital::up); }
+    const bool more() { return controller::master.getDigital(ControllerDigital::up); }
 
-    const bool middleFlag() { return master.getDigital(ControllerDigital::L2); }
+    const bool middleFlag() { return controller::master.getDigital(ControllerDigital::L2); }
 
-    const bool highFlag() { return master.getDigital(ControllerDigital::L1); }
+    const bool highFlag() { return controller::master.getDigital(ControllerDigital::L1); }
   } // namespace launcher
-} // namespace controller
+} // namespace operatorCmd
 
 Motor      intake(13, false, AbstractMotor::gearset::green);
 MotorGroup lift({Motor(15, false, AbstractMotor::gearset::green),
@@ -54,6 +59,11 @@ pros::ADIDigitalOut light = pros::ADIDigitalOut('a', false);
 namespace drive {
   Motor left(11, false, AbstractMotor::gearset::green);
   Motor right(12, true, AbstractMotor::gearset::green);
+
+  void moveVelocity(double lvel, double rvel) {
+    left.moveVelocity(lvel);
+    right.moveVelocity(rvel);
+  }
 
   ChassisControllerIntegrated dc = ChassisControllerFactory::create(
           left, right, AbstractMotor::gearset::green, ChassisScales({4.1_in, 15.125_in}));

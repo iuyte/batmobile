@@ -14,10 +14,16 @@ namespace controller {
   extern Controller master;
   /** partner joystick V5 controller */
   extern Controller partner;
+} // namespace controller
 
-  const float leftDrive();
-  const float rightDrive();
-  const bool  driveHoldToggle();
+/** different buttons and controls for operator control */
+namespace operatorCmd {
+  namespace drive {
+    const float left();
+    const float right();
+    const bool  holdToggle();
+  } // namespace drive
+
   const float lift();
   const float intake();
 
@@ -29,12 +35,15 @@ namespace controller {
     const bool middleFlag();
     const bool highFlag();
   } // namespace launcher
-} // namespace controller
+} // namespace operatorCmd
 
 /** things having to do with the drive */
 namespace drive {
   extern Motor left;
   extern Motor right;
+
+  /** move the drive at a specific velocity */
+  void moveVelocity(double lvel, double rvel);
 
   /** drive chassis profile controller, a combination of the left and right side motors */
   extern ChassisControllerIntegrated dc;

@@ -69,7 +69,7 @@ clean:
 	-$Drm -rf $(BINDIR)
 
 upload: quick
-	$(HOME)/.local/bin/prosv5 upload --no-run-after
+	$(HOME)/.local/bin/prosv5 upload
 
 $(OUTBIN): $(OUTELF) $(BINDIR)
 	@echo -n "Creating $@ for $(DEVICE) "

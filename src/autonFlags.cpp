@@ -58,7 +58,9 @@ void autonFlags(int side) {
 
   // back into the flag
   drive::dc.moveDistance(-16_in);
+}
 
+void flipCap(int side) {
   // turn, back away from the wall and turn towards the cap
   drive::dc.turnAngle(20_deg);
   drive::dc.moveDistance(22_in);
@@ -67,13 +69,19 @@ void autonFlags(int side) {
   // flip the cap
   drive::dc.setMaxVelocity(150);
   intake.move(-127);
-  drive::dc.moveDistance(-15_in);
+  drive::dc.moveDistance(-17_in);
 
   // back up from the cap and stop the intake
-  drive::dc.moveDistance(18_in);
+  drive::dc.moveDistance(8_in);
   intake.move(0);
 }
 
-void autonRedFlags() { autonFlags(side_red); }
+void autonRedFlags() {
+  autonFlags(side_red);
+  flipCap(side_red);
+}
 
-void autonBlueFlags() { autonFlags(side_blue); }
+void autonBlueFlags() {
+  autonFlags(side_blue);
+  flipCap(side_blue);
+}

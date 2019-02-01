@@ -16,10 +16,6 @@ void initialize() {
   // set the flywheel pid
   launcher.setVelPID(0, 2, 0, 7);
 
-  // select the autonomous routine using the touchscreen
-  // chooseAuton();
-  // isSelected = true;
-
   // a task that prints a lot of useful data to the LCD emulator
   pros::Task(&infoLoop, nullptr);
 }

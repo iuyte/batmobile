@@ -101,34 +101,10 @@ std::pair<vfptr, string> selectMenu(SwitcherMenu *menu) {
           return selectMenu(&m);
         return selectMenu(menu);
       } else {
-        return std::pair(m.fnc, string(m.name));
+        return std::pair(m.fnc, string(menu->name).append(string("->")).append(string(m.name)));
       }
     }
   }
-}
-
-void chooseAuton() {
-  // clang-format off
-  static SwitcherMenu rootMenu("select autonomous", {
-        SwitcherMenu("red", {
-          SwitcherMenu("flags", {}, &autonRedFlags),
-          SwitcherMenu("caps", {}, &autonRedCaps),
-        }),
-        SwitcherMenu("blue", {
-          SwitcherMenu("flags", {}, &autonBlueFlags),
-          SwitcherMenu("caps", {}, &autonBlueCaps),
-        }),
-        SwitcherMenu("other", {
-          SwitcherMenu("data", {}, &printData),
-          SwitcherMenu("skills", {}, &autonSkills),
-        }),
-        SwitcherMenu("none", {}, &doNothing),
-  });
-  // clang-format on
-
-  auto s    = selectMenu(&rootMenu);
-  auton     = s.first;
-  autonName = s.second;
 }
 
 lv_obj_t *cont;
@@ -224,7 +200,7 @@ void infoLoop(void *none) {
           Line("right drive", &drive::right, Line::Velocity,    nlines++),
   };
 
-  static SwitcherMenu rootMenu("select autonomous", {
+  static SwitcherMenu rootMenu("", {
           SwitcherMenu("red", {
             SwitcherMenu("flags", {}, &autonRedFlags),
             SwitcherMenu("caps", {}, &autonRedCaps),
@@ -282,8 +258,40 @@ void infoLoop(void *none) {
   lv_btnm_set_style(btn, LV_BTNM_STYLE_BTN_REL, &style_btn_rel);
   lv_btnm_set_style(btn, LV_BTNM_STYLE_BTN_PR, &style_btn_pr);
 
+  // Create a bar and an indicator style
+  static lv_style_t style_bar;
+  static lv_style_t style_indic;
+
+  lv_style_copy(&style_bar, &lv_style_pretty);
+  style_bar.body.main_color   = LV_COLOR_BLACK;
+  style_bar.body.grad_color   = LV_COLOR_GRAY;
+  style_bar.body.radius       = LV_RADIUS_CIRCLE;
+  style_bar.body.border.color = LV_COLOR_WHITE;
+
+  lv_style_copy(&style_indic, &lv_style_pretty);
+  style_indic.body.grad_color   = LV_COLOR_GREEN;
+  style_indic.body.main_color   = LV_COLOR_LIME;
+  style_indic.body.radius       = LV_RADIUS_CIRCLE;
+  style_indic.body.shadow.width = 10;
+  style_indic.body.shadow.color = LV_COLOR_LIME;
+  style_indic.body.padding.hor  = 3; // Make the indicator a little bit smaller
+  style_indic.body.padding.ver  = 3;
+
+  // Create a label for the bar
+  lv_obj_t *bar_label = lv_label_create(cont, NULL);
+  lv_label_set_text(bar_label, "Battery");
+  lv_obj_align(bar_label, cont, LV_ALIGN_IN_TOP_RIGHT, 0, LV_VER_RES / 4 + 5);
+
+  // Create a bar
+  lv_obj_t *bar = lv_bar_create(cont, NULL);
+  lv_bar_set_style(bar, LV_BAR_STYLE_BG, &style_bar);
+  lv_bar_set_style(bar, LV_BAR_STYLE_INDIC, &style_indic);
+  lv_obj_set_size(bar, LV_HOR_RES / 5, 20);
+  lv_obj_align(bar, bar_label, LV_ALIGN_OUT_BOTTOM_RIGHT, 0, 5);
+
   mutex.give();
   bool blpressed = false;
+  Rate rate;
   while (true) {
     if (bpressed) {
       lv_obj_set_hidden(cont, true);
@@ -302,6 +310,8 @@ void infoLoop(void *none) {
       line.draw();
 
     lv_label_set_text(autonLine, (autonT + autonName).c_str());
+    lv_bar_set_value(bar, (int16_t)pros::battery::get_capacity());
+    lv_label_set_text(bar_label, std::to_string((int16_t)pros::battery::get_capacity()).append("%").c_str());
 
     if (blpressed) {
       blpressed = false;
@@ -314,6 +324,7 @@ void infoLoop(void *none) {
 
     light.set_value(abs(launcher.getActualVelocity() - launcher.getTargetVelocity()) > 5 ||
                     launcher.getTargetVelocity() == 0);
-    delay(50);
+
+    rate.delay(20);
   }
 }

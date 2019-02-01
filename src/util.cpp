@@ -1,6 +1,6 @@
 #include "util.h"
-#include "main.h"
 #include "devices.h"
+#include "main.h"
 
 #include <iterator>
 #include <sstream>
