@@ -165,7 +165,7 @@ public:
 
   void draw() { lv_label_set_text(line, get().c_str()); }
   void clear() { lv_label_set_text(line, ""); }
-  void align() { lv_obj_align(line, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 20 * number); }
+  void align() { lv_obj_align(line, cont, LV_ALIGN_IN_TOP_LEFT, 0, 20 * number); }
 
 private:
   ValueType valueType;
@@ -289,6 +289,28 @@ void infoLoop(void *none) {
   lv_obj_set_size(bar, LV_HOR_RES / 5, 20);
   lv_obj_align(bar, bar_label, LV_ALIGN_OUT_BOTTOM_RIGHT, 0, 5);
 
+  // Create a simple style with ticker line width
+  static lv_style_t style_lmeter;
+  lv_style_copy(&style_lmeter, &lv_style_pretty_color);
+  style_lmeter.line.width      = 2;
+  style_lmeter.line.color      = LV_COLOR_SILVER;
+  style_lmeter.body.main_color = LV_COLOR_LIME;
+  style_lmeter.body.grad_color = LV_COLOR_ORANGE;
+
+  // Create the speed meter
+  lv_obj_t *meter;
+  meter = lv_lmeter_create(cont, NULL);
+  lv_lmeter_set_range(meter, 0, 200);       // Set the range
+  lv_lmeter_set_value(meter, 0);            // Set the current value
+  lv_lmeter_set_style(meter, &style_lmeter); // Apply the new style
+  lv_obj_set_size(meter, 80, 80);
+  lv_obj_align(meter, NULL, LV_ALIGN_IN_BOTTOM_RIGHT, -10, 0);
+
+  // Add a label to show the current value
+  lv_obj_t *m_label;
+  m_label = lv_label_create(meter, NULL);
+  lv_obj_align(m_label, NULL, LV_ALIGN_CENTER, 15, 0);
+
   mutex.give();
   bool blpressed = false;
   Rate rate;
@@ -311,7 +333,11 @@ void infoLoop(void *none) {
 
     lv_label_set_text(autonLine, (autonT + autonName).c_str());
     lv_bar_set_value(bar, (int16_t)pros::battery::get_capacity());
-    lv_label_set_text(bar_label, std::to_string((int16_t)pros::battery::get_capacity()).append("%").c_str());
+    lv_label_set_text(bar_label,
+                      std::to_string((int16_t)pros::battery::get_capacity()).append("%").c_str());
+
+    lv_lmeter_set_value(meter, (int16_t)launcher.getActualVelocity());
+    lv_label_set_text(m_label, std::to_string((int16_t)launcher.getActualVelocity()).c_str());
 
     if (blpressed) {
       blpressed = false;
