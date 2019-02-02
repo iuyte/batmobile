@@ -182,6 +182,8 @@ static lv_res_t selectionPress(lv_obj_t *btn, const char *txt) {
 void infoLoop(void *none) {
   unsigned int nlines = 0;
   char         tline[20];
+  char         batteryText[20];
+  char         speedometerText[20];
   string       autonT = "autonomous: ";
   cont                = lv_cont_create(lv_scr_act(), NULL);
   lv_cont_set_fit(cont, false, false);
@@ -200,7 +202,7 @@ void infoLoop(void *none) {
           Line("right drive", &drive::right, Line::Velocity,    nlines++),
   };
 
-  static SwitcherMenu rootMenu("", {
+  static SwitcherMenu rootMenu("main menu", {
           SwitcherMenu("red", {
             SwitcherMenu("flags", {}, &autonRedFlags),
             SwitcherMenu("caps", {}, &autonRedCaps),
@@ -300,20 +302,22 @@ void infoLoop(void *none) {
   // Create the speed meter
   lv_obj_t *meter;
   meter = lv_lmeter_create(cont, NULL);
-  lv_lmeter_set_range(meter, 0, 200);       // Set the range
-  lv_lmeter_set_value(meter, 0);            // Set the current value
+  lv_lmeter_set_range(meter, 0, 175);        // Set the range
+  lv_lmeter_set_value(meter, 0);             // Set the current value
   lv_lmeter_set_style(meter, &style_lmeter); // Apply the new style
   lv_obj_set_size(meter, 80, 80);
   lv_obj_align(meter, NULL, LV_ALIGN_IN_BOTTOM_RIGHT, -10, 0);
+  lv_lmeter_set_style(meter, &style_lmeter);
 
   // Add a label to show the current value
   lv_obj_t *m_label;
   m_label = lv_label_create(meter, NULL);
-  lv_obj_align(m_label, NULL, LV_ALIGN_CENTER, 15, 0);
+  lv_obj_align(m_label, NULL, LV_ALIGN_CENTER, 0, 0);
+  lv_label_set_style(m_label, &lv_style_plain);
 
   mutex.give();
-  bool blpressed = false;
-  Rate rate;
+  Rate  rate;
+  short batteryCapacity, launcherVel;
   while (true) {
     if (bpressed) {
       lv_obj_set_hidden(cont, true);
@@ -328,29 +332,36 @@ void infoLoop(void *none) {
       bpressed = false;
       lv_obj_set_hidden(cont, false);
     }
+
+    // update info lines
     for (auto &&line : lines)
       line.draw();
 
+    // update autonomous name
     lv_label_set_text(autonLine, (autonT + autonName).c_str());
-    lv_bar_set_value(bar, (int16_t)pros::battery::get_capacity());
-    lv_label_set_text(bar_label,
-                      std::to_string((int16_t)pros::battery::get_capacity()).append("%").c_str());
 
-    lv_lmeter_set_value(meter, (int16_t)launcher.getActualVelocity());
-    lv_label_set_text(m_label, std::to_string((int16_t)launcher.getActualVelocity()).c_str());
+    launcherVel     = (short)(launcher.getActualVelocity() + .5);
+    batteryCapacity = (short)pros::battery::get_capacity();
 
-    if (blpressed) {
-      blpressed = false;
-    }
+    // update battery capacity
+    lv_bar_set_value(bar, batteryCapacity);
+    snprintf(batteryText, 15, "%3d%%", batteryCapacity);
+    lv_label_set_text(bar_label, batteryText);
 
-    sprintf(tline, "v: %.3d | t: %.2f", (int)(launcher.getActualVelocity() + .5),
-            launcher.getTemperature());
+    // update flywheel speedometer
+    lv_lmeter_set_value(meter, launcherVel);
+    snprintf(speedometerText, 15, "%4d", launcherVel);
+    lv_label_set_text(m_label, speedometerText);
+
+    // print values to the controllers
+    snprintf(tline, 15, "v: %3d | t: %2f", launcherVel, launcher.getTemperature());
     controller::master.setText(2, 0, tline);
-    controller::partner.setText(2, 0, tline);
 
+    // let the light indicate if it's OK to shoot
     light.set_value(abs(launcher.getActualVelocity() - launcher.getTargetVelocity()) > 5 ||
                     launcher.getTargetVelocity() == 0);
 
-    rate.delay(20);
+    // run 20 times per second
+    rate.delay(20_Hz);
   }
 }

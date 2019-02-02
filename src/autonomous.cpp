@@ -19,7 +19,9 @@ void autonomous() {
   cout << "Done!" << endl;
 
   // disable the controller
-  drive::dpc.flipDisable();
+  // drive::dpc.flipDisable(true);
+
+  drive::dc.setMaxVelocity(200);
 
   // wait for something to happen
   while (pros::competition::is_autonomous())

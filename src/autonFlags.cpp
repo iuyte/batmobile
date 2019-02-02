@@ -63,8 +63,8 @@ void autonFlags(int side) {
 void flipCap(int side) {
   // turn, back away from the wall and turn towards the cap
   drive::dc.turnAngle(20_deg);
-  drive::dc.moveDistance(22_in);
-  drive::dc.turnAngle(90_deg);
+  drive::dc.moveDistance(20.5_in);
+  drive::dc.turnAngle(98_deg);
 
   // flip the cap
   drive::dc.setMaxVelocity(150);
@@ -72,7 +72,7 @@ void flipCap(int side) {
   drive::dc.moveDistance(-17_in);
 
   // back up from the cap and stop the intake
-  drive::dc.moveDistance(8_in);
+  drive::dc.moveDistance(14_in);
   intake.move(0);
 }
 
