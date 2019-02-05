@@ -23,15 +23,15 @@ void autonFlags(int side) {
 
   // once the intake stops moving, power up the flywheel
   waitUntil(motorPosTargetReached(intake, 20), 20);
-  launcher.moveVelocity(fpreset[MAGIC]);
+  catapult.moveVelocity(fpreset[MAGIC]);
 
   // move towards the flags
   drive::dc.waitUntilSettled();
   drive::dc.moveDistanceAsync(-8_in);
 
-  // wait for the drive and launcher to reach their position and velocity targets, respectively
+  // wait for the drive and catapult to reach their position and velocity targets, respectively
   drive::dc.waitUntilSettled();
-  waitUntil(motorVelTargetReached(launcher, 10), 20);
+  waitUntil(motorVelTargetReached(catapult, 10), 20);
 
   // launch a ball
   intake.moveRelative(230, 200);
@@ -40,7 +40,7 @@ void autonFlags(int side) {
   // drive forward and launch the second ball
   drive::dc.moveDistance(-16_in);
   delay(250);
-  waitUntil(motorVelTargetReached(launcher, 10), 20);
+  waitUntil(motorVelTargetReached(catapult, 10), 20);
   intake.moveRelative(520, 200);
   waitUntil(motorPosTargetReached(intake, 20), 20);
   intake.moveRelative(180, 200);
@@ -52,8 +52,8 @@ void autonFlags(int side) {
   // make sure the second ball is launched
   waitUntil(motorPosTargetReached(intake, 20), 20);
 
-  // stop launcher & intake
-  launcher.moveVelocity(0);
+  // stop catapult & intake
+  catapult.moveVelocity(0);
   intake.moveVelocity(0);
 
   // back into the flag

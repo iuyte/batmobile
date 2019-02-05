@@ -22,7 +22,7 @@ vector<string> split(const string &s, char delim) {
 }
 
 void printData() {
-  AbstractMotor *     m        = &launcher;
+  AbstractMotor *     m        = &catapult;
   int                 v        = 0;
   int                 d        = 1;
   float               interval = 1000;

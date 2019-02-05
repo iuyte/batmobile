@@ -79,7 +79,6 @@ std::pair<vfptr, string> selectMenu(SwitcherMenu *menu) {
   // wait for something to be selected
   while (!pressed) {
     if (controller::master.getDigital(ControllerDigital::R1) ||
-        controller::partner.getDigital(ControllerDigital::R1) ||
         (pros::competition::is_autonomous() && !pros::competition::is_disabled())) {
       // delete the buttons
       lv_obj_del(btnMtx);
@@ -191,11 +190,10 @@ void infoLoop(void *none) {
 
   // clang-format off
   Line lines[] = {
-          Line("flywheel",    &launcher,     Line::Velocity,    nlines++),
-          Line("flywheel",    &launcher,     Line::Temperature, nlines++),
-          Line("flywheel",    &launcher,     Line::Power,       nlines++),
+          Line("flywheel",    &catapult,     Line::Velocity,    nlines++),
+          Line("flywheel",    &catapult,     Line::Temperature, nlines++),
+          Line("flywheel",    &catapult,     Line::Power,       nlines++),
           Line("intake",      &intake,       Line::Velocity,    nlines++),
-          Line("lift",        &lift,         Line::Position,    nlines++),
           Line("left drive",  &drive::left,  Line::Position,    nlines++),
           Line("right drive", &drive::right, Line::Position,    nlines++),
           Line("left drive",  &drive::left,  Line::Velocity,    nlines++),
@@ -317,7 +315,7 @@ void infoLoop(void *none) {
 
   mutex.give();
   Rate  rate;
-  short batteryCapacity, launcherVel;
+  short batteryCapacity, catapultVel;
   while (true) {
     if (bpressed) {
       lv_obj_set_hidden(cont, true);
@@ -340,7 +338,7 @@ void infoLoop(void *none) {
     // update autonomous name
     lv_label_set_text(autonLine, (autonT + autonName).c_str());
 
-    launcherVel     = (short)(launcher.getActualVelocity() + .5);
+    catapultVel     = (short)(catapult.getActualVelocity() + .5);
     batteryCapacity = (short)pros::battery::get_capacity();
 
     // update battery capacity
@@ -349,17 +347,13 @@ void infoLoop(void *none) {
     lv_label_set_text(bar_label, batteryText);
 
     // update flywheel speedometer
-    lv_lmeter_set_value(meter, launcherVel);
-    snprintf(speedometerText, 15, "%4d", launcherVel);
+    lv_lmeter_set_value(meter, catapultVel);
+    snprintf(speedometerText, 15, "%4d", catapultVel);
     lv_label_set_text(m_label, speedometerText);
 
     // print values to the controllers
-    snprintf(tline, 15, "v: %3d | t: %2f", launcherVel, launcher.getTemperature());
+    snprintf(tline, 15, "v: %3d | t: %2f", catapultVel, catapult.getTemperature());
     controller::master.setText(2, 0, tline);
-
-    // let the light indicate if it's OK to shoot
-    light.set_value(abs(launcher.getActualVelocity() - launcher.getTargetVelocity()) > 5 ||
-                    launcher.getTargetVelocity() == 0);
 
     // run 20 times per second
     rate.delay(20_Hz);

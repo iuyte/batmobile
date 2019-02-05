@@ -2,7 +2,7 @@
 
 void opcontrol() {
   // maximum speed in RPM for the drive motors
-  static const float dmax = 190;
+  static const float dmax = 200;
 
   // acceptable time between presses to make a change
   static const unsigned long lpresst = 325;
@@ -22,20 +22,23 @@ void opcontrol() {
   AbstractMotor::brakeMode bmode = AbstractMotor::brakeMode::coast;
   drive::left.setBrakeMode(bmode);
   drive::right.setBrakeMode(bmode);
-  drive::dc.setMaxVelocity(200);
+  drive::dc.setMaxVelocity(dmax);
+
+  // rate to keep loop at constant rate
+  Rate rate;
 
   // infinite driver-control loop, runs: drive, intake, and launcher
   while (true) {
     // get the input control for the drive
-    leftCmd  = operatorCmd::drive::left();
-    rightCmd = operatorCmd::drive::right();
+    leftCmd  = controller::get::drive::left();
+    rightCmd = controller::get::drive::right();
 
     drive::dc.tank(leftCmd, rightCmd, .05);
 
     // if x is pressed, set the drive to hold, and if the commanded power value isn't 0, coast.
     // Otherwise, if the robot is still (or almost still), keep it still by setting a commanded
     // velocity of zero
-    if (operatorCmd::drive::holdToggle()) {
+    if (controller::get::drive::holdToggle()) {
       drive::left.setBrakeMode(AbstractMotor::brakeMode::hold);
       drive::right.setBrakeMode(AbstractMotor::brakeMode::hold);
     } else if (leftCmd || rightCmd) {
@@ -55,38 +58,11 @@ void opcontrol() {
       }
     }
 
-    // move the lift based on whether or not it is at maximum/minimum height
-    if (lift.getPosition() < lift_bottom) {
-      lift.moveVelocity(trim(liftSpeed * operatorCmd::lift(), 0, liftSpeed));
-    } else if (lift.getPosition() > lift_top) {
-      lift.moveVelocity(trim(liftSpeed * operatorCmd::lift(), -liftSpeed, 0));
-    } else {
-      lift.moveVelocity(liftSpeed * operatorCmd::lift());
-    }
-
     // move the intake based on whether or not the right bumpers are pressed
-    intake.move(127 * operatorCmd::intake());
+    intake.move(127 * controller::get::intake());
 
-    if (operatorCmd::launcher::off()) {
-      fspeed = 0;
-    } else if (operatorCmd::launcher::backwards() && millis() - lpress[0] > lpresst) {
-      fspeed    = fspeed ? 0 : -15;
-      lpress[0] = millis();
-    } else if (operatorCmd::launcher::less() && millis() - lpress[1] > lpresst) {
-      fspeed -= 2.5;
-      lpress[1] = millis();
-    } else if (operatorCmd::launcher::more() && millis() - lpress[2] > lpresst) {
-      fspeed += 2.5;
-      lpress[2] = millis();
-    } else if (operatorCmd::launcher::middleFlag() && millis() - lpress[3] > lpresst) {
-      fspeed    = (fspeed == fpreset[LOW]) ? 0 : fpreset[LOW];
-      lpress[3] = millis();
-    } else if (operatorCmd::launcher::highFlag() && millis() - lpress[4] > lpresst) {
-      fspeed    = (fspeed == fpreset[HIGH]) ? 0 : fpreset[HIGH];
-      lpress[4] = millis();
-    }
-
-    launcher.moveVelocity(fspeed); // move the flywheel
+    if (controller::get::catapult())
+      catapult.moveVelocity(100);
 
     if constexpr (!atCompetition) {
       if (controller::master.getDigital(ControllerDigital::Y))
@@ -94,5 +70,6 @@ void opcontrol() {
     }
 
     delay(25);
+    rate.delay(50_Hz);
   }
 }
