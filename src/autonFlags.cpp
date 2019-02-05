@@ -16,10 +16,10 @@ void autonFlags(int side) {
   intake.moveRelative(-180, 100);
 
   // back up
-  drive::dc.moveDistance(32_in);
+  drive::dc.moveDistance(33_in);
 
   // turn to the flags
-  drive::dc.turnAngleAsync(-90_deg);
+  drive::dc.turnAngleAsync(90_deg * side);
 
   // once the intake stops moving, power up the flywheel
   waitUntil(motorPosTargetReached(intake, 20), 20);
@@ -27,7 +27,7 @@ void autonFlags(int side) {
 
   // move towards the flags
   drive::dc.waitUntilSettled();
-  drive::dc.moveDistanceAsync(-10.5_in);
+  drive::dc.moveDistanceAsync(-8_in);
 
   // wait for the drive and launcher to reach their position and velocity targets, respectively
   drive::dc.waitUntilSettled();
@@ -62,9 +62,9 @@ void autonFlags(int side) {
 
 void flipCap(int side) {
   // turn, back away from the wall and turn towards the cap
-  drive::dc.turnAngle(20_deg);
-  drive::dc.moveDistance(20.5_in);
-  drive::dc.turnAngle(98_deg);
+  drive::dc.turnAngle(-20_deg * side);
+  drive::dc.moveDistance(17_in);
+  drive::dc.turnAngle(-95_deg * side);
 
   // flip the cap
   drive::dc.setMaxVelocity(150);

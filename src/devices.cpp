@@ -25,23 +25,30 @@ namespace operatorCmd {
   } // namespace drive
 
   const float lift() {
-    return controller::partner.getDigital(ControllerDigital::L1) - controller::partner.getDigital(ControllerDigital::L2);
+    return controller::partner.getDigital(ControllerDigital::L1) -
+           controller::partner.getDigital(ControllerDigital::L2) +
+           controller::master.getDigital(ControllerDigital::up) -
+           controller::master.getDigital(ControllerDigital::down);
   }
 
   const float intake() {
-    return controller::master.getDigital(ControllerDigital::R1) - controller::master.getDigital(ControllerDigital::R2);
+    return controller::master.getDigital(ControllerDigital::R1) -
+           controller::master.getDigital(ControllerDigital::R2);
   }
 
   namespace launcher {
-    const bool off() { return controller::master.getDigital(ControllerDigital::A); }
+    const bool off() {
+      return controller::master.getDigital(ControllerDigital::A) ||
+             controller::master.getDigital(ControllerDigital::L2);
+    }
 
     const bool backwards() { return controller::master.getDigital(ControllerDigital::B); }
 
-    const bool less() { return controller::master.getDigital(ControllerDigital::down); }
+    const bool less() { return false; }
 
-    const bool more() { return controller::master.getDigital(ControllerDigital::up); }
+    const bool more() { return false; }
 
-    const bool middleFlag() { return controller::master.getDigital(ControllerDigital::L2); }
+    const bool middleFlag() { return false; }
 
     const bool highFlag() { return controller::master.getDigital(ControllerDigital::L1); }
   } // namespace launcher
