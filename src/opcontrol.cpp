@@ -29,8 +29,6 @@ void opcontrol() {
   // rate to keep loop at constant rate
   Rate rate;
 
-  auto catapultTaskHandle = pros::Task(&catapultTask, nullptr);
-
   // infinite driver-control loop, runs: drive, intake, and launcher
   while (true) {
     // get the input control for the drive
@@ -77,7 +75,6 @@ void opcontrol() {
     switch (controller::get::catapult()) {
     case 1:
       toggleState();
-      catapultTaskHandle.notify();
       break;
     case -1:
       catapult.moveVelocity(-10);

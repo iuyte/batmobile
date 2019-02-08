@@ -22,7 +22,7 @@ namespace controller {
     const int catapult() {
       static unsigned long lastTime = millis();
 
-      if (millis() - lastTime > 200 && controller::master.getDigital(ControllerDigital::L1)) {
+      if (millis() - lastTime > 350 && controller::master.getDigital(ControllerDigital::L1)) {
         lastTime = millis();
         return 1;
       } else if (controller::master.getDigital(ControllerDigital::L2)){
@@ -35,7 +35,7 @@ namespace controller {
 } // namespace controller
 
 Motor         intake(12, true, AbstractMotor::gearset::green);
-Motor         catapult(21, false, AbstractMotor::gearset::green);
+Motor         catapult(21, false, AbstractMotor::gearset::red);
 Potentiometer cataPot('a');
 
 namespace drive {

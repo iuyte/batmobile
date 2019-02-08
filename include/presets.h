@@ -5,11 +5,8 @@
 
 #define MAGIC 2
 
-// low/high flag flywheel speeds, respectively
-static const float fpreset[] = {110, 125, 130};
-
 // catapult position
-static const float cataPos[] = {1480, 2000};
+static const float cataPos[] = {1450, 2000};
 
 // catapult states
 enum CataState{
@@ -18,8 +15,9 @@ enum CataState{
         fire,
 };
 
-CataState toggleState();
+CataState toggleState(CataState newState = CataState::neutral);
 void catapultTask(void *none);
+extern pros::Task *catapultTaskHandle;
 
 void infoLoop(void *none);
 void chooseAuton();
