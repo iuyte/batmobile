@@ -182,7 +182,7 @@ void infoLoop(void *none) {
   unsigned int nlines = 0;
   char         tline[20];
   char         batteryText[20];
-  char         speedometerText[20];
+  char         cataPotText[20];
   string       autonT = "autonomous: ";
   cont                = lv_cont_create(lv_scr_act(), NULL);
   lv_cont_set_fit(cont, false, false);
@@ -190,14 +190,16 @@ void infoLoop(void *none) {
 
   // clang-format off
   Line lines[] = {
-          Line("flywheel",    &catapult,     Line::Velocity,    nlines++),
-          Line("flywheel",    &catapult,     Line::Temperature, nlines++),
-          Line("flywheel",    &catapult,     Line::Power,       nlines++),
+          Line("catapult",    &catapult,     Line::Velocity,    nlines++),
+          Line("catapult",    &catapult,     Line::Temperature, nlines++),
+          Line("catapult",    &catapult,     Line::Power,       nlines++),
           Line("intake",      &intake,       Line::Velocity,    nlines++),
           Line("left drive",  &drive::left,  Line::Position,    nlines++),
           Line("right drive", &drive::right, Line::Position,    nlines++),
           Line("left drive",  &drive::left,  Line::Velocity,    nlines++),
           Line("right drive", &drive::right, Line::Velocity,    nlines++),
+          Line("left drive",  &drive::left,  Line::Temperature, nlines++),
+          Line("right drive", &drive::right, Line::Temperature, nlines++),
   };
 
   static SwitcherMenu rootMenu("main menu", {
@@ -300,7 +302,7 @@ void infoLoop(void *none) {
   // Create the speed meter
   lv_obj_t *meter;
   meter = lv_lmeter_create(cont, NULL);
-  lv_lmeter_set_range(meter, 0, 175);        // Set the range
+  lv_lmeter_set_range(meter, 1300, 2400);    // Set the range
   lv_lmeter_set_value(meter, 0);             // Set the current value
   lv_lmeter_set_style(meter, &style_lmeter); // Apply the new style
   lv_obj_set_size(meter, 80, 80);
@@ -310,12 +312,12 @@ void infoLoop(void *none) {
   // Add a label to show the current value
   lv_obj_t *m_label;
   m_label = lv_label_create(meter, NULL);
-  lv_obj_align(m_label, NULL, LV_ALIGN_CENTER, 0, 0);
-  lv_label_set_style(m_label, &lv_style_plain);
+  lv_obj_align(m_label, NULL, LV_ALIGN_CENTER, 2, 0);
+  lv_label_set_style(m_label, &lv_style_plain_color);
 
   mutex.give();
   Rate  rate;
-  short batteryCapacity, catapultVel;
+  short batteryCapacity, catapultVal;
   while (true) {
     if (bpressed) {
       lv_obj_set_hidden(cont, true);
@@ -338,7 +340,7 @@ void infoLoop(void *none) {
     // update autonomous name
     lv_label_set_text(autonLine, (autonT + autonName).c_str());
 
-    catapultVel     = (short)(catapult.getActualVelocity() + .5);
+    catapultVal     = (short)(cataPot.get());
     batteryCapacity = (short)pros::battery::get_capacity();
 
     // update battery capacity
@@ -346,13 +348,13 @@ void infoLoop(void *none) {
     snprintf(batteryText, 15, "%3d%%", batteryCapacity);
     lv_label_set_text(bar_label, batteryText);
 
-    // update flywheel speedometer
-    lv_lmeter_set_value(meter, catapultVel);
-    snprintf(speedometerText, 15, "%4d", catapultVel);
-    lv_label_set_text(m_label, speedometerText);
+    // update catapult meter
+    lv_lmeter_set_value(meter, catapultVal);
+    snprintf(cataPotText, 15, "%4d", catapultVal);
+    lv_label_set_text(m_label, cataPotText);
 
     // print values to the controllers
-    snprintf(tline, 15, "v: %3d | t: %2f", catapultVel, catapult.getTemperature());
+    snprintf(tline, 15, "%d | %f", catapultVal, catapult.getTemperature());
     controller::master.setText(2, 0, tline);
 
     // run 20 times per second

@@ -15,8 +15,6 @@ void opcontrol() {
   float leftCmd, rightCmd;
   // counter for flywheel toggle
   unsigned long fcount = millis();
-  // toggle for flywheel pressing buttons
-  bool flywheeltoggle = true;
 
   // set the drive to "coast" mode, as it is more natural for drivers
   AbstractMotor::brakeMode bmode = AbstractMotor::brakeMode::coast;
@@ -24,8 +22,14 @@ void opcontrol() {
   drive::right.setBrakeMode(bmode);
   drive::dc.setMaxVelocity(dmax);
 
+  // drive position to hold at
+  double driveHoldPos[] = {0, 0};
+  bool   lastHoldPress  = false;
+
   // rate to keep loop at constant rate
   Rate rate;
+
+  auto catapultTaskHandle = pros::Task(&catapultTask, nullptr);
 
   // infinite driver-control loop, runs: drive, intake, and launcher
   while (true) {
@@ -39,30 +43,48 @@ void opcontrol() {
     // Otherwise, if the robot is still (or almost still), keep it still by setting a commanded
     // velocity of zero
     if (controller::get::drive::holdToggle()) {
-      drive::left.setBrakeMode(AbstractMotor::brakeMode::hold);
-      drive::right.setBrakeMode(AbstractMotor::brakeMode::hold);
-    } else if (leftCmd || rightCmd) {
-      if (bmode != AbstractMotor::brakeMode::coast) {
-        bmode = AbstractMotor::brakeMode::coast;
-        drive::left.setBrakeMode(bmode);
-        drive::right.setBrakeMode(bmode);
+      if (!lastHoldPress) {
+        driveHoldPos[0] = drive::left.getPosition();
+        driveHoldPos[1] = drive::right.getPosition();
+        lastHoldPress   = true;
       }
-    } else if (abs(drive::left.getActualVelocity()) + abs(drive::right.getActualVelocity()) < 16) {
-      drive::left.moveVelocity(0);
-      drive::right.moveVelocity(0);
+      drive::left.moveAbsolute(driveHoldPos[0], dmax);
+      drive::right.moveAbsolute(driveHoldPos[1], dmax);
+    } else {
+      lastHoldPress = false;
+      if (leftCmd || rightCmd) {
+        if (bmode != AbstractMotor::brakeMode::coast) {
+          bmode = AbstractMotor::brakeMode::coast;
+          drive::left.setBrakeMode(bmode);
+          drive::right.setBrakeMode(bmode);
+        }
+      } else if (abs(drive::left.getActualVelocity()) + abs(drive::right.getActualVelocity()) <
+                 16) {
+        drive::left.moveVelocity(0);
+        drive::right.moveVelocity(0);
 
-      if (bmode != AbstractMotor::brakeMode::hold) {
-        bmode = AbstractMotor::brakeMode::hold;
-        drive::left.setBrakeMode(bmode);
-        drive::right.setBrakeMode(bmode);
+        if (bmode != AbstractMotor::brakeMode::hold) {
+          bmode = AbstractMotor::brakeMode::hold;
+          drive::left.setBrakeMode(bmode);
+          drive::right.setBrakeMode(bmode);
+        }
       }
     }
 
     // move the intake based on whether or not the right bumpers are pressed
     intake.move(127 * controller::get::intake());
 
-    if (controller::get::catapult())
-      catapult.moveVelocity(100);
+    switch (controller::get::catapult()) {
+    case 1:
+      toggleState();
+      catapultTaskHandle.notify();
+      break;
+    case -1:
+      catapult.moveVelocity(-10);
+      break;
+    default:
+      break;
+    }
 
     if constexpr (!atCompetition) {
       if (controller::master.getDigital(ControllerDigital::Y))

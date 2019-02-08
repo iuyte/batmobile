@@ -9,42 +9,40 @@ namespace controller {
 
   namespace get {
     namespace drive {
-      const float left() {
-        return master.getAnalog(ControllerAnalog::leftY);
-      }
+      const float left() { return master.getAnalog(ControllerAnalog::leftY); }
 
-      const float right() {
-        return master.getAnalog(ControllerAnalog::leftY);
-      }
-      const bool holdToggle() { return master.getDigital(ControllerDigital::X); }
+      const float right() { return master.getAnalog(ControllerAnalog::rightY); }
+      const bool  holdToggle() { return master.getDigital(ControllerDigital::X); }
     } // namespace drive
 
     const float intake() {
-      return master.getDigital(ControllerDigital::R1) -
-             master.getDigital(ControllerDigital::R2);
+      return master.getDigital(ControllerDigital::R1) - master.getDigital(ControllerDigital::R2);
     }
 
-    const bool catapult() {
+    const int catapult() {
       static unsigned long lastTime = millis();
 
       if (millis() - lastTime > 200 && controller::master.getDigital(ControllerDigital::L1)) {
         lastTime = millis();
-        return true;
+        return 1;
+      } else if (controller::master.getDigital(ControllerDigital::L2)){
+        return -1;
       }
 
-      return false;
+      return 0;
     }
   } // namespace get
 } // namespace controller
 
-Motor intake(6, false, AbstractMotor::gearset::green);
-Motor catapult(5, false, AbstractMotor::gearset::green);
+Motor         intake(12, true, AbstractMotor::gearset::green);
+Motor         catapult(21, false, AbstractMotor::gearset::green);
+Potentiometer cataPot('a');
 
 namespace drive {
-  MotorGroup left({Motor(1, false, AbstractMotor::gearset::green),
-                   Motor(2, false, AbstractMotor::gearset::green)});
-  MotorGroup right({Motor(3, true, AbstractMotor::gearset::green),
-                    Motor(3, true, AbstractMotor::gearset::green)});
+  MotorGroup left({Motor(16, false, AbstractMotor::gearset::green),
+                   Motor(9, false, AbstractMotor::gearset::green)});
+  MotorGroup right({Motor(15, true, AbstractMotor::gearset::green),
+                    Motor(10, true, AbstractMotor::gearset::green)});
 
   void moveVelocity(double lvel, double rvel) {
     left.moveVelocity(lvel);

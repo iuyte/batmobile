@@ -23,7 +23,7 @@ namespace controller {
 
     const float intake();
 
-    const bool catapult();
+    const int catapult();
   } // namespace get
 } // namespace controller
 
@@ -45,5 +45,7 @@ namespace drive {
 extern Motor intake;
 /** catapult */
 extern Motor catapult;
+/** catapult potentiometer */
+extern Potentiometer cataPot;
 
 #endif

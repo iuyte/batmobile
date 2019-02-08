@@ -69,7 +69,7 @@ clean:
 	-$Drm -rf $(BINDIR)
 
 upload: quick
-	$(HOME)/.local/bin/prosv5 upload
+	$(HOME)/.local/bin/prosv5 upload --name batmobile
 
 $(OUTBIN): $(OUTELF) $(BINDIR)
 	@echo -n "Creating $@ for $(DEVICE) "

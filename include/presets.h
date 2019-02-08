@@ -8,18 +8,18 @@
 // low/high flag flywheel speeds, respectively
 static const float fpreset[] = {110, 125, 130};
 
-// lift speed in rpm
-static const int liftSpeed = 185;
+// catapult position
+static const float cataPos[] = {1480, 2000};
 
-/** lift heights */
-typedef enum {
-  lift_bottom = 0,
-  lift_ing    = 300,
-  lift_top    = 1780,
-} liftH;
+// catapult states
+enum CataState{
+        neutral,
+        ready,
+        fire,
+};
 
-/** raise the lift by one level */
-liftH upHeight(liftH current);
+CataState toggleState();
+void catapultTask(void *none);
 
 void infoLoop(void *none);
 void chooseAuton();
