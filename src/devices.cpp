@@ -6,13 +6,19 @@ namespace controller {
 
   /** main V5 controller */
   Controller master(ControllerId::master);
+  Controller partner(ControllerId::partner);
 
   namespace get {
     namespace drive {
-      const float left() { return master.getAnalog(ControllerAnalog::leftY); }
-
-      const float right() { return master.getAnalog(ControllerAnalog::rightY); }
-      const bool  holdToggle() { return master.getDigital(ControllerDigital::X); }
+      const float left() {
+        return master.getAnalog(ControllerAnalog::leftY) -
+               partner.getAnalog(ControllerAnalog::rightY);
+      }
+      const float right() {
+        return master.getAnalog(ControllerAnalog::rightY) -
+               partner.getAnalog(ControllerAnalog::leftY);
+      }
+      const bool holdToggle() { return master.getDigital(ControllerDigital::X); }
     } // namespace drive
 
     const float intake() {
@@ -25,7 +31,7 @@ namespace controller {
       if (millis() - lastTime > 350 && controller::master.getDigital(ControllerDigital::L1)) {
         lastTime = millis();
         return 1;
-      } else if (controller::master.getDigital(ControllerDigital::L2)){
+      } else if (controller::master.getDigital(ControllerDigital::L2)) {
         return -1;
       }
 
@@ -50,6 +56,6 @@ namespace drive {
   }
 
   ChassisControllerIntegrated dc = ChassisControllerFactory::create(
-          left, right, AbstractMotor::gearset::green, ChassisScales({4.1_in, 15.125_in}));
-  AsyncMotionProfileController dpc = AsyncControllerFactory::motionProfile(.5, 1.25, 8, dc);
+          left, right, AbstractMotor::gearset::green, ChassisScales({4.15_in, 14_in}));
+  AsyncMotionProfileController dpc = AsyncControllerFactory::motionProfile(1, 2, 10, dc);
 } // namespace drive

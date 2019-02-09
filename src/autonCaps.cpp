@@ -5,19 +5,17 @@
 #define side_blue 1
 
 void autonScoreCap() {
+  // set the intake to on
   intake.move(127);
 
-  drive::dc.setMaxVelocity(115);
-  drive::dc.moveDistance(-39_in);
+  // drive forward, pick up the ball, and back up
+  drive::dpc.setTarget("F1");
+  drive::dpc.waitUntilSettled();
+  drive::dpc.setTarget("F2", true);
+  drive::dpc.waitUntilSettled();
 
-  intake.moveRelative(1260, 200);
-  intake.moveRelative(-300, 100);
-
-  auto a = (drive::left.getPosition() + drive::right.getPosition()) / 2;
-  drive::left.moveAbsolute(a, 75);
-  drive::right.moveAbsolute(a, 75);
-
-  drive::dc.moveDistance(24_in);
+  // stop the intake
+  intake.move(0);
 }
 
 void autonCaps(int side) { autonScoreCap(); }

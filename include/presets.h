@@ -6,7 +6,7 @@
 #define MAGIC 2
 
 // catapult position
-static const float cataPos[] = {1450, 2000};
+static const float cataPos[] = {1550, 2000, 2350};
 
 // catapult states
 enum CataState{
@@ -15,9 +15,10 @@ enum CataState{
         fire,
 };
 
+extern pros::Task *catapultTaskHandle;
 CataState toggleState(CataState newState = CataState::neutral);
 void catapultTask(void *none);
-extern pros::Task *catapultTaskHandle;
+bool catapultAchieved();
 
 void infoLoop(void *none);
 void chooseAuton();

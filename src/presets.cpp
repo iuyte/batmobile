@@ -2,6 +2,7 @@
 
 CataState   cataState = CataState::neutral;
 pros::Task *catapultTaskHandle;
+int         switchable = 1;
 
 void catapultTask(void *none) {
   // runs the task at a constant rate
@@ -18,41 +19,49 @@ void catapultTask(void *none) {
 
   while (true) {
     if (cataState != achieved) {
+      switchable = 0;
+
       switch (cataState) {
       case CataState::ready:
+        catapult.setBrakeMode(AbstractMotor::brakeMode::hold);
         catapult.moveVelocity(100);
-        waitUntil(cataPot.get() < cataPos[HIGH], 20);
+        waitUntil(cataPot.get() < cataPos[1], 20);
         catapult.moveVelocity(75);
-        waitUntil(cataPot.get() < cataPos[LOW] + 100, 20);
+        waitUntil(cataPot.get() < cataPos[0], 20);
         pos = catapult.getPosition();
         catapult.moveAbsolute(pos, 5);
         break;
       case CataState::fire:
         catapult.moveVelocity(100);
-        waitUntil(cataPot.get() < cataPos[LOW], 20);
-        catapult.moveRelative(1000, 100);
-        waitUntil(motorPosTargetReached(catapult, 10), 20);
+        waitUntil(cataPot.get() > cataPos[1], 20);
+        waitUntil(cataPot.get() < cataPos[2], 20);
+        catapult.setBrakeMode(AbstractMotor::brakeMode::coast);
         break;
       default:
         break;
       }
 
       achieved = cataState;
-      catapult.moveVelocity(0);
     }
 
+    switchable = 1;
+    catapult.moveVelocity(0);
     pros::c::task_notify_take(true, -1);
   }
 }
 
-CataState toggleState(CataState newState) {
-  if (newState == CataState::neutral) {
-    cataState = (cataState == ready) ? fire : ready;
-  } else {
-    cataState = newState;
-  }
-
-  catapultTaskHandle->notify();
+bool catapultAchieved() {
+  return (bool)switchable;
 }
 
-void catapultMove(CataState s) {}
+CataState toggleState(CataState newState) {
+  if (switchable) {
+    if (newState == CataState::neutral) {
+      cataState = (cataState == ready) ? fire : ready;
+    } else {
+      cataState = newState;
+    }
+
+    catapultTaskHandle->notify();
+  }
+}

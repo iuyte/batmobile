@@ -1,78 +1,73 @@
 #include "autonomous.h"
 #include "util.h"
 
-#define side_red -1
-#define side_blue 1
+#define side_red 1
+#define side_blue -1
 
 void autonFlags(int side) {
   // set the intake to on
   intake.move(127);
 
-  // drive forward and grab the ball from under the cap
-  drive::dc.setMaxVelocity(115);
-  drive::dc.moveDistance(-38_in);
+  // drive forward and grab the ball
+  drive::dpc.setTarget("F1");
+  drive::dpc.waitUntilSettled();
 
-  // move the balls in the intake away from the flywheel
-  intake.moveRelative(-180, 100);
+  // ready the catapult
+  toggleState(CataState::ready);
 
   // back up
-  drive::dc.moveDistance(33_in);
+  drive::dpc.setTarget("F2", true);
+  drive::dpc.waitUntilSettled();
 
-  // turn to the flags
-  drive::dc.turnAngleAsync(90_deg * side);
-
-  // once the intake stops moving, power up the flywheel
-  waitUntil(motorPosTargetReached(intake, 20), 20);
-  catapult.moveVelocity(fpreset[MAGIC]);
-
-  // move towards the flags
-  drive::dc.waitUntilSettled();
-  drive::dc.moveDistanceAsync(-8_in);
-
-  // wait for the drive and catapult to reach their position and velocity targets, respectively
-  drive::dc.waitUntilSettled();
-  waitUntil(motorVelTargetReached(catapult, 10), 20);
-
-  // launch a ball
-  intake.moveRelative(230, 200);
-  waitUntil(motorPosTargetReached(intake, 20), 20);
-
-  // drive forward and launch the second ball
-  drive::dc.moveDistance(-16_in);
-  delay(250);
-  waitUntil(motorVelTargetReached(catapult, 10), 20);
-  intake.moveRelative(520, 200);
-  waitUntil(motorPosTargetReached(intake, 20), 20);
-  intake.moveRelative(180, 200);
-
-  // turn
+  // turn towards the flags
+  drive::dc.setMaxVelocity(75);
+  drive::dc.turnAngle(-90_deg * side);
   drive::dc.setMaxVelocity(200);
-  drive::dc.turnAngle(20_deg * side);
 
-  // make sure the second ball is launched
-  waitUntil(motorPosTargetReached(intake, 20), 20);
+  // drive forward a bit
+  drive::dpc.setTarget("F3");
+  drive::dpc.waitUntilSettled();
 
-  // stop catapult & intake
-  catapult.moveVelocity(0);
-  intake.moveVelocity(0);
+  waitUntil(catapultAchieved(), 20);
 
-  // back into the flag
-  drive::dc.moveDistance(-16_in);
+  // wait a bit
+  drive::moveVelocity(0, 0);
+  delay(250);
+
+  // fire the catapult
+  toggleState(CataState::fire);
+  waitUntil(cataPot.get() > cataPos[3], 20);
+
+  // reverse intake for cap flipping
+  intake.move(-127);
+
+  // hit the bottom flag
+  drive::dc.setMaxVelocity(125);
+  drive::dc.moveDistance(20_in);
+  drive::dc.turnAngle(-20_deg * side);
+  drive::dc.moveDistance(22_in);
+  drive::dc.moveDistance(-10_in);
+  drive::dc.turnAngle(10_deg * side);
 }
 
 void flipCap(int side) {
-  // turn, back away from the wall and turn towards the cap
-  drive::dc.turnAngle(-20_deg * side);
-  drive::dc.moveDistance(17_in);
-  drive::dc.turnAngle(-95_deg * side);
+  // back up from the wall
+  drive::dpc.setTarget("FC1", true);
+  drive::dpc.waitUntilSettled();
+
+  // turn towards the cap
+  drive::dc.setMaxVelocity(85);
+  drive::dc.turnAngle(100_deg * side);
+  drive::dc.setMaxVelocity(200);
 
   // flip the cap
-  drive::dc.setMaxVelocity(150);
-  intake.move(-127);
-  drive::dc.moveDistance(-17_in);
+  drive::dc.moveDistance(30_in);
 
-  // back up from the cap and stop the intake
-  drive::dc.moveDistance(14_in);
+  // back away
+  drive::dpc.setTarget("F3", true);
+  drive::dpc.waitUntilSettled();
+
+  // stop the intake
   intake.move(0);
 }
 

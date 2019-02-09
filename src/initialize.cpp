@@ -1,6 +1,6 @@
 #include "main.h"
 
-bool isSelected = false;
+void generatePaths();
 
 void initialize() {
   // Clear controller
@@ -10,12 +10,16 @@ void initialize() {
   intake.setBrakeMode(AbstractMotor::brakeMode::coast);
   catapult.setBrakeMode(AbstractMotor::brakeMode::hold);
 
-  // a task that prints a lot of useful data to the LCD emulator
-  pros::Task(&infoLoop, nullptr);
-
   // task to handle catapult
   static pros::Task catapultTaskHandleL(&catapultTask, nullptr);
   catapultTaskHandle = &catapultTaskHandleL;
+
+  // generate paths to be used in autonomous
+  generatePaths();
+
+  // a task that prints a lot of useful data to the LCD emulator
+  pros::Task(&infoLoop, nullptr);
+
 }
 
 void disabled() {}
