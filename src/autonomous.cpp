@@ -1,7 +1,7 @@
 #include "autonomous.h"
 
-vfptr  auton     = &autonSkills;
-string autonName = "other->skills";
+vfptr  auton     = &autonRedFlags;
+string autonName = "red->flags";
 
 void autonomous() {
   // make it so the drive motors hold commanded positions, rather than coast like in driver-control
@@ -28,20 +28,16 @@ void generatePaths() {
   }, "F1");
   drive::dpc.generatePath({
     Point{0_ft, 0_ft, 0_deg},
-    Point{42_in, 0_ft, 0_deg},
+    Point{40_in, 0_ft, 0_deg},
   }, "F2");
   drive::dpc.generatePath({
     Point{0_ft, 0_ft, 0_deg},
-    Point{8_in, 0_ft, 0_deg},
+    Point{12_in, 0_ft, 0_deg},
   }, "F3");
   drive::dpc.generatePath({
     Point{0_ft, 0_ft, 0_deg},
     Point{20_in, 0_ft, 0_deg},
   }, "FC1");
-  drive::dpc.generatePath({
-    Point{0_ft, 0_ft, 0_deg},
-    Point{24_in, 0_ft, 0_deg},
-  }, "24in");
   // clang-format on
 }
 

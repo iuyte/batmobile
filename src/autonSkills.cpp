@@ -21,8 +21,8 @@ void autonSkills() {
 
   // get onto the platform
   drive::dc.setMaxVelocity(200);
-  drive::left.moveRelative(-1800, 200);
-  drive::right.moveRelative(-1800, 200);
+  drive::left.moveRelative(-2400, 200);
+  drive::right.moveRelative(-2400, 200);
   waitUntil(motorPosTargetReached(drive::left, 50) && motorPosTargetReached(drive::right, 50), 20);
   drive::moveVelocity(0, 0);
 }

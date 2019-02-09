@@ -34,7 +34,8 @@ void catapultTask(void *none) {
       case CataState::fire:
         catapult.moveVelocity(100);
         waitUntil(cataPot.get() > cataPos[1], 20);
-        waitUntil(cataPot.get() < cataPos[2], 20);
+        catapult.moveRelative(360 * 3.3, 100);
+        waitUntil(motorPosTargetReached(catapult, 20), 20);
         catapult.setBrakeMode(AbstractMotor::brakeMode::coast);
         break;
       default:

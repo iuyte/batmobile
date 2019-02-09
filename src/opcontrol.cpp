@@ -77,7 +77,7 @@ void opcontrol() {
       toggleState();
       break;
     case -1:
-      catapult.moveVelocity(-10);
+      catapult.moveVoltage(-50);
       break;
     default:
       break;

@@ -20,8 +20,8 @@ void autonFlags(int side) {
   drive::dpc.waitUntilSettled();
 
   // turn towards the flags
-  drive::dc.setMaxVelocity(75);
-  drive::dc.turnAngle(-90_deg * side);
+  drive::dc.setMaxVelocity(70);
+  drive::dc.turnAngle(-93_deg * side);
   drive::dc.setMaxVelocity(200);
 
   // drive forward a bit
@@ -37,17 +37,18 @@ void autonFlags(int side) {
   // fire the catapult
   toggleState(CataState::fire);
   waitUntil(cataPot.get() > cataPos[3], 20);
+  delay(250);
 
   // reverse intake for cap flipping
   intake.move(-127);
 
   // hit the bottom flag
   drive::dc.setMaxVelocity(125);
+  drive::dc.turnAngle(-24_deg * side);
   drive::dc.moveDistance(20_in);
-  drive::dc.turnAngle(-20_deg * side);
+  drive::dc.turnAngle(24_deg * side);
   drive::dc.moveDistance(22_in);
   drive::dc.moveDistance(-10_in);
-  drive::dc.turnAngle(10_deg * side);
 }
 
 void flipCap(int side) {
@@ -58,10 +59,9 @@ void flipCap(int side) {
   // turn towards the cap
   drive::dc.setMaxVelocity(85);
   drive::dc.turnAngle(100_deg * side);
-  drive::dc.setMaxVelocity(200);
 
   // flip the cap
-  drive::dc.moveDistance(30_in);
+  drive::dc.moveDistance(24_in);
 
   // back away
   drive::dpc.setTarget("F3", true);

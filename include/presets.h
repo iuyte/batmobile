@@ -6,7 +6,7 @@
 #define MAGIC 2
 
 // catapult position
-static const float cataPos[] = {1550, 2000, 2350};
+static const float cataPos[] = {1550, 2300, 2350};
 
 // catapult states
 enum CataState{

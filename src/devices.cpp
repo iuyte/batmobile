@@ -28,11 +28,14 @@ namespace controller {
     const int catapult() {
       static unsigned long lastTime = millis();
 
-      if (millis() - lastTime > 350 && controller::master.getDigital(ControllerDigital::L1)) {
-        lastTime = millis();
-        return 1;
-      } else if (controller::master.getDigital(ControllerDigital::L2)) {
-        return -1;
+      if (millis() - lastTime > 350) {
+        if (controller::master.getDigital(ControllerDigital::L1)) {
+          lastTime = millis();
+          return 1;
+        } else if (controller::master.getDigital(ControllerDigital::L2)) {
+          lastTime = millis();
+          return -1;
+        }
       }
 
       return 0;
