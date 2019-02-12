@@ -152,7 +152,7 @@ public:
     case Position:
       return atext + std::to_string(motor->getPosition());
     case Temperature:
-      return atext + std::to_string(motor->getTemperature());
+      return atext + std::to_string(motor->getTemperature() * (9/5) + 32);
     case Velocity:
       return atext + std::to_string(motor->getActualVelocity());
     case Power:
@@ -190,16 +190,16 @@ void infoLoop(void *none) {
 
   // clang-format off
   Line lines[] = {
-          Line("catapult",    &catapult,     Line::Velocity,    nlines++),
-          Line("catapult",    &catapult,     Line::Temperature, nlines++),
-          Line("catapult",    &catapult,     Line::Power,       nlines++),
-          Line("intake",      &intake,       Line::Velocity,    nlines++),
-          Line("left drive",  &drive::left,  Line::Position,    nlines++),
-          Line("right drive", &drive::right, Line::Position,    nlines++),
-          Line("left drive",  &drive::left,  Line::Velocity,    nlines++),
-          Line("right drive", &drive::right, Line::Velocity,    nlines++),
-          Line("left drive",  &drive::left,  Line::Temperature, nlines++),
-          Line("right drive", &drive::right, Line::Temperature, nlines++),
+          Line("catapult",    &catapult::motor, Line::Velocity,    nlines++),
+          Line("catapult",    &catapult::motor, Line::Temperature, nlines++),
+          Line("catapult",    &catapult::motor, Line::Power,       nlines++),
+          Line("intake",      &intake,          Line::Velocity,    nlines++),
+          Line("left drive",  &drive::left,     Line::Position,    nlines++),
+          Line("right drive", &drive::right,    Line::Position,    nlines++),
+          Line("left drive",  &drive::left,     Line::Velocity,    nlines++),
+          Line("right drive", &drive::right,    Line::Velocity,    nlines++),
+          Line("left drive",  &drive::left,     Line::Temperature, nlines++),
+          Line("right drive", &drive::right,    Line::Temperature, nlines++),
   };
 
   static SwitcherMenu rootMenu("main menu", {
@@ -340,7 +340,7 @@ void infoLoop(void *none) {
     // update autonomous name
     lv_label_set_text(autonLine, (autonT + autonName).c_str());
 
-    catapultVal     = (short)(cataPot.get());
+    catapultVal     = (short)(catapult::pot.get());
     batteryCapacity = (short)pros::battery::get_capacity();
 
     // update battery capacity
@@ -354,7 +354,7 @@ void infoLoop(void *none) {
     lv_label_set_text(m_label, cataPotText);
 
     // print values to the controllers
-    snprintf(tline, 15, "%d | %f", catapultVal, catapult.getTemperature());
+    snprintf(tline, 15, "%d | %f", catapultVal, catapult::motor.getTemperature());
     controller::master.setText(2, 0, tline);
 
     // run 20 times per second

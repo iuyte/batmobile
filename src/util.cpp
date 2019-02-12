@@ -22,30 +22,17 @@ vector<string> split(const string &s, char delim) {
 }
 
 void printData() {
-  AbstractMotor *     m        = &catapult;
+  AbstractMotor *     m        = &catapult::motor;
   int                 v        = 0;
   int                 d        = 1;
   float               interval = 1000;
   const char *        c        = ",";
   const unsigned long startT   = millis();
 
-  m->moveVoltage(10000);
-
   while (true) {
-    /*
-    if (millis() % (unsigned long)interval) {
-      v += d;
-      if (abs(v) > 200) {
-        d *= -1;
-        interval *= .5;
-      }
-    }
-    m->moveVelocity(v);
-    */
-
     // clang-format off
     cout << millis() - startT << c
-         << v << c
+         << m->getTargetVelocity() << c
          << m->getActualVelocity() << c
          << m->getPower() * 10 << c
          << m->getTorque() * 100 << c

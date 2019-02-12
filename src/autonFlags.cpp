@@ -13,7 +13,7 @@ void autonFlags(int side) {
   drive::dpc.waitUntilSettled();
 
   // ready the catapult
-  toggleState(CataState::ready);
+  catapult::ready();
 
   // back up
   drive::dpc.setTarget("F2", true);
@@ -28,15 +28,15 @@ void autonFlags(int side) {
   drive::dpc.setTarget("F3");
   drive::dpc.waitUntilSettled();
 
-  waitUntil(catapultAchieved(), 20);
+  waitUntil(catapult::atTarget(), 20);
 
   // wait a bit
   drive::moveVelocity(0, 0);
   delay(250);
 
   // fire the catapult
-  toggleState(CataState::fire);
-  waitUntil(cataPot.get() > cataPos[3], 20);
+  catapult::fire();
+  waitUntil(catapult::pot.get() > catapult::presets[3], 20);
   delay(250);
 
   // reverse intake for cap flipping

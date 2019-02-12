@@ -74,10 +74,10 @@ void opcontrol() {
 
     switch (controller::get::catapult()) {
     case 1:
-      toggleState();
+      catapult::move();
       break;
     case -1:
-      catapult.moveVoltage(-50);
+      // catapult::motor.moveVelocity(-25);
       break;
     default:
       break;

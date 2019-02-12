@@ -41,11 +41,16 @@ namespace drive {
   extern AsyncMotionProfileController dpc;
 } // namespace drive
 
+/** catapult */
+namespace catapult {
+  /** catapult motors */
+  extern MotorGroup motor;
+
+  /** catapult potentiometer */
+  extern Potentiometer pot;
+} // namespace catapult
+
 /** intake */
 extern Motor intake;
-/** catapult */
-extern Motor catapult;
-/** catapult potentiometer */
-extern Potentiometer cataPot;
 
 #endif

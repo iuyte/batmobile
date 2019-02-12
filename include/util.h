@@ -15,6 +15,9 @@ using std::vector;
 
 vector<string> split(const string &s, char delim);
 
+void infoLoop(void *none);
+void chooseAuton();
+
 extern int indicator;
 
 #endif

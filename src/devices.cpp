@@ -43,9 +43,13 @@ namespace controller {
   } // namespace get
 } // namespace controller
 
-Motor         intake(12, true, AbstractMotor::gearset::green);
-Motor         catapult(21, false, AbstractMotor::gearset::red);
-Potentiometer cataPot('a');
+Motor intake(12, true, AbstractMotor::gearset::green);
+
+namespace catapult {
+  MotorGroup    motor({Motor(21, false, AbstractMotor::gearset::red),
+                    Motor(20, true, AbstractMotor::gearset::red)});
+  Potentiometer pot('a');
+} // namespace catapult
 
 namespace drive {
   MotorGroup left({Motor(16, false, AbstractMotor::gearset::green),

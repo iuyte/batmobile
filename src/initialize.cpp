@@ -8,11 +8,10 @@ void initialize() {
 
   // set flywheel and intake to "coast" mode
   intake.setBrakeMode(AbstractMotor::brakeMode::coast);
-  catapult.setBrakeMode(AbstractMotor::brakeMode::hold);
+  catapult::motor.setBrakeMode(AbstractMotor::brakeMode::hold);
 
-  // task to handle catapult
-  static pros::Task catapultTaskHandleL(&catapultTask, nullptr);
-  catapultTaskHandle = &catapultTaskHandleL;
+  // start task to handle catapult
+  catapult::startManager();
 
   // generate paths to be used in autonomous
   generatePaths();
