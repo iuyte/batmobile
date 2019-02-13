@@ -27,7 +27,7 @@ namespace catapult {
           motor.setBrakeMode(AbstractMotor::brakeMode::hold);
           motor.moveVelocity(100);
           waitUntil(pot.get() < presets[1], 20);
-          motor.moveVelocity(75);
+          motor.moveVelocity(100);
           waitUntil(pot.get() < presets[0], 20);
           pos = motor.getPosition();
           motor.moveAbsolute(pos, 5);
@@ -35,11 +35,13 @@ namespace catapult {
         case State::Fire:
           motor.moveVelocity(100);
           waitUntil(pot.get() > presets[1], 20);
-          motor.moveRelative(360 * 3.3, 100);
+          motor.moveRelative(360 * 2.8, 100);
           waitUntil(motorPosTargetReached(motor, 20), 20);
           motor.setBrakeMode(AbstractMotor::brakeMode::coast);
+          motor.moveVelocity(0);
           break;
         default:
+          motor.moveVelocity(0);
           break;
         }
 
@@ -47,7 +49,7 @@ namespace catapult {
       }
 
       _atTarget = true;
-      motor.moveVelocity(0);
+
       pros::Task::current().notify_take(true, -1);
     }
   }

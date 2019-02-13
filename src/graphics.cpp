@@ -104,6 +104,8 @@ std::pair<vfptr, string> selectMenu(SwitcherMenu *menu) {
       }
     }
   }
+
+  return selectMenu(menu);
 }
 
 lv_obj_t *cont;
