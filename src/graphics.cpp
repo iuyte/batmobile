@@ -215,7 +215,10 @@ void infoLoop(void *none) {
           }),
             SwitcherMenu("other", {
               SwitcherMenu("data", {}, &printData),
-              SwitcherMenu("skills", {}, &autonSkills),
+              SwitcherMenu("skills", {
+                SwitcherMenu("traditional", {}, &autonSkills1),
+                SwitcherMenu("old", {}, &autonSkills2),
+              }),
           }),
             SwitcherMenu("none", {}, &doNothing),
   });

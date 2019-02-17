@@ -16,13 +16,16 @@ typedef void (*vfptr)();
 extern vfptr       auton;
 extern std::string autonName;
 
-void printData();
-void autonSkills();
+void chooseAuton();
+
 void autonRedFlags();
 void autonBlueFlags();
 void autonRedCaps();
 void autonBlueCaps();
 void autonScoreCap();
+
+void autonSkills1();
+void autonSkills2();
 
 /**
  * a blocking alternative to the typical motor.moveRelative
