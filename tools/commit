@@ -1,0 +1,47 @@
+#!/bin/bash
+
+# Build everything and then get rid of it so the user knows the state of stuff
+make all -j4
+make clean
+
+# Create pdfs and the website
+make pdfs website -j2
+
+# Add files
+git add .
+git add -u
+
+# Commit using the argument to the program if possible, otherwise open up the
+# default editor for it
+if [ $# -eq 1 ]
+  then git commit -S -m "$1"
+else
+  git commit -S
+fi
+
+# Generate the website
+make website
+
+# Go into the docs folder, aka the gh-pages branch, and generate a markdown
+# table from the json log
+cd docs
+cat log.json | python -m json.tool > tmp.json
+mv tmp.json log.json
+cat log.json | md-table > table.md
+
+# Replace all of the commas without spaces after them with commas *with* spaces
+# becuase it will format better
+cd ..
+tools/formatTable.py
+grip docs/table.md --user-content --title="709S Programming Log" --export docs/table.html
+tools/formatTableHTML.py
+rm docs/table.md
+
+# Go into docs (gh-pages) and add files and commit with the message of the
+# current time
+cd docs
+git add .
+git commit -m "`date`"
+
+# Push website changes
+git push

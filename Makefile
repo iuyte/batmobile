@@ -71,6 +71,16 @@ clean:
 upload: quick
 	$(HOME)/.local/bin/prosv5 upload --name batmobile
 
+# Make pdfs
+pdfs:
+	cd $(ROOT)
+	tools/pdfMaker.sh
+
+# Build the website log
+website:
+	cd $(ROOT)
+	tools/buildSite.sh
+
 $(OUTBIN): $(OUTELF) $(BINDIR)
 	@echo -n "Creating $@ for $(DEVICE) "
 	$(call test_output,$D$(OBJCOPY) $< -O binary $@,$(DONE_STRING))
