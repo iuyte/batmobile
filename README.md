@@ -1,2 +1,2 @@
-# g19abot
-g19abot (gigabot) is the 2019 VRC code for team 709S
+# the batmobile
+the batmobile is the second design which we intend to finish the 2019 VRC season with this year
