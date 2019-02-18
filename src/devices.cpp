@@ -10,13 +10,19 @@ namespace controller {
 
   namespace get {
     namespace drive {
-      const float left() {
+      const float forward() {
         return master.getAnalog(ControllerAnalog::leftY) -
-               partner.getAnalog(ControllerAnalog::rightY);
-      }
-      const float right() {
-        return master.getAnalog(ControllerAnalog::rightY) -
                partner.getAnalog(ControllerAnalog::leftY);
+      }
+
+      const float turn() {
+        return master.getAnalog(ControllerAnalog::rightX) -
+               partner.getAnalog(ControllerAnalog::rightX);
+      }
+
+      const float strafe() {
+        return master.getAnalog(ControllerAnalog::leftX) -
+               partner.getAnalog(ControllerAnalog::leftX);
       }
       const bool holdToggle() { return master.getDigital(ControllerDigital::X); }
     } // namespace drive
@@ -52,14 +58,24 @@ namespace catapult {
 } // namespace catapult
 
 namespace drive {
-  MotorGroup left({Motor(16, false, AbstractMotor::gearset::green),
-                   Motor(9, false, AbstractMotor::gearset::green)});
-  MotorGroup right({Motor(15, true, AbstractMotor::gearset::green),
-                    Motor(10, true, AbstractMotor::gearset::green)});
+  Motor motors[2][2] {{Motor(16, false, AbstractMotor::gearset::green),
+                     Motor(9, false, AbstractMotor::gearset::green)},
+                    {Motor(15, true, AbstractMotor::gearset::green),
+                     Motor(10, true, AbstractMotor::gearset::green)}};
+  MotorGroup left({motors[0][0], motors[0][1]});
+  MotorGroup right({motors[1][0], motors[1][1]});
 
   void moveVelocity(double lvel, double rvel) {
     left.moveVelocity(lvel);
     right.moveVelocity(rvel);
+  }
+
+  void control(float forward, float turn, float strafe) {
+    #define dmax 200
+    motors[0][0].moveVelocity(trim(dmax * (forward + turn + strafe), -dmax, dmax));
+    motors[0][1].moveVelocity(trim(dmax * (forward + turn - strafe), -dmax, dmax));
+    motors[1][0].moveVelocity(trim(dmax * (forward - turn - strafe), -dmax, dmax));
+    motors[1][1].moveVelocity(trim(dmax * (forward - turn + strafe), -dmax, dmax));
   }
 
   ChassisControllerIntegrated dc = ChassisControllerFactory::create(

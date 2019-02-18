@@ -16,8 +16,9 @@ namespace controller {
   /** different buttons and controls for operator control */
   namespace get {
     namespace drive {
-      const float left();
-      const float right();
+      const float forward();
+      const float turn();
+      const float strafe();
       const bool  holdToggle();
     } // namespace drive
 
@@ -34,6 +35,9 @@ namespace drive {
 
   /** move the drive at a specific velocity */
   void moveVelocity(double lvel, double rvel);
+
+  /** control all aspects of the drive on a scale of -1 to +1 */
+  void control(float forward, float turn, float strafe);
 
   /** drive chassis profile controller, a combination of the left and right side motors */
   extern ChassisControllerIntegrated dc;

@@ -72,7 +72,7 @@ namespace catapult {
 
       task->notify();
     }
-  }
+  }  
 
   void ready() {
     waitUntil(atTarget(), 20);
