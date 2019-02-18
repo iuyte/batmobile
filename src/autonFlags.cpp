@@ -20,9 +20,7 @@ void autonFlags(int side) {
   drive::dpc.waitUntilSettled();
 
   // turn towards the flags
-  drive::dc.setMaxVelocity(70);
   drive::dc.turnAngle(-93_deg * side);
-  drive::dc.setMaxVelocity(200);
 
   // drive forward a bit
   drive::dpc.setTarget("F3");
@@ -57,10 +55,10 @@ void flipCap(int side) {
   drive::dpc.waitUntilSettled();
 
   // turn towards the cap
-  drive::dc.setMaxVelocity(85);
   drive::dc.turnAngle(100_deg * side);
 
   // flip the cap
+  drive::dc.setMaxVelocity(85);
   drive::dc.moveDistance(24_in);
 
   // back away

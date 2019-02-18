@@ -12,7 +12,7 @@ void opcontrol() {
   // flywheel speed
   float fspeed = 0;
   // the commanded drive power values
-  float leftCmd, rightCmd;
+  float fwdCmd, turnCmd, strafeCmd;
   // counter for flywheel toggle
   unsigned long fcount = millis();
 
@@ -32,10 +32,11 @@ void opcontrol() {
   // infinite driver-control loop, runs: drive, intake, and launcher
   while (true) {
     // get the input control for the drive
-    leftCmd  = controller::get::drive::left();
-    rightCmd = controller::get::drive::right();
+    fwdCmd  = controller::get::drive::forward();
+    turnCmd  = controller::get::drive::turn();
+    strafeCmd  = controller::get::drive::strafe();
 
-    drive::dc.tank(leftCmd, rightCmd, .05);
+    drive::control(fwdCmd, turnCmd, strafeCmd);
 
     // if x is pressed, set the drive to hold, and if the commanded power value isn't 0, coast.
     // Otherwise, if the robot is still (or almost still), keep it still by setting a commanded
@@ -50,7 +51,7 @@ void opcontrol() {
       drive::right.moveAbsolute(driveHoldPos[1], dmax);
     } else {
       lastHoldPress = false;
-      if (leftCmd || rightCmd) {
+      if (fwdCmd || turnCmd || strafeCmd) {
         if (bmode != AbstractMotor::brakeMode::coast) {
           bmode = AbstractMotor::brakeMode::coast;
           drive::left.setBrakeMode(bmode);

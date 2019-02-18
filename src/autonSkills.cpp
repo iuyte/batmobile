@@ -41,11 +41,11 @@ void autonSkills2() {
   // wait for the ball to be in the catapult
   delay(2000);
 
-  // 
+  //
 
   // turn towards the flags
   drive::dc.setMaxVelocity(70);
-  drive::dc.turnAngle(-93_deg * side);
+  drive::dc.turnAngle(-93_deg);
   drive::dc.setMaxVelocity(200);
 
   // drive forward a bit
@@ -68,21 +68,19 @@ void autonSkills2() {
 
   // hit the bottom flag
   drive::dc.setMaxVelocity(125);
-  drive::dc.turnAngle(-24_deg * side);
+  drive::dc.turnAngle(-24_deg);
   drive::dc.moveDistance(20_in);
-  drive::dc.turnAngle(24_deg * side);
+  drive::dc.turnAngle(24_deg);
   drive::dc.moveDistance(22_in);
   drive::dc.moveDistance(-10_in);
-}
 
-void flipCap(int side) {
   // back up from the wall
   drive::dpc.setTarget("FC1", true);
   drive::dpc.waitUntilSettled();
 
   // turn towards the cap
   drive::dc.setMaxVelocity(85);
-  drive::dc.turnAngle(100_deg * side);
+  drive::dc.turnAngle(100_deg);
 
   // flip the cap
   drive::dc.moveDistance(24_in);
@@ -93,7 +91,6 @@ void flipCap(int side) {
 
   // stop the intake
   intake.move(0);
-}
 
   // slower for better accuracy
   drive::dc.setMaxVelocity(110);
