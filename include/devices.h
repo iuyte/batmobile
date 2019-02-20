@@ -33,11 +33,31 @@ namespace drive {
   extern MotorGroup left;
   extern MotorGroup right;
 
+  /** get the current angle of the drive, in degrees */
+  double getAngle();
+
+  /** reset the sensors */
+  void reset();
+
+  /** whether or not the drive motors have each reached their position targets */
+  bool atTarget(int range = 15);
+
+  /** the total velocity of the drive motors */
+  double totalVelocity();
+
+  /** strafe to a certain amount of ticks */
+  void strafe(float ticks, int vel = 200);
+
+  void waitUntilCompletion();
+
   /** move the drive at a specific velocity */
   void moveVelocity(double lvel, double rvel);
 
   /** control all aspects of the drive on a scale of -1 to +1 */
   void control(float forward, float turn, float strafe);
+
+  /** turn the robot a number of degrees */
+  void turn(float angle, float range = 2, bool absolute = false);
 
   /** drive chassis profile controller, a combination of the left and right side motors */
   extern ChassisControllerIntegrated dc;

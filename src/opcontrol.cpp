@@ -32,9 +32,9 @@ void opcontrol() {
   // infinite driver-control loop, runs: drive, intake, and launcher
   while (true) {
     // get the input control for the drive
-    fwdCmd  = controller::get::drive::forward();
-    turnCmd  = controller::get::drive::turn();
-    strafeCmd  = controller::get::drive::strafe();
+    fwdCmd    = controller::get::drive::forward();
+    turnCmd   = controller::get::drive::turn();
+    strafeCmd = controller::get::drive::strafe();
 
     drive::control(fwdCmd, turnCmd, strafeCmd);
 
@@ -47,6 +47,7 @@ void opcontrol() {
         driveHoldPos[1] = drive::right.getPosition();
         lastHoldPress   = true;
       }
+
       drive::left.moveAbsolute(driveHoldPos[0], dmax);
       drive::right.moveAbsolute(driveHoldPos[1], dmax);
     } else {

@@ -3,7 +3,7 @@
 namespace catapult {
   State       state = State::None;
   pros::Task *task;
-  bool _atTarget = true;
+  bool        _atTarget = true;
 
   void manager(void *None) {
     // runs the task at a constant rate
@@ -26,17 +26,17 @@ namespace catapult {
         case State::Ready:
           motor.setBrakeMode(AbstractMotor::brakeMode::hold);
           motor.moveVelocity(100);
-          waitUntil(pot.get() < presets[1], 20);
+          waitUntiloD(pot.get() < presets[1], 20);
           motor.moveVelocity(100);
-          waitUntil(pot.get() < presets[0], 20);
+          waitUntiloD(pot.get() < presets[0], 20);
           pos = motor.getPosition();
           motor.moveAbsolute(pos, 5);
           break;
         case State::Fire:
           motor.moveVelocity(100);
-          waitUntil(pot.get() > presets[1], 20);
+          waitUntiloD(pot.get() > presets[1], 20);
           motor.moveRelative(360 * 2.8, 100);
-          waitUntil(motorPosTargetReached(motor, 20), 20);
+          waitUntiloD(motorPosTargetReached(motor, 20), 20);
           motor.setBrakeMode(AbstractMotor::brakeMode::coast);
           motor.moveVelocity(0);
           break;
@@ -72,7 +72,7 @@ namespace catapult {
 
       task->notify();
     }
-  }  
+  }
 
   void ready() {
     waitUntil(atTarget(), 20);

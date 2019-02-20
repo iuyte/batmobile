@@ -154,7 +154,7 @@ public:
     case Position:
       return atext + std::to_string(motor->getPosition());
     case Temperature:
-      return atext + std::to_string(motor->getTemperature() * (9/5) + 32);
+      return atext + std::to_string(motor->getTemperature() * (9 / 5) + 32);
     case Velocity:
       return atext + std::to_string(motor->getActualVelocity());
     case Power:
@@ -186,6 +186,7 @@ void infoLoop(void *none) {
   char         batteryText[20];
   char         cataPotText[20];
   string       autonT = "autonomous: ";
+  string       gyroT  = "gyro: ";
   cont                = lv_cont_create(lv_scr_act(), NULL);
   lv_cont_set_fit(cont, false, false);
   lv_obj_set_size(cont, LV_HOR_RES, LV_VER_RES);
@@ -205,22 +206,27 @@ void infoLoop(void *none) {
   };
 
   static SwitcherMenu rootMenu("main menu", {
-          SwitcherMenu("red", {
-            SwitcherMenu("flags", {}, &autonRedFlags),
-            SwitcherMenu("caps", {}, &autonRedCaps),
+          SwitcherMenu("flags", {
+            SwitcherMenu("+ cap", {
+              SwitcherMenu("red", {}, &autonRedFlagsCap),
+              SwitcherMenu("blue", {}, &autonRedFlagsCap),
+            }),
+            SwitcherMenu("+ 2nd tree", {
+              SwitcherMenu("red", {}, &autonRedFlagsX2),
+              SwitcherMenu("blue", {}, &autonRedFlagsX2),
+          })}),
+          SwitcherMenu("caps", {
+              SwitcherMenu("red", {}, &autonRedCaps),
+              SwitcherMenu("blue", {}, &autonBlueCaps),
           }),
-            SwitcherMenu("blue", {
-              SwitcherMenu("flags", {}, &autonBlueFlags),
-              SwitcherMenu("caps", {}, &autonBlueCaps),
+          SwitcherMenu("other", {
+            SwitcherMenu("data", {}, &printData),
+            SwitcherMenu("skills", {
+              SwitcherMenu("traditional", {}, &autonSkills1),
+              SwitcherMenu("new", {}, &autonSkills2),
+            }),
           }),
-            SwitcherMenu("other", {
-              SwitcherMenu("data", {}, &printData),
-              SwitcherMenu("skills", {
-                SwitcherMenu("traditional", {}, &autonSkills1),
-                SwitcherMenu("old", {}, &autonSkills2),
-              }),
-          }),
-            SwitcherMenu("none", {}, &doNothing),
+          SwitcherMenu("none", {}, &doNothing),
   });
   // clang-format on
 
@@ -229,6 +235,8 @@ void infoLoop(void *none) {
 
   auto autonLine = lv_label_create(cont, NULL);
   lv_obj_align(autonLine, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 20 * nlines);
+  auto gyroLine = lv_label_create(cont, NULL);
+  lv_obj_align(gyroLine, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 20 * (nlines + 1));
 
   // init lvgl button matrix
   lv_obj_t *  btn    = lv_btnm_create(cont, NULL);
@@ -329,6 +337,7 @@ void infoLoop(void *none) {
       for (auto &&line : lines)
         line.clear();
       lv_label_set_text(autonLine, "");
+      lv_label_set_text(gyroLine, "");
 
       auto s    = selectMenu(&rootMenu);
       auton     = s.first;
@@ -344,6 +353,7 @@ void infoLoop(void *none) {
 
     // update autonomous name
     lv_label_set_text(autonLine, (autonT + autonName).c_str());
+    lv_label_set_text(gyroLine, (gyroT + std::to_string(drive::getAngle())).c_str());
 
     catapultVal     = (short)(catapult::pot.get());
     batteryCapacity = (short)pros::battery::get_capacity();

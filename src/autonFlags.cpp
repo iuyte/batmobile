@@ -1,8 +1,8 @@
 #include "autonomous.h"
 #include "util.h"
 
-#define side_red 1
-#define side_blue -1
+#define side_Red 1
+#define side_Blue -1
 
 void autonFlags(int side) {
   // set the intake to on
@@ -12,15 +12,20 @@ void autonFlags(int side) {
   drive::dpc.setTarget("F1");
   drive::dpc.waitUntilSettled();
 
-  // ready the catapult
-  catapult::ready();
+  // stop - not necessary but seems to help
+  drive::moveVelocity(0, 0);
 
   // back up
   drive::dpc.setTarget("F2", true);
+
+  // ready the catapult
+  catapult::ready();
+
+  // wait for backing up to finish
   drive::dpc.waitUntilSettled();
 
   // turn towards the flags
-  drive::dc.turnAngle(-93_deg * side);
+  drive::turn(-90 * side);
 
   // drive forward a bit
   drive::dpc.setTarget("F3");
@@ -35,18 +40,40 @@ void autonFlags(int side) {
   // fire the catapult
   catapult::fire();
   waitUntil(catapult::pot.get() > catapult::presets[3], 20);
-  delay(250);
+  delay(800);
 
+  // don't
   // reverse intake for cap flipping
-  intake.move(-127);
+  // intake.move(-127);
+
+  // align to the bottom flag
+  drive::reset();
+  drive::strafe(-160, 110);
+  waitUntil(drive::totalVelocity() > 4, 20);
+  waitUntil(drive::totalVelocity() < 4, 20);
+  delay(200);
+  // delay(400);
+  drive::turn(0, 2, true);
 
   // hit the bottom flag
   drive::dc.setMaxVelocity(125);
-  drive::dc.turnAngle(-24_deg * side);
-  drive::dc.moveDistance(20_in);
-  drive::dc.turnAngle(24_deg * side);
-  drive::dc.moveDistance(22_in);
+  drive::moveVelocity(125, 125);
+  waitUntil(drive::totalVelocity() > 10, 20);
+  waitUntil(drive::totalVelocity() < 10, 20);
+  drive::moveVelocity(0, 0);
+  // drive::dc.moveDistance(42_in);
+  // drive::dc.moveDistance(16_in);
+  // if (abs(drive::getAngle()) > 10)
+  // drive::turn(0, 2, true);
+  // drive::dc.moveDistance(14_in);
+  // drive::dc.moveDistance(12_in);
+  // drive::dc.tank(.2, .2);
+  // delay(100);
+  // drive::reset();
+
+  // back up
   drive::dc.moveDistance(-10_in);
+  drive::dc.setMaxVelocity(200);
 }
 
 void flipCap(int side) {
@@ -55,10 +82,11 @@ void flipCap(int side) {
   drive::dpc.waitUntilSettled();
 
   // turn towards the cap
-  drive::dc.turnAngle(100_deg * side);
+  drive::turn(90 * side);
 
   // flip the cap
-  drive::dc.setMaxVelocity(85);
+  intake.moveVelocity(-60);
+  drive::dc.setMaxVelocity(75);
   drive::dc.moveDistance(24_in);
 
   // back away
@@ -67,14 +95,55 @@ void flipCap(int side) {
 
   // stop the intake
   intake.move(0);
+  drive::dc.setMaxVelocity(200);
 }
 
-void autonRedFlags() {
-  autonFlags(side_red);
-  flipCap(side_red);
+void scoreTree2(int side) {
+  // back up from the wall
+  drive::dpc.setTarget("FC1", true);
+
+  // ready the catapult
+  catapult::ready();
+
+  // wait to achieve the position
+  drive::dpc.waitUntilSettled();
+
+  // strafe towards the cap
+  drive::strafe(1300);
+  waitUntil(drive::totalVelocity() > 4, 20);
+  waitUntil(drive::totalVelocity() < 4, 20);
+  drive::dc.stop();
+
+  // turn, align
+  drive::turn(45 * side);
+  drive::dc.moveDistance(4_in);
+  // drive::strafe(-180, 90);
+
+  // fire
+  delay(150);
+  catapult::fire();
+  delay(250);
+
+  // back away
+  drive::dc.moveDistance(-4_in);
 }
 
-void autonBlueFlags() {
-  autonFlags(side_blue);
-  flipCap(side_blue);
+void autonRedFlagsCap() {
+  autonFlags(side_Red);
+  flipCap(side_Red);
+}
+
+void autonBlueFlagsCap() {
+  autonFlags(side_Blue);
+  flipCap(side_Blue);
+}
+
+void autonRedFlagsX2() {
+  autonFlags(side_Red);
+  scoreTree2(side_Red);
+}
+
+void autonBlueFlagsX2() {
+  autonFlags(side_Blue);
+  scoreTree2(side_Blue);
 }

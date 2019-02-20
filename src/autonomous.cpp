@@ -1,12 +1,15 @@
 #include "autonomous.h"
 
-vfptr  auton     = &autonRedFlags;
-string autonName = "red->flags";
+vfptr  auton     = &autonSkills2;
+string autonName = "other->skills->new";
 
 void autonomous() {
   // make it so the drive motors hold commanded positions, rather than coast like in driver-control
   drive::left.setBrakeMode(okapi::AbstractMotor::brakeMode::hold);
   drive::right.setBrakeMode(okapi::AbstractMotor::brakeMode::hold);
+
+  // reset sensors
+  drive::reset();
 
   cout << "Starting autonomous... ";
 
@@ -28,7 +31,7 @@ void generatePaths() {
   }, "F1");
   drive::dpc.generatePath({
     Point{0_ft, 0_ft, 0_deg},
-    Point{40_in, 0_ft, 0_deg},
+    Point{34_in, 0_ft, 0_deg},
   }, "F2");
   drive::dpc.generatePath({
     Point{0_ft, 0_ft, 0_deg},
@@ -36,7 +39,7 @@ void generatePaths() {
   }, "F3");
   drive::dpc.generatePath({
     Point{0_ft, 0_ft, 0_deg},
-    Point{20_in, 0_ft, 0_deg},
+    Point{18_in, 0_ft, 0_deg},
   }, "FC1");
   // clang-format on
 }

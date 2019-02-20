@@ -18,8 +18,11 @@ extern std::string autonName;
 
 void chooseAuton();
 
-void autonRedFlags();
-void autonBlueFlags();
+void autonRedFlagsCap();
+void autonBlueFlagsCap();
+void autonRedFlagsX2();
+void autonBlueFlagsX2();
+
 void autonRedCaps();
 void autonBlueCaps();
 void autonScoreCap();
