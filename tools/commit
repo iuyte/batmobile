@@ -39,9 +39,9 @@ rm docs/table.md
 
 # Go into docs (gh-pages) and add files and commit with the message of the
 # current time
-cd docs
-git add .
-git commit -m "`date`"
-
-# Push website changes
-git push
+#cd docs
+#git add .
+#git commit -m "`date`"
+#
+## Push website changes
+#git push

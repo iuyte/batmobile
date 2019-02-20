@@ -1,1 +1,296 @@
-[{"a_timestamp": "  Sun Feb 17 19:21:28 2019 -0500", "b_author": "Ethan", "c_description": "switched to mecanum wheels", "d_changes": []}, {"a_timestamp": "  Sun Feb 17 14:24:58 2019 -0500", "b_author": "Ethan", "c_description": "added another skills program", "d_changes": []}, {"a_timestamp": "  Tue Feb 12 20:55:45 2019 -0500", "b_author": "Ethan", "c_description": "test commit from second laptop", "d_changes": []}, {"a_timestamp": "  Tue Feb 12 14:34:37 2019 -0500", "b_author": "Ethan", "c_description": "restructured catapult code", "d_changes": []}, {"a_timestamp": "  Sat Feb 9 17:26:43 2019 -0500", "b_author": "Ethan", "c_description": "changes made (primarily to auton) during Fulton competition", "d_changes": []}, {"a_timestamp": "  Sat Feb 9 07:45:12 2019 -0500", "b_author": "Ethan", "c_description": "modified autonomous & autonomous skills to fit the catapult", "d_changes": []}, {"a_timestamp": "  Fri Feb 8 16:02:56 2019 -0500", "b_author": "Ethan", "c_description": "perfected catapult control", "d_changes": []}, {"a_timestamp": "  Fri Feb 8 00:04:04 2019 -0500", "b_author": "Ethan", "c_description": "e n h a n c e d catapult control", "d_changes": []}, {"a_timestamp": "  Tue Feb 5 17:19:02 2019 -0500", "b_author": "Ethan", "c_description": "changed instances to adapt to having a catapult, 4 motor drive, and no lift", "d_changes": []}, {"a_timestamp": "  Tue Feb 5 16:30:42 2019 -0500", "b_author": "Ethan", "c_description": "updated okapi", "d_changes": []}, {"a_timestamp": "  Sat Feb 2 01:27:44 2019 -0500", "b_author": "Ethan", "c_description": "fingers crossed on this 15 points", "d_changes": []}, {"a_timestamp": "  Fri Feb 1 14:50:46 2019 -0500", "b_author": "Ethan", "c_description": "skills is fairly consistent at 13 points", "d_changes": []}, {"a_timestamp": "  Fri Feb 1 11:37:37 2019 -0500", "b_author": "Ethan", "c_description": "added a speedometer for the flywheel", "d_changes": []}, {"a_timestamp": "  Fri Feb 1 11:10:56 2019 -0500", "b_author": "Ethan", "c_description": "added a bar to show battery", "d_changes": []}, {"a_timestamp": "  Thu Jan 31 10:38:38 2019 -0500", "b_author": "Ethan", "c_description": "graphics work", "d_changes": []}, {"a_timestamp": "  Mon Jan 28 23:06:53 2019 -0500", "b_author": "Ethan", "c_description": "added more graphics stuff that kind-of works; removed flipper motor", "d_changes": []}, {"a_timestamp": "  Sat Jan 26 09:34:57 2019 -0500", "b_author": "Ethan", "c_description": "added flywheel motor", "d_changes": []}, {"a_timestamp": "  Sat Jan 19 18:07:16 2019 -0500", "b_author": "Ethan", "c_description": "updated project and autonomous switcher", "d_changes": []}, {"a_timestamp": "  Sat Jan 12 18:10:43 2019 -0500", "b_author": "Ethan", "c_description": "made autonomous, competition tweaks", "d_changes": []}, {"a_timestamp": "  Fri Jan 11 18:14:49 2019 -0500", "b_author": "Ethan", "c_description": "Changed the .gitignore to include the extra dir", "d_changes": []}, {"a_timestamp": "  Fri Jan 11 18:13:22 2019 -0500", "b_author": "Ethan", "c_description": "added a second controller", "d_changes": []}, {"a_timestamp": "  Wed Dec 26 13:49:54 2018 -0500", "b_author": "Ethan", "c_description": "Updated the license", "d_changes": []}, {"a_timestamp": "  Sun Dec 23 17:54:38 2018 -0500", "b_author": "Ethan", "c_description": "added an autonomous selecter that uses the touchscreen", "d_changes": []}, {"a_timestamp": "  Fri Dec 21 21:18:41 2018 -0500", "b_author": "Ethan", "c_description": "added status lights", "d_changes": []}, {"a_timestamp": "  Fri Dec 21 18:58:31 2018 -0500", "b_author": "Ethan", "c_description": "changed nlines++ to ++nlines", "d_changes": []}, {"a_timestamp": "  Fri Dec 21 18:30:41 2018 -0500", "b_author": "Ethan", "c_description": "flywheel toggle now only happens every 250ms", "d_changes": []}, {"a_timestamp": "  Fri Dec 21 18:30:14 2018 -0500", "b_author": "Ethan", "c_description": "information printing to the v5 screen is now nicely abstracted", "d_changes": []}, {"a_timestamp": "  Fri Dec 21 18:29:26 2018 -0500", "b_author": "Ethan", "c_description": "minor style change", "d_changes": []}, {"a_timestamp": "  Sat Dec 15 15:00:15 2018 -0500", "b_author": "Ethan", "c_description": "formatted to style", "d_changes": []}, {"a_timestamp": "  Sat Dec 15 14:51:13 2018 -0500", "b_author": "Ethan", "c_description": "made flywheel control better by modifying PID values and switched to toggle controls. also switched from LCD emulator to plain LVGL for displaying text on the v5 screen", "d_changes": []}, {"a_timestamp": "  Thu Dec 13 16:39:59 2018 -0500", "b_author": "Ethan", "c_description": "minor changes to weird problems", "d_changes": []}, {"a_timestamp": "  Thu Dec 6 16:41:30 2018 -0500", "b_author": "Ethan", "c_description": "fixed text that displays on the controller", "d_changes": []}, {"a_timestamp": "  Tue Dec 4 17:07:40 2018 -0500", "b_author": "Ethan", "c_description": "flywheel speed control is better documented", "d_changes": []}, {"a_timestamp": "  Tue Dec 4 15:03:10 2018 -0500", "b_author": "Ethan", "c_description": "changed launching mechanism", "d_changes": []}, {"a_timestamp": "  Tue Nov 27 16:59:34 2018 -0500", "b_author": "Ethan", "c_description": "added framework for the lift heights", "d_changes": []}, {"a_timestamp": "  Tue Nov 27 16:10:49 2018 -0500", "b_author": "Ethan", "c_description": "simplified some things", "d_changes": []}, {"a_timestamp": "  Sat Nov 17 22:13:23 2018 -0500", "b_author": "Ethan", "c_description": "Added flipper controller", "d_changes": []}, {"a_timestamp": "  Fri Nov 16 23:10:50 2018 -0500", "b_author": "Ethan", "c_description": "Adapted code to fixed potentiometer; During opcontrol, the drive holds position after it stops", "d_changes": []}, {"a_timestamp": "  Fri Nov 16 23:09:38 2018 -0500", "b_author": "Ethan", "c_description": "Update PROS/Okapi version", "d_changes": []}, {"a_timestamp": "  Fri Nov 9 16:53:44 2018 -0500", "b_author": "Ethan", "c_description": "added potentiometer", "d_changes": []}, {"a_timestamp": "  Thu Nov 8 23:42:18 2018 -0500", "b_author": "Ethan", "c_description": "Made launcher position buttons", "d_changes": []}, {"a_timestamp": "  Thu Nov 8 17:24:00 2018 -0500", "b_author": "Ethan", "c_description": "Added more documentation around the code's function", "d_changes": []}, {"a_timestamp": "  Thu Nov 8 17:04:39 2018 -0500", "b_author": "Ethan", "c_description": "made catapult launcher arm hold it's position if it is cocked back", "d_changes": []}, {"a_timestamp": "  Thu Nov 1 17:12:02 2018 -0400", "b_author": "Ethan", "c_description": "Better gitignore; Add LICENSE and README.md", "d_changes": []}, {"a_timestamp": "  Thu Nov 1 16:57:48 2018 -0400", "b_author": "Ethan", "c_description": "Change style", "d_changes": []}, {"a_timestamp": "  Thu Nov 1 16:56:32 2018 -0400", "b_author": "Ethan", "c_description": "Update to latest", "d_changes": []}, {"a_timestamp": "  Tue Oct 23 15:46:36 2018 -0400", "b_author": "Ethan", "c_description": "Added .gitignore", "d_changes": []}, {"a_timestamp": "  Tue Oct 23 15:46:08 2018 -0400", "b_author": "Ethan", "c_description": "added launcher", "d_changes": []}, {"a_timestamp": "  Tue Oct 2 21:44:13 2018 -0400", "b_author": "Ethan", "c_description": "Initial commit of homecoming robot", "d_changes": []}]
+[
+    {
+        "a_timestamp": "  Sun Feb 17 19:21:28 2019 -0500",
+        "b_author": "Ethan",
+        "c_description": "switched to mecanum wheels",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Sun Feb 17 14:24:58 2019 -0500",
+        "b_author": "Ethan",
+        "c_description": "added another skills program",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Tue Feb 12 20:55:45 2019 -0500",
+        "b_author": "Ethan",
+        "c_description": "test commit from second laptop",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Tue Feb 12 14:34:37 2019 -0500",
+        "b_author": "Ethan",
+        "c_description": "restructured catapult code",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Sat Feb 9 17:26:43 2019 -0500",
+        "b_author": "Ethan",
+        "c_description": "changes made (primarily to auton) during Fulton competition",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Sat Feb 9 07:45:12 2019 -0500",
+        "b_author": "Ethan",
+        "c_description": "modified autonomous & autonomous skills to fit the catapult",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Fri Feb 8 16:02:56 2019 -0500",
+        "b_author": "Ethan",
+        "c_description": "perfected catapult control",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Fri Feb 8 00:04:04 2019 -0500",
+        "b_author": "Ethan",
+        "c_description": "e n h a n c e d catapult control",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Tue Feb 5 17:19:02 2019 -0500",
+        "b_author": "Ethan",
+        "c_description": "changed instances to adapt to having a catapult, 4 motor drive, and no lift",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Tue Feb 5 16:30:42 2019 -0500",
+        "b_author": "Ethan",
+        "c_description": "updated okapi",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Sat Feb 2 01:27:44 2019 -0500",
+        "b_author": "Ethan",
+        "c_description": "fingers crossed on this 15 points",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Fri Feb 1 14:50:46 2019 -0500",
+        "b_author": "Ethan",
+        "c_description": "skills is fairly consistent at 13 points",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Fri Feb 1 11:37:37 2019 -0500",
+        "b_author": "Ethan",
+        "c_description": "added a speedometer for the flywheel",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Fri Feb 1 11:10:56 2019 -0500",
+        "b_author": "Ethan",
+        "c_description": "added a bar to show battery",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Thu Jan 31 10:38:38 2019 -0500",
+        "b_author": "Ethan",
+        "c_description": "graphics work",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Mon Jan 28 23:06:53 2019 -0500",
+        "b_author": "Ethan",
+        "c_description": "added more graphics stuff that kind-of works; removed flipper motor",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Sat Jan 26 09:34:57 2019 -0500",
+        "b_author": "Ethan",
+        "c_description": "added flywheel motor",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Sat Jan 19 18:07:16 2019 -0500",
+        "b_author": "Ethan",
+        "c_description": "updated project and autonomous switcher",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Sat Jan 12 18:10:43 2019 -0500",
+        "b_author": "Ethan",
+        "c_description": "made autonomous, competition tweaks",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Fri Jan 11 18:14:49 2019 -0500",
+        "b_author": "Ethan",
+        "c_description": "Changed the .gitignore to include the extra dir",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Fri Jan 11 18:13:22 2019 -0500",
+        "b_author": "Ethan",
+        "c_description": "added a second controller",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Wed Dec 26 13:49:54 2018 -0500",
+        "b_author": "Ethan",
+        "c_description": "Updated the license",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Sun Dec 23 17:54:38 2018 -0500",
+        "b_author": "Ethan",
+        "c_description": "added an autonomous selecter that uses the touchscreen",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Fri Dec 21 21:18:41 2018 -0500",
+        "b_author": "Ethan",
+        "c_description": "added status lights",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Fri Dec 21 18:58:31 2018 -0500",
+        "b_author": "Ethan",
+        "c_description": "changed nlines++ to ++nlines",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Fri Dec 21 18:30:41 2018 -0500",
+        "b_author": "Ethan",
+        "c_description": "flywheel toggle now only happens every 250ms",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Fri Dec 21 18:30:14 2018 -0500",
+        "b_author": "Ethan",
+        "c_description": "information printing to the v5 screen is now nicely abstracted",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Fri Dec 21 18:29:26 2018 -0500",
+        "b_author": "Ethan",
+        "c_description": "minor style change",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Sat Dec 15 15:00:15 2018 -0500",
+        "b_author": "Ethan",
+        "c_description": "formatted to style",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Sat Dec 15 14:51:13 2018 -0500",
+        "b_author": "Ethan",
+        "c_description": "made flywheel control better by modifying PID values and switched to toggle controls. also switched from LCD emulator to plain LVGL for displaying text on the v5 screen",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Thu Dec 13 16:39:59 2018 -0500",
+        "b_author": "Ethan",
+        "c_description": "minor changes to weird problems",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Thu Dec 6 16:41:30 2018 -0500",
+        "b_author": "Ethan",
+        "c_description": "fixed text that displays on the controller",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Tue Dec 4 17:07:40 2018 -0500",
+        "b_author": "Ethan",
+        "c_description": "flywheel speed control is better documented",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Tue Dec 4 15:03:10 2018 -0500",
+        "b_author": "Ethan",
+        "c_description": "changed launching mechanism",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Tue Nov 27 16:59:34 2018 -0500",
+        "b_author": "Ethan",
+        "c_description": "added framework for the lift heights",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Tue Nov 27 16:10:49 2018 -0500",
+        "b_author": "Ethan",
+        "c_description": "simplified some things",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Sat Nov 17 22:13:23 2018 -0500",
+        "b_author": "Ethan",
+        "c_description": "Added flipper controller",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Fri Nov 16 23:10:50 2018 -0500",
+        "b_author": "Ethan",
+        "c_description": "Adapted code to fixed potentiometer; During opcontrol, the drive holds position after it stops",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Fri Nov 16 23:09:38 2018 -0500",
+        "b_author": "Ethan",
+        "c_description": "Update PROS/Okapi version",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Fri Nov 9 16:53:44 2018 -0500",
+        "b_author": "Ethan",
+        "c_description": "added potentiometer",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Thu Nov 8 23:42:18 2018 -0500",
+        "b_author": "Ethan",
+        "c_description": "Made launcher position buttons",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Thu Nov 8 17:24:00 2018 -0500",
+        "b_author": "Ethan",
+        "c_description": "Added more documentation around the code's function",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Thu Nov 8 17:04:39 2018 -0500",
+        "b_author": "Ethan",
+        "c_description": "made catapult launcher arm hold it's position if it is cocked back",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Thu Nov 1 17:12:02 2018 -0400",
+        "b_author": "Ethan",
+        "c_description": "Better gitignore; Add LICENSE and README.md",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Thu Nov 1 16:57:48 2018 -0400",
+        "b_author": "Ethan",
+        "c_description": "Change style",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Thu Nov 1 16:56:32 2018 -0400",
+        "b_author": "Ethan",
+        "c_description": "Update to latest",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Tue Oct 23 15:46:36 2018 -0400",
+        "b_author": "Ethan",
+        "c_description": "Added .gitignore",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Tue Oct 23 15:46:08 2018 -0400",
+        "b_author": "Ethan",
+        "c_description": "added launcher",
+        "d_changes": []
+    },
+    {
+        "a_timestamp": "  Tue Oct 2 21:44:13 2018 -0400",
+        "b_author": "Ethan",
+        "c_description": "Initial commit of homecoming robot",
+        "d_changes": []
+    }
+]
