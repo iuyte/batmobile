@@ -48,7 +48,12 @@ namespace drive {
   /** strafe to a certain amount of ticks */
   void strafe(float ticks, int vel = 200);
 
+  /** move to relative positions */
+  void moveRelative(float l, float r, int vel);
+
   void waitUntilCompletion();
+  void waitUntilStarted();
+  void waitUntilStopped();
 
   /** move the drive at a specific velocity */
   void moveVelocity(double lvel, double rvel);

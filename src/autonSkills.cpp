@@ -28,57 +28,80 @@ void autonSkills1() {
 }
 
 void autonSkills2() {
-  // move sideways to line up to the right cap
-  drive::strafe(800, 100);
-  delay(250);
-  drive::waitUntilCompletion();
-
-  drive::turn(0, 2, true);
-
-  // reverse intake and flip the cap
-  intake.moveVelocity(-60);
-  drive::dpc.setTarget("F1");
-  drive::dpc.waitUntilSettled();
-  drive::dc.setMaxVelocity(90);
-  drive::dc.moveDistance(12_in);
-  drive::dc.setMaxVelocity(200);
-  delay(500);
-
-  // back up
-  drive::dc.moveDistance(-24_in);
-
-  // intake in and ready the catapult
+  // intake in
   intake.moveVelocity(200);
-  catapult::ready();
 
-  exit(0);
+  // grab the ball from under the cap
+  drive::dpc.setTarget("F1");
+  catapult::ready(); // ready catapult
+  drive::dpc.waitUntilSettled();
 
-  // align to the left cap
-  drive::strafe(-800, 100);
-  drive::waitUntilCompletion();
-  drive::turn(0, 2, true);
-
-  // grab the ball into the catapult
-  drive::dc.moveDistance(12_in);
+  // allow the ball to enter the catapult
   delay(1500);
 
-  // flip the cap
-  intake.moveVelocity(-60);
-  drive::dc.setMaxVelocity(90);
-  drive::dc.moveDistance(6_in);
-  drive::dc.moveDistance(-6_in);
-  drive::dc.setMaxVelocity(200);
+  // reverse intake and flip the cap
+  intake.moveVelocity(-200);
+  // drive::dc.setMaxVelocity(90);
+  // drive::dc.moveDistance(30_in);
+  // delay(250);
 
-  // intake in again
+  drive::dpc.setTarget("48");
+  drive::dpc.waitUntilSettled();
+
+  // back up, intake in to make sure the ball is in the catapult
+  // drive::dc.setMaxVelocity(180);
   intake.moveVelocity(200);
+
+  drive::dpc.setTarget("60", true);
+  drive::dpc.waitUntilSettled();
+
+  // wait a bit
+  drive::dc.stop();
+  delay(250);
+
+  // move sideways to line up to the right cap
+  drive::reset();
+  drive::strafe(720, 125);
+  drive::waitUntilCompletion();
+  drive::dc.stop();
+  delay(250);
+
+  // reverse intake and flip the cap
+  intake.moveVelocity(-200);
+  // drive::dc.setMaxVelocity(90);
+  // drive::dc.moveDistance(30_in);
+  // drive::dc.setMaxVelocity(200);
+  // delay(250);
+
+  drive::dpc.setTarget("48");
+  drive::dpc.waitUntilSettled();
+
+  // back up
+  drive::dpc.setTarget("36", true);
+
+  delay(500);
+
+  // intake in slowly
+  intake.moveVelocity(0);
+
+  drive::dpc.waitUntilSettled();
+
+  // align on the platforms
+  drive::strafe(-1000, 125);
+  drive::waitUntilCompletion();
+  drive::reset();
 
   // back up and turn towards the flags
   drive::dpc.setTarget("F2", true);
   drive::dpc.waitUntilSettled();
-  drive::turn(-89, true);
+  // drive::turn(-89);
+
+  drive::moveRelative(-560, 560, 120);
+  drive::waitUntilCompletion();
 
   // drive towards the flags
-  drive::dc.moveDistance(60_in);
+  drive::dpc.setTarget("60");
+  drive::dpc.waitUntilSettled();
 
   // wait a bit
   drive::moveVelocity(0, 0);
@@ -88,25 +111,21 @@ void autonSkills2() {
   // fire the catapult
   catapult::fire();
   waitUntil(catapult::pot.get() > catapult::presets[3], 20);
-  delay(800);
+  delay(1000);
 
   // align to the bottom flag
   drive::reset();
   drive::strafe(-160, 110);
-  waitUntil(drive::totalVelocity() > 4, 20);
-  waitUntil(drive::totalVelocity() < 4, 20);
+  drive::waitUntilCompletion();
   delay(200);
-  // delay(400);
-  drive::turn(0, 2, true);
 
   // hit the bottom flag
-  drive::dc.setMaxVelocity(125);
   drive::moveVelocity(125, 125);
-  waitUntil(drive::totalVelocity() > 10, 20);
-  waitUntil(drive::totalVelocity() < 10, 20);
+  drive::waitUntilStarted();
+  drive::waitUntilStopped();
   drive::moveVelocity(0, 0);
 
   // back up
   drive::dc.setMaxVelocity(180);
-  drive::dc.moveDistance(-48_in);
+  drive::dc.moveDistance(-28_in);
 }

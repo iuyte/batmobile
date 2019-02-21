@@ -18,6 +18,10 @@ void initialize() {
 
   // a task that prints a lot of useful data to the LCD emulator
   pros::Task(&infoLoop, nullptr);
+
+  // reset sensors
+  drive::reset();
+
 }
 
 void disabled() {}

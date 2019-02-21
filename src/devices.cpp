@@ -82,6 +82,34 @@ namespace drive {
           left, right, AbstractMotor::gearset::green, ChassisScales({4_in, 14_in}));
   AsyncMotionProfileController dpc = AsyncControllerFactory::motionProfile(1, 2, 10, dc);
 
+  bool atTarget(int range) {
+    for (auto &&i = 0; i < 2; i++)
+      for (auto &&ii = 0; i < 2; i++)
+        if (!motorPosTargetReached(motors[i][ii], range))
+          return false;
+
+    return true;
+  }
+
+  double totalVelocity() {
+    double tv;
+
+    for (auto &&i = 0; i < 2; i++)
+      for (auto &&ii = 0; i < 2; i++)
+        tv += abs(motors[i][ii].get_actual_velocity());
+
+    return tv;
+  }
+
+  double backVelocity() {
+    double tv;
+
+    for (auto &&i = 0; i < 2; i++)
+      tv += abs(motors[i][0].get_actual_velocity());
+
+    return tv;
+  }
+
   ADIGyro gyro('b', .104);
 
   namespace _g {
@@ -100,13 +128,9 @@ namespace drive {
       sty = true;
     }
 
-    return gyro.get() + .000012 * (millis() - st);
+    return gyro.get(); // + .000012 * (millis() - st);
 
-    double tv;
-
-    for (auto &&i = 0; i < 2; i++)
-      for (auto &&ii = 0; i < 2; i++)
-        tv += motors[i][ii].get_actual_velocity();
+    double tv = totalVelocity();
 
     if (abs(tv) < 1.f) {
       gb = true;
@@ -148,9 +172,22 @@ namespace drive {
     motors[1][1].moveRelative(ticks, vel);
   }
 
+  void moveRelative(float l, float r, int vel) {
+    left.moveRelative(l, vel);
+    right.moveRelative(r, vel);
+  }
+
   void waitUntilCompletion() {
-    waitUntil(totalVelocity() > 5, 20);
+    waitUntil(totalVelocity() > 10, 20);
     waitUntil(totalVelocity() < 3, 20);
+  }
+
+  void waitUntilStarted() {
+    waitUntil(totalVelocity() > 10, 20);
+  }
+
+  void waitUntilStopped() {
+    waitUntil(backVelocity() < 4, 20);
   }
 
   void reset() {
@@ -166,24 +203,5 @@ namespace drive {
     _g::p   = 0;
     _g::gb  = true;
     _g::sty = false;
-  }
-
-  bool atTarget(int range) {
-    for (auto &&i = 0; i < 2; i++)
-      for (auto &&ii = 0; i < 2; i++)
-        if (!motorPosTargetReached(motors[i][ii], range))
-          return false;
-
-    return true;
-  }
-
-  double totalVelocity() {
-    double tv;
-
-    for (auto &&i = 0; i < 2; i++)
-      for (auto &&ii = 0; i < 2; i++)
-        tv += abs(motors[i][ii].get_actual_velocity());
-
-    return tv;
   }
 } // namespace drive

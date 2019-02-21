@@ -27,7 +27,7 @@ void generatePaths() {
   // clang-format off
   drive::dpc.generatePath({
     Point{0_ft, 0_ft, 0_deg},
-    Point{38_in, 0_ft, 0_deg},
+    Point{39_in, 0_ft, 0_deg},
   }, "F1");
   drive::dpc.generatePath({
     Point{0_ft, 0_ft, 0_deg},
@@ -41,6 +41,46 @@ void generatePaths() {
     Point{0_ft, 0_ft, 0_deg},
     Point{18_in, 0_ft, 0_deg},
   }, "FC1");
+  drive::dpc.generatePath({
+    Point{0_ft, 0_ft, 0_deg},
+    Point{12_in, 0_ft, 0_deg},
+  }, "12");
+  drive::dpc.generatePath({
+    Point{0_ft, 0_ft, 0_deg},
+    Point{18_in, 0_ft, 0_deg},
+  }, "18");
+  drive::dpc.generatePath({
+    Point{0_ft, 0_ft, 0_deg},
+    Point{24_in, 0_ft, 0_deg},
+  }, "24");
+  drive::dpc.generatePath({
+    Point{0_ft, 0_ft, 0_deg},
+    Point{30_in, 0_ft, 0_deg},
+  }, "30");
+  drive::dpc.generatePath({
+    Point{0_ft, 0_ft, 0_deg},
+    Point{36_in, 0_ft, 0_deg},
+  }, "36");
+  drive::dpc.generatePath({
+    Point{0_ft, 0_ft, 0_deg},
+    Point{42_in, 0_ft, 0_deg},
+  }, "42");
+  drive::dpc.generatePath({
+    Point{0_ft, 0_ft, 0_deg},
+    Point{48_in, 0_ft, 0_deg},
+  }, "48");
+  drive::dpc.generatePath({
+    Point{0_ft, 0_ft, 0_deg},
+    Point{50_in, 0_ft, 0_deg},
+  }, "50");
+  drive::dpc.generatePath({
+    Point{0_ft, 0_ft, 0_deg},
+    Point{54_in, 0_ft, 0_deg},
+  }, "54");
+  drive::dpc.generatePath({
+    Point{0_ft, 0_ft, 0_deg},
+    Point{60_in, 0_ft, 0_deg},
+  }, "60");
   // clang-format on
 }
 
