@@ -87,7 +87,7 @@ void autonSkills2() {
   drive::dpc.waitUntilSettled();
 
   // align on the platforms
-  drive::strafe(-1000, 125);
+  drive::strafe(-1100, 125);
   drive::waitUntilCompletion();
   drive::reset();
 
@@ -96,7 +96,7 @@ void autonSkills2() {
   drive::dpc.waitUntilSettled();
   // drive::turn(-89);
 
-  drive::moveRelative(-560, 560, 120);
+  drive::moveRelative(-555, 555, 120);
   drive::waitUntilCompletion();
 
   // drive towards the flags
@@ -120,12 +120,24 @@ void autonSkills2() {
   delay(200);
 
   // hit the bottom flag
-  drive::moveVelocity(125, 125);
-  drive::waitUntilStarted();
-  drive::waitUntilStopped();
-  drive::moveVelocity(0, 0);
+  drive::dpc.setTarget("42");
+  drive::dpc.waitUntilSettled();
+  delay(100);
+  drive::reset();
+
+  // drive::moveVelocity(125, 125);
+  // drive::waitUntilStarted();
+  // drive::waitUntilStopped();
+  // drive::moveVelocity(0, 0);
 
   // back up
   drive::dc.setMaxVelocity(180);
-  drive::dc.moveDistance(-28_in);
+
+  // back up from the wall
+  drive::dpc.setTarget("84", true);
+  drive::dpc.waitUntilSettled();
+
+  // turn towards the platform
+  drive::moveRelative(555, -555, 120);
+  drive::waitUntilCompletion();
 }

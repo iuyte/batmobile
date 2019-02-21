@@ -81,6 +81,10 @@ void generatePaths() {
     Point{0_ft, 0_ft, 0_deg},
     Point{60_in, 0_ft, 0_deg},
   }, "60");
+  drive::dpc.generatePath({
+    Point{0_ft, 0_ft, 0_deg},
+    Point{84_in, 0_ft, 0_deg},
+  }, "84");
   // clang-format on
 }
 
