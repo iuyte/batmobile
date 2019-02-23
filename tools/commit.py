@@ -38,5 +38,9 @@ def saveList(listOfCommits):
     for i in range(len(listOfCommits)):
         listOfCommits[i] = JSONStore(listOfCommits[i])
     toWrite = jsonpickle.encode(listOfCommits, unpicklable=False)
+    toWrite = toWrite.replace("a_timestamp", "timestamp")
+    toWrite = toWrite.replace("b_author", "author")
+    toWrite = toWrite.replace("c_description", "description")
+    toWrite = toWrite.replace("d_changes", "changes")
     f.write(toWrite)
     f.close()

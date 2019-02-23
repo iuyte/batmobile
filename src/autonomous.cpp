@@ -95,6 +95,10 @@ void generatePaths() {
   }, "30");
   drive::dpc.generatePath({
     Point{0_ft, 0_ft, 0_deg},
+    Point{34_in, 0_ft, 0_deg},
+  }, "34");
+  drive::dpc.generatePath({
+    Point{0_ft, 0_ft, 0_deg},
     Point{36_in, 0_ft, 0_deg},
   }, "36");
   drive::dpc.generatePath({

@@ -185,7 +185,7 @@ def parseContent(content):
         filesAdded = []
         filesDeleted = []
         for aline in range(aline, len(lines)):
-            if lines[aline].endswith(".pdf") or not lines[aline].startswith(":"):
+            if lines[aline].endswith(".pdf") or not lines[aline].startswith(":") or "docs/" in lines[aline]:
                 continue
             if lines[aline][31] == "M":
                 filesModified.append(lines[aline][33:])

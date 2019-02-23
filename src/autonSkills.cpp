@@ -193,7 +193,7 @@ void autonSkills2() {
   drive::dpc.waitUntilSettled();
 
   // back up, intake in to make sure the ball is in the catapult
-  drive::dpc.setTarget("30", true);
+  drive::dpc.setTarget("34", true);
   intake.moveVelocity(200);
   drive::dpc.waitUntilSettled();
 
@@ -202,14 +202,14 @@ void autonSkills2() {
   drive::waitUntilCompletion();
 
   // turn towards the flags and align
-  drive::moveRelative(-540, 540, 120);
+  drive::moveRelative(-542, 542, 120);
   delay(200);
   intake.moveVelocity(200);
   drive::waitUntilCompletion();
   drive::dpc.setTarget("2");
   drive::dpc.waitUntilSettled();
-  drive::strafe(-80, 110);
-  drive::waitUntilCompletion();
+  // drive::strafe(-80, 110);
+  // drive::waitUntilCompletion();
 
   // fire the catapult
   catapult::fire();
@@ -219,7 +219,7 @@ void autonSkills2() {
 
   // align to the bottom flag
   drive::reset();
-  drive::strafe(-200, 110);
+  drive::strafe(-180, 110);
   drive::waitUntilCompletion();
 
   // hit the bottom flag
@@ -238,7 +238,7 @@ void autonSkills2() {
   drive::waitUntilCompletion();
 
   // flip the cap
-  drive::dpc.setTarget("30");
+  drive::dpc.setTarget("36");
   drive::dpc.waitUntilSettled();
 
   // back up
@@ -253,20 +253,25 @@ void autonSkills2() {
   drive::waitUntilCompletion();
   drive::dpc.setTarget("18");
   drive::dpc.waitUntilSettled();
-  drive::strafe(-880, 120);
+  drive::moveRelative(60, -60, 120);
+  drive::waitUntilCompletion();
+  drive::strafe(-900, 120);
   drive::waitUntilCompletion();
 
   // align
-  drive::moveRelative(60, -60, 120);
-  drive::waitUntilCompletion();
+  // drive::moveRelative(60, -60, 120);
+  // drive::waitUntilCompletion();
 
   // align on the wall
   // drive::moveVelocity(90, 90);
   // drive::waitUntilStarted();
   // delay(1600);
 
-  drive::dpc.setTarget("12");
-  drive::dpc.waitUntilSettled();
+  // drive::dpc.setTarget("6");
+  // drive::dpc.waitUntilSettled();
+
+  // drive::dc.setMaxVelocity(160);
+  // drive::dc.moveDistance(6_in);
 
   // get onto the platform
   drive::dc.setMaxVelocity(200);
