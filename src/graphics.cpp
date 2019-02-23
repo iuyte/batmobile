@@ -180,6 +180,8 @@ static lv_res_t selectionPress(lv_obj_t *btn, const char *txt) {
   return LV_RES_OK;
 }
 
+extern long int glt;
+
 void infoLoop(void *none) {
   unsigned int nlines = 0;
   char         tline[20];
@@ -353,7 +355,9 @@ void infoLoop(void *none) {
 
     // update autonomous name
     lv_label_set_text(autonLine, (autonT + autonName).c_str());
-    lv_label_set_text(gyroLine, (gyroT + std::to_string(drive::getAngle())).c_str());
+    lv_label_set_text(
+            gyroLine,
+            (gyroT + std::to_string(drive::getAngle()) + " " + std::to_string(glt)).c_str());
 
     catapultVal     = (short)(catapult::pot.get());
     batteryCapacity = (short)pros::battery::get_capacity();

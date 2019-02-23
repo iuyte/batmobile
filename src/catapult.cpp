@@ -30,7 +30,7 @@ namespace catapult {
           motor.moveVelocity(100);
           waitUntiloD(pot.get() < presets[0], 20);
           pos = motor.getPosition();
-          motor.moveAbsolute(pos, 5);
+          motor.moveAbsolute(pos, 20);
           break;
         case State::Fire:
           motor.moveVelocity(100);
@@ -60,7 +60,7 @@ namespace catapult {
     return task;
   }
 
-  bool atTarget() { return _atTarget; }
+  bool atTarget() { return _atTarget || (state == State::None); }
 
   State move(State newState) {
     if (_atTarget) {
@@ -72,6 +72,8 @@ namespace catapult {
 
       task->notify();
     }
+
+    return state;
   }
 
   void ready() {

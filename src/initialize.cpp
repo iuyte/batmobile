@@ -13,15 +13,15 @@ void initialize() {
   // start task to handle catapult
   catapult::startManager();
 
-  // generate paths to be used in autonomous
-  generatePaths();
+  // generate paths to be used in autonomous unless X is pressed
+  if (!controller::master.getDigital(ControllerDigital::X))
+    generatePaths();
 
   // a task that prints a lot of useful data to the LCD emulator
   pros::Task(&infoLoop, nullptr);
 
   // reset sensors
   drive::reset();
-
 }
 
 void disabled() {}

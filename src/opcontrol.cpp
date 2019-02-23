@@ -90,9 +90,9 @@ void opcontrol() {
     }
 
     if (controller::master.getDigital(ControllerDigital::down)) {
-      ballGrabber.moveAbsolute(350, 200);
+      ballGrabber.moveAbsolute(300, 200);
     } else if (controller::master.getDigital(ControllerDigital::up)) {
-      ballGrabber.moveAbsolute(0, 200);
+      ballGrabber.moveAbsolute(-25, 200);
     } else {
       ballGrabber.moveVelocity(0);
     }

@@ -31,7 +31,7 @@ void generatePaths() {
   }, "F1");
   drive::dpc.generatePath({
     Point{0_ft, 0_ft, 0_deg},
-    Point{34_in, 0_ft, 0_deg},
+    Point{33.25_in, 0_ft, 0_deg},
   }, "F2");
   drive::dpc.generatePath({
     Point{0_ft, 0_ft, 0_deg},
@@ -43,8 +43,40 @@ void generatePaths() {
   }, "FC1");
   drive::dpc.generatePath({
     Point{0_ft, 0_ft, 0_deg},
+    Point{2_in, 0_ft, 0_deg},
+  }, "2");
+  drive::dpc.generatePath({
+    Point{0_ft, 0_ft, 0_deg},
+    Point{6_in, 0_ft, 0_deg},
+  }, "6");
+  drive::dpc.generatePath({
+    Point{0_ft, 0_ft, 0_deg},
+    Point{6.5_in, 0_ft, 0_deg},
+  }, "7");
+  drive::dpc.generatePath({
+      Point{0_ft, 0_ft, 0_deg},
+      Point{8_in, 0_ft, 0_deg},
+  }, "8");
+  drive::dpc.generatePath({
+    Point{0_ft, 0_ft, 0_deg},
+    Point{10_in, 0_ft, 0_deg},
+  }, "10");
+  drive::dpc.generatePath({
+    Point{0_ft, 0_ft, 0_deg},
     Point{12_in, 0_ft, 0_deg},
   }, "12");
+  drive::dpc.generatePath({
+    Point{0_ft, 0_ft, 0_deg},
+    Point{14_in, 0_ft, 0_deg},
+  }, "14");
+  drive::dpc.generatePath({
+    Point{0_ft, 0_ft, 0_deg},
+    Point{15_in, 0_ft, 0_deg},
+  }, "15");
+  drive::dpc.generatePath({
+    Point{0_ft, 0_ft, 0_deg},
+    Point{16_in, 0_ft, 0_deg},
+  }, "16");
   drive::dpc.generatePath({
     Point{0_ft, 0_ft, 0_deg},
     Point{18_in, 0_ft, 0_deg},
@@ -55,12 +87,20 @@ void generatePaths() {
   }, "24");
   drive::dpc.generatePath({
     Point{0_ft, 0_ft, 0_deg},
+    Point{26_in, 0_ft, 0_deg},
+  }, "26");
+  drive::dpc.generatePath({
+    Point{0_ft, 0_ft, 0_deg},
     Point{30_in, 0_ft, 0_deg},
   }, "30");
   drive::dpc.generatePath({
     Point{0_ft, 0_ft, 0_deg},
     Point{36_in, 0_ft, 0_deg},
   }, "36");
+  drive::dpc.generatePath({
+    Point{0_ft, 0_ft, 0_deg},
+    Point{40_in, 0_ft, 0_deg},
+  }, "40");
   drive::dpc.generatePath({
     Point{0_ft, 0_ft, 0_deg},
     Point{42_in, 0_ft, 0_deg},
@@ -85,6 +125,10 @@ void generatePaths() {
     Point{0_ft, 0_ft, 0_deg},
     Point{84_in, 0_ft, 0_deg},
   }, "84");
+  drive::dpc.generatePath({
+    Point{0_ft, 0_ft, 0_deg},
+    Point{90_in, 0_ft, 0_deg},
+  }, "90");
   // clang-format on
 }
 
