@@ -180,18 +180,19 @@ def parseContent(content):
             aline += 2
         except:
             continue
+        aline = 0
         filesModified = []
         filesAdded = []
         filesDeleted = []
         for aline in range(aline, len(lines)):
-            if lines[aline].endswith(".pdf"):
+            if lines[aline].endswith(".pdf") or not lines[aline].startswith(":"):
                 continue
-            if ". M" in lines[aline]:
-                filesModified.append(lines[aline][39:])
-            elif ". A" in lines[aline]:
-                filesAdded.append(lines[aline][39:])
-            elif ". D" in lines[aline]:
-                filesDeleted.append(lines[aline][39:])
+            if lines[aline][31] == "M":
+                filesModified.append(lines[aline][33:])
+            elif lines[aline][31] == "A":
+                filesAdded.append(lines[aline][33:])
+            elif lines[aline][31] == "D":
+                filesDeleted.append(lines[aline][33:])
         tcommit = Commit(date, commitkey, author, description, filesModified, filesAdded, filesDeleted)
         lcommits.append(tcommit)
         out += styleContent(tcommit) + "<div class='spacer'></div>"
