@@ -43,8 +43,12 @@ void autonSkills2() {
   catapult::ready(); // ready catapult
   drive::dpc.waitUntilSettled();
 
+  // back up a bit
+  drive::dpc.setTarget("2", true);
+  drive::dpc.waitUntilSettled();
+
   // allow the ball to enter the catapult
-  delay(1200);
+  delay(900);
 
   // reverse intake and flip the cap
   drive::dpc.setTarget("48");
@@ -193,7 +197,7 @@ void autonSkills2() {
   drive::dpc.waitUntilSettled();
 
   // back up, intake in to make sure the ball is in the catapult
-  drive::dpc.setTarget("34", true);
+  drive::dpc.setTarget("36", true);
   intake.moveVelocity(200);
   drive::dpc.waitUntilSettled();
 
@@ -202,7 +206,7 @@ void autonSkills2() {
   drive::waitUntilCompletion();
 
   // turn towards the flags and align
-  drive::moveRelative(-542, 542, 120);
+  drive::moveRelative(-560, 560, 120);
   delay(200);
   intake.moveVelocity(200);
   drive::waitUntilCompletion();
@@ -219,7 +223,7 @@ void autonSkills2() {
 
   // align to the bottom flag
   drive::reset();
-  drive::strafe(-180, 110);
+  drive::strafe(-200, 110);
   drive::waitUntilCompletion();
 
   // hit the bottom flag
@@ -255,29 +259,15 @@ void autonSkills2() {
   drive::dpc.waitUntilSettled();
   drive::moveRelative(60, -60, 120);
   drive::waitUntilCompletion();
-  drive::strafe(-900, 120);
+  drive::strafe(-808, 120);
   drive::waitUntilCompletion();
-
-  // align
-  // drive::moveRelative(60, -60, 120);
-  // drive::waitUntilCompletion();
-
-  // align on the wall
-  // drive::moveVelocity(90, 90);
-  // drive::waitUntilStarted();
-  // delay(1600);
-
-  // drive::dpc.setTarget("6");
-  // drive::dpc.waitUntilSettled();
-
-  // drive::dc.setMaxVelocity(160);
-  // drive::dc.moveDistance(6_in);
 
   // get onto the platform
   drive::dc.setMaxVelocity(200);
-  drive::left.moveRelative(-2300, 200);
-  drive::right.moveRelative(-2300, 200);
+  drive::left.moveRelative(-2425, 200);
+  drive::right.moveRelative(-2425, 200);
   waitUntil(motorPosTargetReached(drive::left, 50) && motorPosTargetReached(drive::right, 50), 20);
+  delay(400);
   drive::moveVelocity(0, 0);
 
   glt = millis() - glt;

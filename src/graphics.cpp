@@ -182,7 +182,7 @@ static lv_res_t selectionPress(lv_obj_t *btn, const char *txt) {
 
 extern long int glt;
 
-void infoLoop(void *none) {
+void infoLoop(void *generated) {
   unsigned int nlines = 0;
   char         tline[20];
   char         batteryText[20];
@@ -192,6 +192,8 @@ void infoLoop(void *none) {
   cont                = lv_cont_create(lv_scr_act(), NULL);
   lv_cont_set_fit(cont, false, false);
   lv_obj_set_size(cont, LV_HOR_RES, LV_VER_RES);
+
+  bool *displayController = (bool *)(generated);
 
   // clang-format off
   Line lines[] = {
@@ -374,7 +376,8 @@ void infoLoop(void *none) {
 
     // print values to the controllers
     snprintf(tline, 15, "%d | %f", catapultVal, catapult::motor.getTemperature());
-    controller::master.setText(2, 0, tline);
+    if (*displayController)
+      controller::master.setText(2, 0, tline);
 
     // run 20 times per second
     rate.delay(20_Hz);

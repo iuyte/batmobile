@@ -27,6 +27,10 @@ void autonFlags(int side) {
   // turn towards the flags
   drive::turn(-90 * side);
 
+  // aling to shoot
+  drive::strafe(-100, 110);
+  drive::waitUntilCompletion();
+
   // drive forward a bit
   drive::dpc.setTarget("F3");
   drive::dpc.waitUntilSettled();
@@ -42,43 +46,24 @@ void autonFlags(int side) {
   waitUntil(catapult::pot.get() > catapult::presets[3], 20);
   delay(800);
 
-  // don't
-  // reverse intake for cap flipping
-  // intake.move(-127);
-
   // align to the bottom flag
   drive::reset();
-  drive::strafe(-160, 110);
-  waitUntil(drive::totalVelocity() > 4, 20);
-  waitUntil(drive::totalVelocity() < 4, 20);
+  drive::strafe(-90, 110);
+  drive::waitUntilCompletion();
   delay(200);
-  // delay(400);
-  drive::turn(0, 2, true);
 
   // hit the bottom flag
-  drive::dc.setMaxVelocity(125);
-  drive::moveVelocity(125, 125);
-  waitUntil(drive::totalVelocity() > 10, 20);
-  waitUntil(drive::totalVelocity() < 10, 20);
-  drive::moveVelocity(0, 0);
-  // drive::dc.moveDistance(42_in);
-  // drive::dc.moveDistance(16_in);
-  // if (abs(drive::getAngle()) > 10)
-  // drive::turn(0, 2, true);
-  // drive::dc.moveDistance(14_in);
-  // drive::dc.moveDistance(12_in);
-  // drive::dc.tank(.2, .2);
-  // delay(100);
-  // drive::reset();
+  drive::dpc.setTarget("30");
+  drive::dpc.waitUntilSettled();
 
   // back up
-  drive::dc.moveDistance(-10_in);
-  drive::dc.setMaxVelocity(200);
+  drive::dpc.setTarget("12");
+  drive::dpc.waitUntilSettled();
 }
 
 void flipCap(int side) {
   // back up from the wall
-  drive::dpc.setTarget("FC1", true);
+  drive::dpc.setTarget("24", true);
   drive::dpc.waitUntilSettled();
 
   // turn towards the cap

@@ -150,17 +150,21 @@ namespace drive {
   }
 
   void turn(float angle, float range, bool absolute) {
-    const float kp     = 2.1;
-    const float min    = 45;
-    float       target = absolute ? angle : angle + getAngle();
-    float       error;
+    angle = (angle * 55.8f) / 9.f;
+    moveRelative(angle, -angle, 115);
+    waitUntilCompletion();
 
-    do {
-      error = target - getAngle();
-      moveVelocity(cutRange(kp * error, -min, min), cutRange(-kp * error, -min, min));
+    // const float kp     = 2.1;
+    // const float min    = 45;
+    // float       target = absolute ? angle : angle + getAngle();
+    // float       error;
 
-      delay(10);
-    } while (abs(error) > range);
+    // do {
+    //   error = target - getAngle();
+    //   moveVelocity(cutRange(kp * error, -min, min), cutRange(-kp * error, -min, min));
+
+    //   delay(10);
+    // } while (abs(error) > range);
 
     moveVelocity(0, 0);
   }
