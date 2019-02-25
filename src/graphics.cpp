@@ -225,6 +225,7 @@ void infoLoop(void *generated) {
           }),
           SwitcherMenu("other", {
             SwitcherMenu("data", {}, &printData),
+            SwitcherMenu("test", {}, &autonTest),
             SwitcherMenu("skills", {
               SwitcherMenu("traditional", {}, &autonSkills1),
               SwitcherMenu("new", {}, &autonSkills2),

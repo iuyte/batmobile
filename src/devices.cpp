@@ -181,8 +181,9 @@ namespace drive {
     right.moveRelative(r, vel);
   }
 
-  void waitUntilCompletion() {
+  void waitUntilCompletion(unsigned long minTime) {
     waitUntil(totalVelocity() > 10, 20);
+    delay(minTime);
     waitUntil(totalVelocity() < 3, 20);
   }
 
@@ -209,3 +210,5 @@ namespace drive {
     _g::sty = false;
   }
 } // namespace drive
+
+pros::Vision vision(7, pros::E_VISION_ZERO_CENTER);

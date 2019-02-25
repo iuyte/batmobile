@@ -30,6 +30,8 @@ void autonScoreCap();
 void autonSkills1();
 void autonSkills2();
 
+void autonTest();
+
 /**
  * a blocking alternative to the typical motor.moveRelative
  */

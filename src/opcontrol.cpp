@@ -97,8 +97,6 @@ void opcontrol() {
       ballGrabber.moveVelocity(0);
     }
 
-    cout << ballGrabber.getPosition() << endl;
-
     if constexpr (!atCompetition) {
       if (controller::master.getDigital(ControllerDigital::Y))
         auton();

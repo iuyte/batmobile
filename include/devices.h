@@ -51,7 +51,7 @@ namespace drive {
   /** move to relative positions */
   void moveRelative(float l, float r, int vel);
 
-  void waitUntilCompletion();
+  void waitUntilCompletion(unsigned long minTime = 0);
   void waitUntilStarted();
   void waitUntilStopped();
 
@@ -81,5 +81,8 @@ namespace catapult {
 
 /** intake */
 extern Motor intake;
+
+/** vision sensor */
+extern pros::Vision vision;
 
 #endif

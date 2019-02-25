@@ -47,6 +47,10 @@ void generatePaths() {
   }, "2");
   drive::dpc.generatePath({
     Point{0_ft, 0_ft, 0_deg},
+    Point{4_in, 0_ft, 0_deg},
+  }, "4");
+  drive::dpc.generatePath({
+    Point{0_ft, 0_ft, 0_deg},
     Point{6_in, 0_ft, 0_deg},
   }, "6");
   drive::dpc.generatePath({
@@ -109,6 +113,10 @@ void generatePaths() {
     Point{0_ft, 0_ft, 0_deg},
     Point{42_in, 0_ft, 0_deg},
   }, "42");
+  drive::dpc.generatePath({
+    Point{0_ft, 0_ft, 0_deg},
+    Point{44_in, 0_ft, 0_deg},
+  }, "44");
   drive::dpc.generatePath({
     Point{0_ft, 0_ft, 0_deg},
     Point{48_in, 0_ft, 0_deg},

@@ -90,7 +90,7 @@ void autonSkills2() {
   drive::dpc.waitUntilSettled();
 
   // align on the platforms
-  drive::strafe(-1200, 125);
+  drive::strafe(-1010, 125);
   drive::waitUntilCompletion();
   drive::reset();
 
@@ -138,7 +138,7 @@ void autonSkills2() {
   intake.moveVelocity(0);
 
   // align against the wall
-  drive::strafe(-650, 110);
+  drive::strafe(-500, 110);
   drive::waitUntilCompletion();
   drive::strafe(300, 110);
   drive::waitUntilCompletion();
@@ -162,10 +162,6 @@ void autonSkills2() {
   drive::dpc.setTarget("10", true);
   drive::dpc.waitUntilSettled();
 
-  // // intake the ball and retract the grabber
-  // delay(500);
-  // ballGrabber.moveAbsolute(0, 200);
-
   // turn to an angle
   drive::moveRelative(70, -70, 120);
   drive::waitUntilCompletion();
@@ -184,14 +180,14 @@ void autonSkills2() {
   drive::dpc.waitUntilSettled();
 
   // back up a bit
-  drive::dpc.setTarget("2", true);
+  drive::dpc.setTarget("4", true);
   drive::dpc.waitUntilSettled();
 
   // allow the ball to enter the catapult
   delay(1050);
 
   // reverse intake and flip the cap
-  drive::dpc.setTarget("40");
+  drive::dpc.setTarget("44");
   delay(200);
   intake.moveVelocity(-200);
   drive::dpc.waitUntilSettled();
@@ -206,7 +202,7 @@ void autonSkills2() {
   drive::waitUntilCompletion();
 
   // turn towards the flags and align
-  drive::moveRelative(-560, 560, 120);
+  drive::moveRelative(-549, 549, 120);
   delay(200);
   intake.moveVelocity(200);
   drive::waitUntilCompletion();
@@ -224,7 +220,7 @@ void autonSkills2() {
   // align to the bottom flag
   drive::reset();
   drive::strafe(-200, 110);
-  drive::waitUntilCompletion();
+  drive::waitUntilCompletion(200);
 
   // hit the bottom flag
   drive::dpc.setTarget("42");
@@ -257,17 +253,39 @@ void autonSkills2() {
   drive::waitUntilCompletion();
   drive::dpc.setTarget("18");
   drive::dpc.waitUntilSettled();
-  drive::moveRelative(60, -60, 120);
+  drive::moveRelative(75, -75, 120);
   drive::waitUntilCompletion();
-  drive::strafe(-808, 120);
+  drive::strafe(-700, 120);
   drive::waitUntilCompletion();
+
+  pros::vision_object_s_t rtn;
+  float m;
+
+  // align along the x
+  do {
+    m = vision.get_by_sig(0, 1).x_middle_coord + 16;
+    drive::control(0, 0, .0065 * m);
+    delay(50);
+  } while (abs(m) > 6);
+
+  drive::moveVelocity(0, 0);
+  delay(200);
+
+  // align along the y
+  drive::moveVelocity(-200, -200);
+  while (rtn.height < 25) {
+    rtn = vision.get_by_sig(0, 1);
+    delay(50);
+  }
 
   // get onto the platform
   drive::dc.setMaxVelocity(200);
-  drive::left.moveRelative(-2425, 200);
-  drive::right.moveRelative(-2425, 200);
+  drive::left.moveRelative(-2150, 200);
+  drive::right.moveRelative(-2150, 200);
   waitUntil(motorPosTargetReached(drive::left, 50) && motorPosTargetReached(drive::right, 50), 20);
-  delay(400);
+
+  drive::left.setBrakeMode(AbstractMotor::brakeMode::hold);
+  drive::right.setBrakeMode(AbstractMotor::brakeMode::hold);
   drive::moveVelocity(0, 0);
 
   glt = millis() - glt;
