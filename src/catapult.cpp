@@ -35,7 +35,7 @@ namespace catapult {
         case State::Fire:
           motor.moveVelocity(100);
           waitUntiloD(pot.get() > presets[1], 20);
-          motor.moveRelative(360 * 2.8, 100);
+          motor.moveRelative(2.8 * imev5BlueTPR, 100);
           waitUntiloD(motorPosTargetReached(motor, 20), 20);
           motor.setBrakeMode(AbstractMotor::brakeMode::coast);
           motor.moveVelocity(0);

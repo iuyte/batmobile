@@ -30,6 +30,6 @@ extern int indicator;
 static const double sqrt2 = sqrt(2);
 
 /** convert degrees of rotations to motor ticks */
-// inline double dt(double deg, int tpr = imev5GreenTPR) { return deg * (float)tpr * (1.f/360.f); }
+inline double dt(double deg, int tpr = imev5GreenTPR) { return deg * (float)tpr * (1.f/360.f); }
 
 #endif

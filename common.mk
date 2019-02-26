@@ -1,4 +1,4 @@
-ARCHTUPLE=arm-none-eabi-
+ARCHTUPLE=$(HOME)/bin/gcc-arm-none-eabi-8-2018-q4-major/bin/arm-none-eabi-
 DEVICE=VEX EDR V5
 
 MFLAGS=-mcpu=cortex-a9 -mfpu=neon-fp16 -mfloat-abi=softfp

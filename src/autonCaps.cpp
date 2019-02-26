@@ -9,10 +9,10 @@ void autonScoreCap() {
   intake.move(127);
 
   // drive forward, pick up the ball, and back up
-  drive::dpc.setTarget("F1");
-  drive::dpc.waitUntilSettled();
-  drive::dpc.setTarget("6", true);
-  drive::dpc.waitUntilSettled();
+  drive::dpc->setTarget("F1");
+  drive::dpc->waitUntilSettled();
+  drive::dpc->setTarget("6", true);
+  drive::dpc->waitUntilSettled();
 
   // move away from the platforms to allow room to turn
   drive::strafe(600, 110);
@@ -23,8 +23,7 @@ void autonScoreCap() {
   drive::waitUntilCompletion();
 
   // get on the lower platform
-  drive::left.moveRelative(-800, 200);
-  drive::right.moveRelative(-800, 200);
+  drive::moveRelative(-800, -800, 200);
   waitUntil(motorPosTargetReached(drive::left, 50) && motorPosTargetReached(drive::right, 50), 20);
   drive::moveVelocity(0, 0);
 

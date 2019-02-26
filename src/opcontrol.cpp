@@ -24,7 +24,7 @@ void opcontrol() {
   AbstractMotor::brakeMode bmode = AbstractMotor::brakeMode::coast;
   drive::left.setBrakeMode(bmode);
   drive::right.setBrakeMode(bmode);
-  drive::dc.setMaxVelocity(dmax);
+  drive::dc->setMaxVelocity(dmax);
 
   // drive position to hold at
   double driveHoldPos[] = {0, 0};
@@ -32,6 +32,8 @@ void opcontrol() {
 
   // rate to keep loop at constant rate
   Rate rate;
+
+  drive::dc->stop();
 
   // infinite driver-control loop, runs: drive, intake, and launcher
   while (true) {

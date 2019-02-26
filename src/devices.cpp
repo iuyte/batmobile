@@ -78,10 +78,18 @@ namespace drive {
     motors[1][1].moveVelocity(trim(dmax * (forward - turn + strafe), -dmax, dmax));
   }
 
-  ChassisControllerIntegrated dc = ChassisControllerFactory::create(
-          left, right, AbstractMotor::gearset::green, ChassisScales({4_in, 14_in}));
-  AsyncMotionProfileController dpc = AsyncControllerFactory::motionProfile(1, 2, 10, dc);
-
+  using G = IterativePosPIDController::Gains;
+  shared_ptr<ChassisController> dc =
+          ChassisControllerBuilder()
+                  .withMotors(left, right)
+                  .withGearset(AbstractMotor::gearset::green)
+                  .withDimensions(ChassisScales({4_in, 14_in}, imev5GreenTPR))
+                  // .withGains(G{.0031, 0, .00019, 0}, G{0, 0, 0, 0}, G{0, 0, 0, 0})
+                  .build();
+  shared_ptr<AsyncMotionProfileController> dpc = AsyncMotionProfileControllerBuilder()
+                                                         .withOutput(dc)
+                                                         .withLimits(PathfinderLimits({1, 2, 10}))
+                                                         .buildMotionProfileController();
   bool atTarget(int range) {
     for (auto &&i = 0; i < 2; i++)
       for (auto &&ii = 0; i < 2; i++)
@@ -170,6 +178,7 @@ namespace drive {
   }
 
   void strafe(float ticks, int vel) {
+    ticks = dt(ticks);
     motors[0][0].moveRelative(ticks, vel);
     motors[0][1].moveRelative(-ticks, vel);
     motors[1][0].moveRelative(-ticks, vel);
@@ -177,8 +186,13 @@ namespace drive {
   }
 
   void moveRelative(float l, float r, int vel) {
-    left.moveRelative(l, vel);
-    right.moveRelative(r, vel);
+    left.moveRelative(dt(l), vel);
+    right.moveRelative(dt(r), vel);
+  }
+
+  void moveAbsolute(float l, float r, int vel) {
+    left.moveAbsolute(dt(l), vel);
+    right.moveAbsolute(dt(r), vel);
   }
 
   void waitUntilCompletion(unsigned long minTime) {
@@ -187,17 +201,13 @@ namespace drive {
     waitUntil(totalVelocity() < 3, 20);
   }
 
-  void waitUntilStarted() {
-    waitUntil(totalVelocity() > 10, 20);
-  }
+  void waitUntilStarted() { waitUntil(totalVelocity() > 10, 20); }
 
-  void waitUntilStopped() {
-    waitUntil(backVelocity() < 4, 20);
-  }
+  void waitUntilStopped() { waitUntil(backVelocity() < 4, 20); }
 
   void reset() {
     gyro.reset();
-    drive::dc.stop();
+    drive::dc->stop();
 
     for (auto &&i = 0; i < 2; i++)
       for (auto &&ii = 0; i < 2; i++)

@@ -2,11 +2,13 @@
 #define _IUYTE_DEVICES_H_
 
 #include "main.h"
+#include <memory>
 
 using namespace okapi::literals;
 using namespace okapi;
 using pros::delay;
 using pros::millis;
+using std::shared_ptr;
 
 /** V5 controllers and buttons */
 namespace controller {
@@ -51,6 +53,9 @@ namespace drive {
   /** move to relative positions */
   void moveRelative(float l, float r, int vel);
 
+  /** move to absolute positions */
+  void moveAbsolute(float l, float r, int vel);
+
   void waitUntilCompletion(unsigned long minTime = 0);
   void waitUntilStarted();
   void waitUntilStopped();
@@ -65,9 +70,9 @@ namespace drive {
   void turn(float angle, float range = 2, bool absolute = false);
 
   /** drive chassis profile controller, a combination of the left and right side motors */
-  extern ChassisControllerIntegrated dc;
+  extern shared_ptr<ChassisController> dc;
   /** motion profile controller for the drive */
-  extern AsyncMotionProfileController dpc;
+  extern shared_ptr<AsyncMotionProfileController> dpc;
 } // namespace drive
 
 /** catapult */
