@@ -11,9 +11,10 @@ void initialize() {
   // reset sensors
   drive::reset();
 
-  // set flywheel and intake to "coast" mode
+  // set intake to "coast" mode and catapult/arm to "hold" mode
   intake.setBrakeMode(AbstractMotor::brakeMode::coast);
   catapult::motor.setBrakeMode(AbstractMotor::brakeMode::hold);
+  arm.setBrakeMode(AbstractMotor::brakeMode::hold);
 
   // start task to handle catapult
   catapult::startManager();

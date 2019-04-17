@@ -1,10 +1,6 @@
 #include "main.h"
 
 void opcontrol() {
-  // auto ballGrabber = Motor(8);
-  auto ballGrabber = 8_rmtr;
-  ballGrabber.setBrakeMode(AbstractMotor::brakeMode::hold);
-
   // maximum speed in RPM for the drive motors
   static const float dmax = 200;
 
@@ -91,20 +87,13 @@ void opcontrol() {
       break;
     }
 
-    if (controller::master.getDigital(ControllerDigital::down)) {
-      ballGrabber.moveAbsolute(300, 200);
-    } else if (controller::master.getDigital(ControllerDigital::up)) {
-      ballGrabber.moveAbsolute(-25, 200);
-    } else {
-      ballGrabber.moveVelocity(0);
-    }
+    arm.moveVelocity(200 * controller::get::arm());
 
     if constexpr (!atCompetition) {
       if (controller::master.getDigital(ControllerDigital::Y))
         auton();
     }
 
-    delay(25);
     rate.delay(50_Hz);
   }
 }

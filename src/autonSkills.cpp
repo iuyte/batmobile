@@ -32,9 +32,6 @@ void autonSkills1() {
 }
 
 void autonSkills2() {
-  auto ballGrabber = 8_rmtr;
-  ballGrabber.setBrakeMode(AbstractMotor::brakeMode::hold);
-
   // intake in
   intake.moveVelocity(200);
 
@@ -156,9 +153,9 @@ void autonSkills2() {
 
   // grab the ball and back up
   intake.moveVelocity(200);
-  ballGrabber.moveAbsolute(300, 200);
-  waitUntil(ballGrabber.getActualVelocity() > 5, 20);
-  waitUntil(ballGrabber.getActualVelocity() < 5, 20);
+  arm.moveAbsolute(300, 200);
+  waitUntil(arm.getActualVelocity() > 5, 20);
+  waitUntil(arm.getActualVelocity() < 5, 20);
   drive::dpc->setTarget("10", true);
   drive::dpc->waitUntilSettled();
 
@@ -175,7 +172,7 @@ void autonSkills2() {
   intake.moveVelocity(200);
 
   // grab the ball from under the cap
-  ballGrabber.moveAbsolute(0, 200);
+  arm.moveAbsolute(0, 200);
   drive::dpc->setTarget("48");
   drive::dpc->waitUntilSettled();
 

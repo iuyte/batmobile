@@ -25,7 +25,7 @@ namespace controller {
     } // namespace drive
 
     const float intake();
-
+    const float arm();
     const int catapult();
   } // namespace get
 } // namespace controller
@@ -86,6 +86,9 @@ namespace catapult {
 
 /** intake */
 extern Motor intake;
+
+/** arm */
+extern Motor arm;
 
 namespace vision {
   /** vision sensor */

@@ -31,6 +31,10 @@ namespace controller {
       return master.getDigital(ControllerDigital::R1) - master.getDigital(ControllerDigital::R2);
     }
 
+    const float arm() {
+        return master.getDigital(ControllerDigital::up) - master.getDigital(ControllerDigital::down);
+    }
+
     const int catapult() {
       static unsigned long lastTime = millis();
 
@@ -49,18 +53,20 @@ namespace controller {
   } // namespace get
 } // namespace controller
 
-Motor intake(12, true, AbstractMotor::gearset::green);
+Motor intake(12, false, AbstractMotor::gearset::green);
+
+Motor arm(11, true, AbstractMotor::gearset::red);
 
 namespace catapult {
-  MotorGroup    motor({Motor(21, false, AbstractMotor::gearset::red),
-                    Motor(20, true, AbstractMotor::gearset::red)});
+  MotorGroup    motor({Motor(5, false, AbstractMotor::gearset::red),
+                    Motor(4, true, AbstractMotor::gearset::red)});
   Potentiometer pot('a');
 } // namespace catapult
 
 namespace drive {
-  Motor      motors[2][2]{{Motor(16, false, AbstractMotor::gearset::green),
+  Motor      motors[2][2]{{Motor(7, false, AbstractMotor::gearset::green),
                       Motor(9, false, AbstractMotor::gearset::green)},
-                     {Motor(15, true, AbstractMotor::gearset::green),
+                     {Motor(8, true, AbstractMotor::gearset::green),
                       Motor(10, true, AbstractMotor::gearset::green)}};
   MotorGroup left({motors[0][0], motors[0][1]});
   MotorGroup right({motors[1][0], motors[1][1]});
@@ -72,10 +78,10 @@ namespace drive {
 
   void control(float forward, float turn, float strafe) {
 #define dmax 200 * 1.5
-    motors[0][0].moveVelocity(trim(dmax * (forward + turn + strafe), -dmax, dmax));
-    motors[0][1].moveVelocity(trim(dmax * (forward + turn - strafe), -dmax, dmax));
-    motors[1][0].moveVelocity(trim(dmax * (forward - turn - strafe), -dmax, dmax));
-    motors[1][1].moveVelocity(trim(dmax * (forward - turn + strafe), -dmax, dmax));
+    motors[0][0].moveVelocity(trim(dmax * (forward + turn + strafe), -200, 200));
+    motors[0][1].moveVelocity(trim(dmax * (forward + turn - strafe), -200, 200));
+    motors[1][0].moveVelocity(trim(dmax * (forward - turn - strafe), -200, 200));
+    motors[1][1].moveVelocity(trim(dmax * (forward - turn + strafe), -200, 200));
   }
 
   using G = IterativePosPIDController::Gains;
@@ -222,5 +228,5 @@ namespace drive {
 } // namespace drive
 
 namespace vision {
-  pros::Vision vision(7, pros::E_VISION_ZERO_CENTER);
+  pros::Vision vision(6, pros::E_VISION_ZERO_CENTER);
 }
