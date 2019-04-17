@@ -221,4 +221,6 @@ namespace drive {
   }
 } // namespace drive
 
-pros::Vision vision(7, pros::E_VISION_ZERO_CENTER);
+namespace vision {
+  pros::Vision vision(7, pros::E_VISION_ZERO_CENTER);
+}

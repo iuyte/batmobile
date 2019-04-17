@@ -87,7 +87,17 @@ namespace catapult {
 /** intake */
 extern Motor intake;
 
-/** vision sensor */
-extern pros::Vision vision;
+namespace vision {
+  /** vision sensor */
+  extern pros::Vision vision;
+
+  typedef enum {
+    Rlag     = 2,
+    Platform = 1,
+  } Alignment;
+
+  void alignX(Alignment a, float offset = 0, float prec = 6);
+  void alignY(Alignment a, float objheight, float prec = 1);
+} // namespace vision
 
 #endif

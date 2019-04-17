@@ -262,21 +262,11 @@ void autonSkills2() {
   float m;
 
   // align along the x
-  do {
-    m = vision.get_by_sig(0, 1).x_middle_coord + 16;
-    drive::control(0, 0, .0065 * m);
-    delay(50);
-  } while (abs(m) > 6);
-
-  drive::moveVelocity(0, 0);
+  vision::alignX(vision::Alignment::Platform, 16);
   delay(200);
 
   // align along the y
-  drive::moveVelocity(-200, -200);
-  while (rtn.height < 25) {
-    rtn = vision.get_by_sig(0, 1);
-    delay(50);
-  }
+  vision::alignY(vision::Alignment::Platform, 25, 2);
 
   // get onto the platform
   drive::reset();

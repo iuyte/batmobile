@@ -20,6 +20,8 @@ using std::vector;
   while (!(condition || pros::competition::is_disabled()))                                         \
   pros::delay(loopTime)
 
+template <typename T> int sgn(T n) { return (n > 0) ? 1 : ((n < 0) ? -1 : 0); }
+
 vector<string> split(const string &s, char delim);
 
 void infoLoop(void *controllerDisplay);
