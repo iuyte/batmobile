@@ -255,15 +255,12 @@ void autonSkills2() {
   drive::strafe(-700, 120);
   drive::waitUntilCompletion();
 
-  pros::vision_object_s_t rtn;
-  float m;
-
   // align along the x
-  vision::alignX(vision::Alignment::Platform, 16);
+  vision::back.alignX(vision::Alignment::Platform, 16);
   delay(200);
 
   // align along the y
-  vision::alignY(vision::Alignment::Platform, 25, 2);
+  vision::back.alignY(vision::Alignment::Platform, 25, 2);
 
   // get onto the platform
   drive::reset();

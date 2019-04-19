@@ -64,6 +64,7 @@
 #include "catapult.h"
 #include "devices.h"
 #include "util.h"
+#include "vision.h"
 
 using std::cout;
 using std::endl;

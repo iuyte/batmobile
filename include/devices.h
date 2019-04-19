@@ -26,7 +26,7 @@ namespace controller {
 
     const float intake();
     const float arm();
-    const int catapult();
+    const int   catapult();
   } // namespace get
 } // namespace controller
 
@@ -89,18 +89,10 @@ extern Motor intake;
 
 /** arm */
 extern Motor arm;
-
-namespace vision {
-  /** vision sensor */
-  extern pros::Vision vision;
-
-  typedef enum {
-    Rlag     = 2,
-    Platform = 1,
-  } Alignment;
-
-  void alignX(Alignment a, float offset = 0, float prec = 6);
-  void alignY(Alignment a, float objheight, float prec = 1);
-} // namespace vision
+enum ArmP {
+  Top  = 30,
+  Flag = -35,
+  Low  = -340,
+};
 
 #endif

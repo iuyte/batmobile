@@ -32,7 +32,7 @@ namespace controller {
     }
 
     const float arm() {
-        return master.getDigital(ControllerDigital::up) - master.getDigital(ControllerDigital::down);
+      return master.getDigital(ControllerDigital::up) - master.getDigital(ControllerDigital::down);
     }
 
     const int catapult() {
@@ -228,5 +228,6 @@ namespace drive {
 } // namespace drive
 
 namespace vision {
-  pros::Vision vision(6, pros::E_VISION_ZERO_CENTER);
-}
+  vision front(13, pros::E_VISION_ZERO_CENTER);
+  vision back(6, pros::E_VISION_ZERO_CENTER);
+} // namespace vision

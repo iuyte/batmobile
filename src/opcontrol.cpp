@@ -87,7 +87,17 @@ void opcontrol() {
       break;
     }
 
-    arm.moveVelocity(200 * controller::get::arm());
+    switch ((int)controller::get::arm()) {
+    case 1:
+      arm.moveAbsolute(ArmP::Top, 200);
+      break;
+    case -1:
+      arm.moveAbsolute(ArmP::Low, 200);
+      break;
+    default:
+      arm.moveVelocity(0);
+      break;
+    }
 
     if constexpr (!atCompetition) {
       if (controller::master.getDigital(ControllerDigital::Y))

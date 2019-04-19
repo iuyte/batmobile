@@ -199,8 +199,8 @@ void infoLoop(void *generated) {
   Line lines[] = {
           Line("catapult",    &catapult::motor, Line::Velocity,    nlines++),
           Line("catapult",    &catapult::motor, Line::Temperature, nlines++),
-          Line("catapult",    &catapult::motor, Line::Power,       nlines++),
-          Line("intake",      &intake,          Line::Velocity,    nlines++),
+          Line("intake",      &intake,          Line::Position,    nlines++),
+          Line("arm",         &arm,             Line::Position,    nlines++),
           Line("left drive",  &drive::left,     Line::Position,    nlines++),
           Line("right drive", &drive::right,    Line::Position,    nlines++),
           Line("left drive",  &drive::left,     Line::Velocity,    nlines++),

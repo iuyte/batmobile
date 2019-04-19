@@ -25,15 +25,15 @@ namespace catapult {
         switch (state) {
         case State::Ready:
           motor.setBrakeMode(AbstractMotor::brakeMode::hold);
-          motor.moveVelocity(100);
+          motor.moveVelocity(200);
           waitUntiloD(pot.get() < presets[1], 20);
-          motor.moveVelocity(100);
+          motor.moveVelocity(150);
           waitUntiloD(pot.get() < presets[0], 20);
           pos = motor.getPosition();
           motor.moveAbsolute(pos, 20);
           break;
         case State::Fire:
-          motor.moveVelocity(100);
+          motor.moveVelocity(200);
           waitUntiloD(pot.get() > presets[1], 20);
           motor.moveRelative(2.8 * imev5BlueTPR, 100);
           waitUntiloD(motorPosTargetReached(motor, 20), 20);
