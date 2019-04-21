@@ -1,9 +1,9 @@
 #include "autonomous.h"
 
-// vfptr  auton     = &autonSkills2;
-// string autonName = "other->skills->new";
 vfptr  auton     = &autonTest;
 string autonName = "other->test";
+// vfptr  auton     = &autonBlueFlagsX2;
+// string autonName = "+ 2nd tree->blue";
 
 void autonomous() {
   // make it so the drive motors hold commanded positions, rather than coast like in driver-control
@@ -43,6 +43,7 @@ void generatePaths() {
     Point{0_ft, 0_ft, 0_deg},
     Point{18_in, 0_ft, 0_deg},
   }, "FC1");
+
   drive::dpc->generatePath({
     Point{0_ft, 0_ft, 0_deg},
     Point{2_in, 0_ft, 0_deg},
@@ -87,6 +88,11 @@ void generatePaths() {
     Point{0_ft, 0_ft, 0_deg},
     Point{18_in, 0_ft, 0_deg},
   }, "18");
+
+  drive::dpc->generatePath({
+    Point{0_ft, 0_ft, 0_deg},
+    Point{20_in, 0_ft, 0_deg},
+  }, "20");
   drive::dpc->generatePath({
     Point{0_ft, 0_ft, 0_deg},
     Point{24_in, 0_ft, 0_deg},
@@ -95,6 +101,10 @@ void generatePaths() {
     Point{0_ft, 0_ft, 0_deg},
     Point{26_in, 0_ft, 0_deg},
   }, "26");
+  drive::dpc->generatePath({
+    Point{0_ft, 0_ft, 0_deg},
+    Point{28_in, 0_ft, 0_deg},
+  }, "28");
   drive::dpc->generatePath({
     Point{0_ft, 0_ft, 0_deg},
     Point{30_in, 0_ft, 0_deg},
@@ -107,6 +117,11 @@ void generatePaths() {
     Point{0_ft, 0_ft, 0_deg},
     Point{36_in, 0_ft, 0_deg},
   }, "36");
+  drive::dpc->generatePath({
+    Point{0_ft, 0_ft, 0_deg},
+    Point{38_in, 0_ft, 0_deg},
+  }, "38");
+
   drive::dpc->generatePath({
     Point{0_ft, 0_ft, 0_deg},
     Point{40_in, 0_ft, 0_deg},

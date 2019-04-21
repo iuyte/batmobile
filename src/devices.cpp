@@ -32,22 +32,16 @@ namespace controller {
     }
 
     const float arm() {
-      return master.getDigital(ControllerDigital::up) - master.getDigital(ControllerDigital::down);
+      return master.getDigital(ControllerDigital::L1) - master.getDigital(ControllerDigital::L2);
     }
 
     const int catapult() {
       static unsigned long lastTime = millis();
 
-      if (millis() - lastTime > 350) {
-        if (controller::master.getDigital(ControllerDigital::L1)) {
-          lastTime = millis();
-          return 1;
-        } else if (controller::master.getDigital(ControllerDigital::L2)) {
-          lastTime = millis();
-          return -1;
-        }
+      if (millis() - lastTime > 350 && controller::master.getDigital(ControllerDigital::Y)) {
+        lastTime = millis();
+        return 1;
       }
-
       return 0;
     }
   } // namespace get
@@ -77,7 +71,7 @@ namespace drive {
   }
 
   void control(float forward, float turn, float strafe) {
-#define dmax 200 * 1.5
+#define dmax 200 * 1.4
     motors[0][0].moveVelocity(trim(dmax * (forward + turn + strafe), -200, 200));
     motors[0][1].moveVelocity(trim(dmax * (forward + turn - strafe), -200, 200));
     motors[1][0].moveVelocity(trim(dmax * (forward - turn - strafe), -200, 200));
@@ -89,7 +83,7 @@ namespace drive {
           ChassisControllerBuilder()
                   .withMotors(left, right)
                   .withGearset(AbstractMotor::gearset::green)
-                  .withDimensions(ChassisScales({4_in, 14_in}, imev5GreenTPR))
+                  .withDimensions(ChassisScales({4_in, 12.125_in}, imev5GreenTPR))
                   // .withGains(G{.0031, 0, .00019, 0}, G{0, 0, 0, 0}, G{0, 0, 0, 0})
                   .build();
   shared_ptr<AsyncMotionProfileController> dpc = AsyncMotionProfileControllerBuilder()
@@ -164,9 +158,9 @@ namespace drive {
   }
 
   void turn(float angle, float range, bool absolute) {
-    angle = (angle * 55.8f) / 9.f;
+    angle *= 5.45;
     moveRelative(angle, -angle, 115);
-    waitUntilCompletion();
+    waitUntilCompletion(2 * abs(angle));
 
     // const float kp     = 2.1;
     // const float min    = 45;
@@ -181,6 +175,23 @@ namespace drive {
     // } while (abs(error) > range);
 
     moveVelocity(0, 0);
+  }
+
+  void equal() {
+    int sgns[2][2];
+    double avg;
+    for (auto &&i = 0; i < 2; i++)
+      for (auto &&ii = 0; i < 2; i++) {
+        sgns[i][ii] = sgn(motors[i][ii].getPosition());
+        avg += abs(motors[i][ii].getPosition());
+      }
+    avg /= 8;
+
+    for (auto &&i = 0; i < 2; i++)
+      for (auto &&ii = 0; i < 2; i++)
+        motors[i][ii].moveAbsolute(avg * sgns[i][ii], 120);
+
+    waitUntilCompletion(100);
   }
 
   void strafe(float ticks, int vel) {

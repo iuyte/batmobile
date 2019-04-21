@@ -28,7 +28,7 @@ lv_res_t buttonPress(lv_obj_t *btn, const char *text) {
   return LV_RES_OK;
 }
 
-std::pair<vfptr, string> selectMenu(SwitcherMenu *menu) {
+std::pair<vfptr, string> selectMenu(SwitcherMenu *menu, string path = "") {
   // reset the selected text and pressed notifier
   selected = "";
   pressed  = false;
@@ -97,10 +97,10 @@ std::pair<vfptr, string> selectMenu(SwitcherMenu *menu) {
     if (string(m.name) == selected) {
       if (m.fnc == nullptr) {
         if (m.submenus.size())
-          return selectMenu(&m);
+          return selectMenu(&m, path + string(menu->name) + string("->"));
         return selectMenu(menu);
       } else {
-        return std::pair(m.fnc, string(menu->name).append(string("->")).append(string(m.name)));
+        return std::pair(m.fnc, path + string(menu->name) + string("->") + string(m.name));
       }
     }
   }
@@ -209,15 +209,15 @@ void infoLoop(void *generated) {
           Line("right drive", &drive::right,    Line::Temperature, nlines++),
   };
 
-  static SwitcherMenu rootMenu("main menu", {
+  static SwitcherMenu rootMenu("-", {
           SwitcherMenu("flags", {
             SwitcherMenu("+ cap", {
               SwitcherMenu("red", {}, &autonRedFlagsCap),
-              SwitcherMenu("blue", {}, &autonRedFlagsCap),
+              SwitcherMenu("blue", {}, &autonBlueFlagsCap),
             }),
             SwitcherMenu("+ 2nd tree", {
               SwitcherMenu("red", {}, &autonRedFlagsX2),
-              SwitcherMenu("blue", {}, &autonRedFlagsX2),
+              SwitcherMenu("blue", {}, &autonBlueFlagsX2),
           })}),
           SwitcherMenu("caps", {
               SwitcherMenu("red", {}, &autonRedCaps),
@@ -227,7 +227,7 @@ void infoLoop(void *generated) {
             SwitcherMenu("data", {}, &printData),
             SwitcherMenu("test", {}, &autonTest),
             SwitcherMenu("skills", {
-              SwitcherMenu("traditional", {}, &autonSkills1),
+              SwitcherMenu("old", {}, &autonSkills1),
               SwitcherMenu("new", {}, &autonSkills2),
             }),
           }),

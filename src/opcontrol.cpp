@@ -76,16 +76,8 @@ void opcontrol() {
     // move the intake based on whether or not the right bumpers are pressed
     intake.move(127 * controller::get::intake());
 
-    switch (controller::get::catapult()) {
-    case 1:
+    if (controller::get::catapult())
       catapult::move();
-      break;
-    case -1:
-      // catapult::motor.moveVelocity(-25);
-      break;
-    default:
-      break;
-    }
 
     switch ((int)controller::get::arm()) {
     case 1:
@@ -100,7 +92,7 @@ void opcontrol() {
     }
 
     if constexpr (!atCompetition) {
-      if (controller::master.getDigital(ControllerDigital::Y))
+      if (controller::master.getDigital(ControllerDigital::B))
         auton();
     }
 

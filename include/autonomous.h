@@ -9,7 +9,7 @@ using namespace okapi;
 #define motorVelTargetReached(motor, range)                                                        \
   (abs(motor.getTargetVelocity() - motor.getActualVelocity()) < range)
 
-#define atCompetition false
+#define atCompetition true
 
 typedef void (*vfptr)();
 

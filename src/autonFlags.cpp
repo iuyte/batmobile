@@ -16,7 +16,7 @@ void autonFlags(int side) {
   drive::moveVelocity(0, 0);
 
   // back up
-  drive::dpc->setTarget("F2", true);
+  drive::dpc->setTarget("34", true);
 
   // ready the catapult
   catapult::ready();
@@ -26,39 +26,41 @@ void autonFlags(int side) {
 
   // turn towards the flags
   drive::turn(-90 * side);
+  delay(200);
 
   // aling to shoot
-  drive::strafe(-100, 110);
+  vision::front.alignX(vision::Alignment::Flag, 75, 14 * side, 2);
   drive::waitUntilCompletion();
 
   // drive forward a bit
   drive::dpc->setTarget("F3");
   drive::dpc->waitUntilSettled();
 
-  waitUntil(catapult::atTarget(), 20);
-
   // wait a bit
+  waitUntil(catapult::atTarget(), 20);
   drive::moveVelocity(0, 0);
   delay(250);
 
   // fire the catapult
   catapult::fire();
   waitUntil(catapult::pot.get() > catapult::presets[3], 20);
-  delay(800);
+  delay(850);
 
   // align to the bottom flag
   drive::reset();
-  drive::strafe(-90, 110);
-  drive::waitUntilCompletion();
+  vision::front.alignX(vision::Alignment::Flag, 75, -20 * side, 2);
   delay(200);
 
   // hit the bottom flag
-  drive::dpc->setTarget("30");
+  drive::dpc->setTarget("24");
+  delay(750);
+  arm.moveAbsolute(ArmP::Flag, 200);
   drive::dpc->waitUntilSettled();
 
   // back up
   drive::dpc->setTarget("12");
   drive::dpc->waitUntilSettled();
+  arm.moveAbsolute(ArmP::Top, 200);
 }
 
 void flipCap(int side) {
@@ -67,11 +69,11 @@ void flipCap(int side) {
   drive::dpc->waitUntilSettled();
 
   // turn towards the cap
-  drive::turn(90 * side);
+  drive::turn(96 * side);
 
   // flip the cap
-  intake.moveVelocity(-60);
-  drive::dc->setMaxVelocity(75);
+  intake.moveVelocity(-127);
+  drive::dc->setMaxVelocity(200);
   drive::dc->moveDistance(24_in);
 
   // back away
@@ -84,8 +86,9 @@ void flipCap(int side) {
 }
 
 void scoreTree2(int side) {
+  intake.move(127);
   // back up from the wall
-  drive::dpc->setTarget("FC1", true);
+  drive::dpc->setTarget("20", true);
 
   // ready the catapult
   catapult::ready();
@@ -93,24 +96,17 @@ void scoreTree2(int side) {
   // wait to achieve the position
   drive::dpc->waitUntilSettled();
 
-  // strafe towards the cap
-  drive::strafe(1300);
-  waitUntil(drive::totalVelocity() > 4, 20);
-  waitUntil(drive::totalVelocity() < 4, 20);
-  drive::dc->stop();
+  // turn towards the flags
+  drive::turn(65 * side);
+  delay(100);
 
-  // turn, align
-  drive::turn(45 * side);
-  drive::dc->moveDistance(4_in);
-  // drive::strafe(-180, 90);
+  // drive towards the flags
+  drive::dpc->setTarget("14");
+  drive::dpc->waitUntilSettled();
 
   // fire
-  delay(150);
   catapult::fire();
-  delay(250);
-
-  // back away
-  drive::dc->moveDistance(-4_in);
+  delay(1000);
 }
 
 void autonRedFlagsCap() {

@@ -256,17 +256,23 @@ void autonSkills2() {
   drive::waitUntilCompletion();
 
   // align along the x
-  vision::back.alignX(vision::Alignment::Platform, 16);
+  vision::back.alignX(vision::Alignment::Platform, 200, 0, 5);
   delay(200);
 
   // align along the y
-  vision::back.alignY(vision::Alignment::Platform, 25, 2);
+  vision::back.alignY(vision::Alignment::Platform, 26);
 
   // get onto the platform
   drive::reset();
-  drive::dc->setMaxVelocity(200);
-  drive::moveAbsolute(-2200, -2200, 200);
-  waitUntil(motorPosTargetReached(drive::left, 50) && motorPosTargetReached(drive::right, 50), 20);
+  for (float i = 0; i < 1.f; i += .05) {
+    drive::control(-i, 0, 0);
+    delay(25);
+  }
+
+  drive::control(-1, 0, 0);
+
+  waitUntil(drive::left.getPosition() < -6 * imev5GreenTPR, 20);
+  waitUntil(drive::right.getPosition() < -6 * imev5GreenTPR, 20);
 
   drive::left.setBrakeMode(AbstractMotor::brakeMode::hold);
   drive::right.setBrakeMode(AbstractMotor::brakeMode::hold);

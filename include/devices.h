@@ -69,6 +69,8 @@ namespace drive {
   /** turn the robot a number of degrees */
   void turn(float angle, float range = 2, bool absolute = false);
 
+  void equal();
+
   /** drive chassis profile controller, a combination of the left and right side motors */
   extern shared_ptr<ChassisController> dc;
   /** motion profile controller for the drive */
@@ -91,7 +93,8 @@ extern Motor intake;
 extern Motor arm;
 enum ArmP {
   Top  = 30,
-  Flag = -35,
+  Flag = -85,
+  Mid  = -200,
   Low  = -340,
 };
 

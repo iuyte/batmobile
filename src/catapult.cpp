@@ -33,7 +33,7 @@ namespace catapult {
           motor.moveAbsolute(pos, 20);
           break;
         case State::Fire:
-          motor.moveVelocity(200);
+          motor.moveVelocity(100);
           waitUntiloD(pot.get() > presets[1], 20);
           motor.moveRelative(2.8 * imev5BlueTPR, 100);
           waitUntiloD(motorPosTargetReached(motor, 20), 20);
