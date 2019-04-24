@@ -1,9 +1,11 @@
 #include "autonomous.h"
 
-vfptr  auton     = &autonTest;
-string autonName = "other->test";
+// vfptr  auton     = &autonTest;
+// string autonName = "other->test";
 // vfptr  auton     = &autonBlueFlagsX2;
 // string autonName = "+ 2nd tree->blue";
+vfptr  auton     = &autonSkills2;
+string autonName = "other->skills-new";
 
 void autonomous() {
   // make it so the drive motors hold commanded positions, rather than coast like in driver-control
@@ -142,6 +144,10 @@ void generatePaths() {
     Point{0_ft, 0_ft, 0_deg},
     Point{50_in, 0_ft, 0_deg},
   }, "50");
+  drive::dpc->generatePath({
+    Point{0_ft, 0_ft, 0_deg},
+    Point{52_in, 0_ft, 0_deg},
+  }, "52");
   drive::dpc->generatePath({
     Point{0_ft, 0_ft, 0_deg},
     Point{54_in, 0_ft, 0_deg},

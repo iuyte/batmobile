@@ -16,6 +16,7 @@ void autonFlags(int side) {
   drive::moveVelocity(0, 0);
 
   // back up
+  intake.move(127);
   drive::dpc->setTarget("34", true);
 
   // ready the catapult
@@ -29,6 +30,7 @@ void autonFlags(int side) {
   delay(200);
 
   // aling to shoot
+  intake.move(127);
   vision::front.alignX(vision::Alignment::Flag, 75, 14 * side, 2);
   drive::waitUntilCompletion();
 
@@ -52,32 +54,33 @@ void autonFlags(int side) {
   delay(200);
 
   // hit the bottom flag
-  drive::dpc->setTarget("24");
+  drive::dpc->setTarget("28");
+  intake.move(127);
   delay(750);
   arm.moveAbsolute(ArmP::Flag, 200);
   drive::dpc->waitUntilSettled();
 
   // back up
-  drive::dpc->setTarget("12");
+  drive::dpc->setTarget("14", true);
   drive::dpc->waitUntilSettled();
   arm.moveAbsolute(ArmP::Top, 200);
 }
 
 void flipCap(int side) {
-  // back up from the wall
-  drive::dpc->setTarget("24", true);
-  drive::dpc->waitUntilSettled();
-
   // turn towards the cap
   drive::turn(96 * side);
 
   // flip the cap
-  intake.moveVelocity(-127);
-  drive::dc->setMaxVelocity(200);
-  drive::dc->moveDistance(24_in);
+  arm.moveAbsolute(ArmP::Low, 200);
+  delay(300);
+  drive::dpc->setTarget("6");
+  drive::dpc->waitUntilSettled();
+  drive::dpc->setTarget("4");
+  arm.moveAbsolute(ArmP::Top, 200);
+  drive::dpc->waitUntilSettled();
 
   // back away
-  drive::dpc->setTarget("F3", true);
+  drive::dpc->setTarget("12", true);
   drive::dpc->waitUntilSettled();
 
   // stop the intake
@@ -87,9 +90,6 @@ void flipCap(int side) {
 
 void scoreTree2(int side) {
   intake.move(127);
-  // back up from the wall
-  drive::dpc->setTarget("20", true);
-
   // ready the catapult
   catapult::ready();
 
@@ -98,7 +98,6 @@ void scoreTree2(int side) {
 
   // turn towards the flags
   drive::turn(65 * side);
-  delay(100);
 
   // drive towards the flags
   drive::dpc->setTarget("14");

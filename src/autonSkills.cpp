@@ -6,32 +6,6 @@ long int glt;
 void autonSkills1() {
   glt = millis();
 
-  autonRedFlagsCap();
-
-  // slower for better accuracy
-  drive::dc->setMaxVelocity(110);
-
-  // back up
-  drive::dc->moveDistance(-18_in);
-
-  // turn 90 deg counter-clockwise
-  drive::dc->turnAngle(-96_deg);
-
-  // drive towards the platform
-  drive::dc->moveDistance(-50_in);
-
-  // turn 90 deg counter-clockwise
-  drive::dc->turnAngle(-90_deg);
-
-  // get onto the platform
-  drive::dc->setMaxVelocity(200);
-  drive::left.moveRelative(-2400, 200);
-  drive::right.moveRelative(-2400, 200);
-  waitUntil(motorPosTargetReached(drive::left, 50) && motorPosTargetReached(drive::right, 50), 20);
-  drive::moveVelocity(0, 0);
-}
-
-void autonSkills2() {
   // intake in
   intake.moveVelocity(200);
 
@@ -277,6 +251,159 @@ void autonSkills2() {
   drive::left.setBrakeMode(AbstractMotor::brakeMode::hold);
   drive::right.setBrakeMode(AbstractMotor::brakeMode::hold);
   drive::moveVelocity(0, 0);
+
+  glt = millis() - glt;
+}
+
+void autonSkills2() {
+  glt = millis();
+
+  // intake in, arm down, ready catapult
+  intake.moveVelocity(200);
+  arm.moveAbsolute(ArmP::Tipped, 150);
+  catapult::ready();
+
+  // grab the ball from under the cap
+  drive::dpc->setTarget("36");
+  drive::dpc->waitUntilSettled();
+
+  // flip the cap
+  drive::dpc->setTarget("2");
+  arm.moveAbsolute(ArmP::Top, 200);
+  drive::dpc->waitUntilSettled();
+
+  // back up
+  drive::dpc->setTarget("34", true);
+  drive::dpc->waitUntilSettled();
+
+  // turn and drive towards the flags
+  drive::turn(-90);
+  delay(200);
+  drive::dpc->setTarget("60");
+  drive::dpc->waitUntilSettled();
+
+  // aling to shoot
+  vision::front.alignX(vision::Alignment::Flag, 75, 14, 2);
+  drive::waitUntilCompletion();
+
+  // drive forward a bit
+  // drive::dpc->setTarget("12");
+  // drive::dpc->waitUntilSettled();
+
+  // wait a bit
+  waitUntil(catapult::atTarget(), 20);
+  drive::moveVelocity(0, 0);
+  delay(250);
+
+  // fire the catapult
+  catapult::fire();
+  waitUntil(catapult::pot.get() > catapult::presets[3], 20);
+  delay(850);
+
+  // align to the bottom flag
+  drive::reset();
+  vision::front.alignX(vision::Alignment::Flag, 75, -20, 2);
+  delay(200);
+
+  // hit the bottom flag
+  intake.move(127);
+  drive::dpc->setTarget("28");
+  delay(750);
+  arm.moveAbsolute(ArmP::Flag, 200);
+  drive::dpc->waitUntilSettled();
+
+  // back up
+  intake.move(-127);
+  drive::dpc->setTarget("52", true);
+  drive::dpc->waitUntilSettled();
+  intake.move(0);
+
+  // turn towards the platform
+  drive::turn(90);
+  delay(100);
+
+  intake.moveVelocity(200);
+  arm.moveAbsolute(ArmP::Mid, 100);
+  drive::dpc->setTarget("10");
+  drive::dpc->waitUntilSettled();
+  arm.moveAbsolute(ArmP::Low, 150);
+  delay(400);
+  drive::dpc->setTarget("8", true);
+  drive::dpc->waitUntilSettled();
+  arm.moveAbsolute(ArmP::Top, 200);
+
+  drive::strafe(-330, 130);
+  drive::waitUntilCompletion(200);
+
+  // intake in, arm down, ready catapult
+  intake.moveVelocity(200);
+  arm.moveAbsolute(ArmP::Tipped, 150);
+  catapult::ready();
+
+  // grab the ball from under the cap
+  drive::dpc->setTarget("30");
+  drive::dpc->waitUntilSettled();
+
+  // flip the cap
+  drive::dpc->setTarget("2");
+  arm.moveAbsolute(ArmP::Top, 200);
+  drive::dpc->waitUntilSettled();
+
+  // turn and drive towards the flags
+  drive::turn(-90);
+  delay(200);
+  drive::dpc->setTarget("16");
+  drive::dpc->waitUntilSettled();
+
+  // aling to shoot
+  vision::front.alignX(vision::Alignment::Flag, 75, 14, 2);
+  drive::waitUntilCompletion();
+
+  // wait a bit
+  waitUntil(catapult::atTarget(), 20);
+  drive::moveVelocity(0, 0);
+  delay(250);
+
+  // fire the catapult
+  catapult::fire();
+  waitUntil(catapult::pot.get() > catapult::presets[3], 20);
+  delay(850);
+
+  // align to the bottom flag
+  drive::reset();
+  vision::front.alignX(vision::Alignment::Flag, 75, -20, 2);
+  delay(200);
+
+  // hit the bottom flag
+  intake.move(127);
+  drive::dpc->setTarget("28");
+  delay(750);
+  arm.moveAbsolute(ArmP::Flag, 200);
+  drive::dpc->waitUntilSettled();
+
+  // back up
+  intake.move(-127);
+  drive::dpc->setTarget("20", true);
+  drive::dpc->waitUntilSettled();
+  intake.move(0);
+
+  return;
+  // turn towards the cap
+  drive::turn(45);
+  intake.move(127);
+  delay(100);
+
+  arm.moveAbsolute(ArmP::Mid, 100);
+  drive::dpc->setTarget("16");
+  drive::dpc->waitUntilSettled();
+
+  arm.moveAbsolute(ArmP::Tipped, 100);
+  delay(200);
+
+  drive::dpc->setTarget("6", true);
+  drive::dpc->waitUntilSettled();
+  drive::dpc->setTarget("8");
+  drive::dpc->waitUntilSettled();
 
   glt = millis() - glt;
 }

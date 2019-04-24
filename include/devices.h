@@ -92,10 +92,11 @@ extern Motor intake;
 /** arm */
 extern Motor arm;
 enum ArmP {
-  Top  = 30,
-  Flag = -85,
-  Mid  = -200,
-  Low  = -340,
+  Top    = 30,
+  Flag   = -85,
+  Mid    = -150,
+  Tipped = -205,
+  Low    = -310,
 };
 
 #endif

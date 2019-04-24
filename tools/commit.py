@@ -1,4 +1,5 @@
-import jsonpickle
+import jsonpickle, csv
+
 class Commit(object):
     date = ""
     commitkey = ""
@@ -34,6 +35,16 @@ class JSONStore(object):
             self.d_changes.append("Modified: " + file)
 
 def saveList(listOfCommits):
+    with open("docs/log.csv", newline="", mode="w") as f:
+        w = csv.writer(f, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        w.writerow(['Date', 'Description', 'Files Changed'])
+        for c in listOfCommits:
+            changes = c.filesAdded + c.filesModified + c.filesDeleted
+            for i in range(len(changes)):
+                ch = changes[i].split("/")
+                changes[i] = ch[-1]
+            w.writerow([c.date[6:12], c.description, ", ".join(changes)])
+
     f = open("docs/log.json", mode="w")
     for i in range(len(listOfCommits)):
         listOfCommits[i] = JSONStore(listOfCommits[i])

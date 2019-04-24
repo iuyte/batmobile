@@ -153,7 +153,7 @@ def parseContent(content):
     commit = 0
     lcom = ""
     lcommits = []
-    for commit in range(1, len(commits)):
+    for commit in range(0, len(commits)):
         aline = 0
         lines = commits[commit].split("\n")
         try:
